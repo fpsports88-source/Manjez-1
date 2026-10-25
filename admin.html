@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow"><title>لوحة المطور — منجز</title>
+<!-- © YS — جميع الحقوق محفوظة -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<style>
+:root{--bg:#f3f6fb;--card:#fff;--tx:#0f172a;--mut:#64748b;--pri:#2563eb;--bd:#e2e8f0}
+@media(prefers-color-scheme:dark){:root{--bg:#0b1220;--card:#131c2e;--tx:#e5ecf6;--mut:#8da0bb;--bd:#22304a}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.7 system-ui,'Segoe UI',Tahoma,sans-serif;padding:env(safe-area-inset-top) 12px 30px}
+.w{max-width:960px;margin:auto}h1{font-size:20px;margin:16px 0}.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:12px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}.k b{display:block;font-size:26px}.k span{color:var(--mut);font-size:13px}
+button{font:inherit;border:0;border-radius:12px;padding:10px 16px;background:var(--pri);color:#fff;cursor:pointer;min-height:44px}button.s{background:var(--card);color:var(--tx);border:1px solid var(--bd)}
+input{width:100%;padding:11px;border:1px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx);font:inherit;margin-bottom:10px}
+table{width:100%;border-collapse:collapse}th,td{text-align:start;padding:8px;border-bottom:1px solid var(--bd);font-size:13px;white-space:nowrap}.sc{overflow-x:auto}
+.u{display:flex;align-items:center;gap:8px}.u img{width:30px;height:30px;border-radius:50%;object-fit:cover}.hide{display:none}#err{color:#dc2626}
+</style></head><body><div class="w">
+<div id="login" class="card" style="margin-top:12vh;text-align:center"><h1>🔐 لوحة المطور — منجز</h1><p style="color:var(--mut)">الدخول للمطور فقط</p>
+<button id="go">المتابعة بحساب جوجل</button><p id="err"></p></div>
+<div id="app" class="hide"><div style="display:flex;justify-content:space-between;align-items:center"><h1>👑 لوحة المطور — منجز</h1><button class="s" id="out">خروج</button></div>
+<div class="g" id="kpis"></div><div class="card" style="margin-top:12px"><input id="q" placeholder="بحث بالاسم أو الإيميل"><div class="sc"><table><thead><tr><th>المستخدم</th><th>الإيميل</th><th>آخر ظهور</th><th>مهام</th><th>الجهاز</th></tr></thead><tbody id="tb"></tbody></table></div>
+<button class="s" id="csv" style="margin-top:10px">📥 تصدير CSV</button></div><p style="text-align:center;color:var(--mut);font-size:12px">© YS</p></div></div>
+<script>
+const FIREBASE_CONFIG={apiKey:'AIzaSyATdu2Jwz1M7BpzKTQiYmV7Cpq_-OphLRw',authDomain:'mongez-83ece.firebaseapp.com',projectId:'mongez-83ece',appId:'1:3482020492:web:72d6f419712c0404a8e9a9'};
+const OWNER_EMAIL='yassinmohmmed555@gmail.com';
+firebase.initializeApp(FIREBASE_CONFIG);const auth=firebase.auth(),db=firebase.firestore(),$=s=>document.querySelector(s);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let rows=[],unsub=null;
+const ms=t=>t&&t.toMillis?t.toMillis():0;
+const ago=t=>{const m=Math.round((Date.now()-ms(t))/6e4);return !ms(t)?'—':m<1?'الآن':m<60?m+' د':m<1440?Math.round(m/60)+' س':Math.round(m/1440)+' يوم'};
+$('#go').onclick=async()=>{$('#err').textContent='';try{await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())}catch(e){$('#err').textContent=e.code||e.message}};
+$('#out').onclick=()=>auth.signOut();
+auth.onAuthStateChanged(u=>{
+  if(unsub){unsub();unsub=null}
+  const ok=u&&u.email&&u.email.toLowerCase()===OWNER_EMAIL&&u.emailVerified;
+  $('#login').classList.toggle('hide',!!ok);$('#app').classList.toggle('hide',!ok);
+  if(u&&!ok){$('#err').textContent='هذا الحساب ليس حساب المطور';auth.signOut();return}
+  if(ok)unsub=db.collection('munjiz_profiles').onSnapshot(s=>{rows=s.docs.map(d=>({id:d.id,...d.data()}));draw()},e=>{$('#kpis').innerHTML='<div class="card">'+esc(e.message)+'</div>'});
+});
+function draw(){
+  const n=Date.now(),d=864e5,c=f=>rows.filter(f).length;
+  $('#kpis').innerHTML=[['المستخدمون',rows.length],['جدد اليوم',c(r=>n-ms(r.createdAt)<d)],['جدد الأسبوع',c(r=>n-ms(r.createdAt)<7*d)],['نشطون الآن',c(r=>n-ms(r.lastSeen)<3e5)],['نشطون اليوم',c(r=>n-ms(r.lastSeen)<d)],['إجمالي المهام',rows.reduce((a,r)=>a+(r.tasks||0),0)]].map(([l,v])=>`<div class="card k"><b>${v}</b><span>${l}</span></div>`).join('');
+  const q=$('#q').value.toLowerCase();
+  $('#tb').innerHTML=rows.filter(r=>((r.name||'')+(r.email||'')).toLowerCase().includes(q)).sort((a,b)=>ms(b.lastSeen)-ms(a.lastSeen)).map(r=>`<tr><td><div class="u">${r.photo?`<img src="${esc(r.photo)}" referrerpolicy="no-referrer" alt="">`:''}${esc(r.name)}</div></td><td>${esc(r.email)}</td><td>${ago(r.lastSeen)}</td><td>${r.tasks||0}</td><td>${esc(r.os)}</td></tr>`).join('')||'<tr><td colspan="5">لا مستخدمين بعد</td></tr>';
+}
+$('#q').oninput=draw;
+$('#csv').onclick=()=>{const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"',L=[['الاسم','الإيميل','المهام','الجهاز']].concat(rows.map(r=>[r.name,r.email,r.tasks||0,r.os]));
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+L.map(r=>r.map(q).join(',')).join('\n')],{type:'text/csv'}));a.download='munjiz-users.csv';a.click()};
+</script></body></html>

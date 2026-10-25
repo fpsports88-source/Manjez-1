@@ -1,0 +1,1656 @@
+<!-- © YS — جميع الحقوق محفوظة -->
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="author" content="YS" />
+  <meta name="description" content="منجز — مساعد الطالب لإدارة المهام وتنظيم الوقت" />
+  <meta name="theme-color" content="#2563eb" />
+  <link rel="manifest" href="manifest.json" />
+  <title>منجز</title>
+  <style>
+    *{box-sizing:border-box}
+    :root{
+      --bg:#f5f7fb; --surface:#fff; --surface2:#eef2f7; --surface3:#e5eaf2;
+      --text:#0f172a; --muted:#64748b; --border:#dbe2ea;
+      --accent:#2563eb; --ok:#059669; --warn:#d97706; --danger:#dc2626;
+      --radius:16px; --shadow:0 10px 28px rgba(15,23,42,.08);
+      --safe-b:env(safe-area-inset-bottom,0px);
+      --safe-t:env(safe-area-inset-top,0px);
+    }
+    [data-theme="dark"]{
+      --bg:#0b1220; --surface:#111827; --surface2:#172033; --surface3:#1f2937;
+      --text:#e5e7eb; --muted:#9aa4b2; --border:#334155;
+      --shadow:0 14px 36px rgba(0,0,0,.35);
+    }
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--text);
+      font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,"Noto Sans Arabic",sans-serif;
+      line-height:1.55; -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    button,input,select,textarea{font:inherit;color:inherit}
+    button{cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);min-height:44px;border-radius:12px;padding:10px 14px;font-weight:700;transition:.15s ease}
+    button:hover{background:var(--surface2)}
+    button:disabled{opacity:.55;cursor:not-allowed}
+    input,select,textarea{width:100%;min-height:44px;font-size:16px;border:1px solid var(--border);border-radius:12px;background:var(--surface);color:var(--text);padding:10px 12px}
+    textarea{min-height:110px;resize:vertical}
+    :focus-visible{outline:3px solid rgba(37,99,235,.35);outline-offset:2px;border-radius:10px}
+    .hidden{display:none!important}
+    .muted{color:var(--muted)}
+    .small{font-size:.86rem}
+    .center{text-align:center}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .between{justify-content:space-between}
+    .grid{display:grid;gap:12px}
+    .stats{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+    .cols-2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
+    .pad0{padding:0;overflow:hidden}
+    .title{margin:0 0 4px;font-size:1.05rem;font-weight:800}
+    .subtitle{margin:0;color:var(--muted);font-size:.9rem}
+    .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+    .btn.primary:hover{filter:brightness(1.05)}
+    .btn.danger{background:var(--danger);border-color:var(--danger);color:#fff}
+    .btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+    .btn.ghost{background:transparent}
+    .btn.sm{min-height:36px;padding:7px 10px;font-size:.86rem;border-radius:10px}
+    .icon-btn{width:44px;height:44px;min-height:44px;padding:0;display:grid;place-items:center;border-radius:12px}
+    .chip{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:99px;border:1px solid var(--border);background:var(--surface2);font-size:.86rem;font-weight:700;min-height:38px}
+    .chip.active{background:rgba(37,99,235,.12);border-color:rgba(37,99,235,.35);color:var(--accent)}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:99px;font-size:.76rem;font-weight:800;background:var(--surface2);border:1px solid var(--border)}
+    .badge.high{color:var(--danger)} .badge.medium{color:var(--warn)} .badge.low{color:var(--ok)}
+    .badge.new{color:var(--muted)} .badge.inProgress{color:var(--accent)} .badge.done{color:var(--ok)}
+    .dot{width:10px;height:10px;border-radius:50%;display:inline-block;background:var(--muted)}
+    .progress{height:9px;background:var(--surface3);border-radius:99px;overflow:hidden;margin-top:8px}
+    .progress>span{display:block;height:100%;background:var(--accent);border-radius:99px}
+    .kv{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px dashed var(--border)}
+    .kv:last-child{border-bottom:0}
+    .list{display:flex;flex-direction:column}
+    .list-item{display:flex;gap:12px;align-items:flex-start;padding:14px;border-bottom:1px solid var(--border)}
+    .list-item:last-child{border-bottom:0}
+    .list-item.done{opacity:.62}
+    .list-main{flex:1;min-width:0}
+    .list-title{font-weight:800;margin:0 0 4px;word-break:break-word}
+    .meta{display:flex;flex-wrap:wrap;gap:8px;color:var(--muted);font-size:.82rem}
+    .empty{padding:30px 16px;text-align:center;color:var(--muted)}
+    .empty .emoji{font-size:2rem;display:block;margin-bottom:8px}
+    .field{display:flex;flex-direction:column;gap:6px}
+    .field span{font-size:.88rem;color:var(--muted);font-weight:700}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .form-grid .full{grid-column:1/-1}
+    .checkbox-line{display:flex;align-items:center;gap:8px;min-height:44px}
+    .checkbox-line input{width:auto;min-height:auto}
+    .app-root{min-height:100dvh}
+    .login{min-height:100dvh;display:grid;place-items:center;padding:18px}
+    .login-card{width:min(100%,460px);display:grid;gap:14px;text-align:center}
+    .logo{width:74px;height:74px;border-radius:24px;display:grid;place-items:center;margin:auto;background:linear-gradient(135deg,var(--accent),#7c3aed);color:#fff;box-shadow:var(--shadow)}
+    .google-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#1f2937;border-color:#dadce0}
+    [data-theme="dark"] .google-btn{background:#111827;color:#e5e7eb;border-color:#334155}
+    .shell{display:grid;grid-template-columns:268px 1fr;min-height:100dvh}
+    .sidebar{position:fixed;inset-block:0;width:268px;background:var(--surface);border-inline-end:1px solid var(--border);display:flex;flex-direction:column;z-index:60;padding-top:var(--safe-t)}
+    [dir="rtl"] .sidebar{right:0;transform:translateX(100%)}
+    [dir="ltr"] .sidebar{left:0;transform:translateX(-100%)}
+    .sidebar.open{transform:none}
+    .brand{display:flex;align-items:center;gap:12px;padding:16px;border-bottom:1px solid var(--border)}
+    .brand-logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#7c3aed);color:#fff;display:grid;place-items:center;font-weight:900}
+    .nav{padding:10px;overflow:auto;flex:1}
+    .nav-item{width:100%;display:flex;align-items:center;gap:10px;padding:11px 12px;margin:3px 0;border:0;background:transparent;color:var(--muted);border-radius:12px;text-align:start}
+    .nav-item:hover{background:var(--surface2);color:var(--text)}
+    .nav-item.active{background:rgba(37,99,235,.12);color:var(--accent);font-weight:800}
+    .sidebar-footer{padding:14px;border-top:1px solid var(--border);color:var(--muted);font-size:.8rem}
+    .main{min-width:0;display:flex;flex-direction:column;min-height:100dvh}
+    [dir="rtl"] .main{margin-right:268px}
+    [dir="ltr"] .main{margin-left:268px}
+    .topbar{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--surface) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;padding:10px 14px;padding-top:calc(10px + var(--safe-t))}
+    .top-title{flex:1;min-width:0}
+    .top-title h1{margin:0;font-size:1.08rem}
+    .top-title p{margin:0;font-size:.8rem}
+    .view{padding:16px;max-width:1400px;width:100%;margin:auto}
+    .bottom-nav{display:none;position:fixed;inset-inline:0;bottom:0;height:68px;background:var(--surface);border-top:1px solid var(--border);z-index:55;padding-bottom:var(--safe-b)}
+    .bottom-nav .nav-item{flex:1;justify-content:center;text-align:center;flex-direction:column;gap:2px;font-size:.72rem;margin:0;border-radius:0}
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:.2s;z-index:50}
+    .overlay.show{opacity:1;pointer-events:auto}
+    .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+    .toolbar .input{flex:1;min-width:220px}
+    .kanban{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .kanban-col{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:10px;min-height:220px}
+    .kanban-col.dragover{outline:2px dashed var(--accent)}
+    .kanban-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:8px;cursor:grab}
+    .calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+    .cal-head{font-size:.8rem;color:var(--muted);text-align:center;font-weight:800}
+    .day{min-height:92px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:8px;cursor:pointer;position:relative}
+    .day.other{opacity:.45}.day.today{border-color:var(--accent);box-shadow:0 0 0 2px rgba(37,99,235,.12)}
+    .day.p1{background:rgba(8,145,178,.08)}.day.p2{background:rgba(217,119,6,.10)}.day.p3{background:rgba(220,38,38,.10)}
+    .day-num{font-weight:900}.day-events{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+    .day-event{font-size:.72rem;background:var(--surface2);border-radius:8px;padding:3px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .timeline{display:flex;flex-direction:column;gap:10px}
+    .event{border-inline-start:4px solid var(--accent);background:var(--surface2);border-radius:12px;padding:10px 12px}
+    .event.conflict{border-inline-start-color:var(--danger)}
+    .timer{display:grid;place-items:center;gap:14px;text-align:center;padding:24px 12px}
+    .timer-display{font-size:clamp(3rem,14vw,6rem);font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:.04em}
+    .toast-root{position:fixed;bottom:calc(18px + var(--safe-b));inset-inline-start:18px;display:flex;flex-direction:column;gap:10px;z-index:200;max-width:min(92vw,420px)}
+    .toast{background:var(--surface);border:1px solid var(--border);border-inline-start:5px solid var(--accent);box-shadow:var(--shadow);border-radius:14px;padding:12px 14px;display:flex;gap:10px;align-items:center;animation:slideIn .2s ease}
+    .toast.success{border-inline-start-color:var(--ok)}.toast.error{border-inline-start-color:var(--danger)}.toast.warn{border-inline-start-color:var(--warn)}
+    .toast.hide{opacity:0;transform:translateY(8px);transition:.2s}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;padding:14px;z-index:150;opacity:0;transition:.18s}
+    .modal-backdrop.show{opacity:1}
+    .modal{width:100%;max-width:680px;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);max-height:90dvh;display:flex;flex-direction:column;overflow:hidden;transform:translateY(8px) scale(.98);transition:.18s}
+    .modal-backdrop.show .modal{transform:none}
+    .modal.sm{max-width:430px}.modal.lg{max-width:920px}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border)}
+    .modal-head h3{margin:0;font-size:1.02rem}
+    .modal-body{padding:16px;overflow:auto}
+    .modal-foot{padding:14px 16px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-start;flex-wrap:wrap}
+    .subtask-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+    .subtask-row input[type="text"]{flex:1}
+    .chart{width:100%;height:190px;display:block}
+    .legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:.84rem}
+    .legend-item{display:flex;align-items:center;gap:6px}
+    .avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;overflow:hidden}
+    .confetti-piece{position:fixed;width:9px;height:14px;top:-20px;z-index:300;border-radius:3px;animation:fall 1.2s linear forwards}
+    @keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    @keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:0}}
+    @media(max-width:1000px){.cols-2{grid-template-columns:1fr}}
+    @media(max-width:900px){
+      .shell{grid-template-columns:1fr}
+      .main{margin:0!important;padding-bottom:calc(76px + var(--safe-b))}
+      .bottom-nav{display:flex}
+      .top-title p{display:none}
+    }
+    @media(max-width:760px){
+      .form-grid{grid-template-columns:1fr}
+      .kanban{grid-template-columns:1fr}
+      .day{min-height:76px;padding:6px}
+      .day-event{display:none}
+      .day .count-pill{display:inline-block;font-size:.7rem;background:var(--surface2);border-radius:99px;padding:2px 6px;margin-top:4px}
+    }
+    @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <div id="app" class="app-root"></div>
+  <div id="toastRoot" class="toast-root" aria-live="polite" aria-atomic="true"></div>
+  <div id="modalRoot"></div>
+
+  <script>
+    /* © YS — جميع الحقوق محفوظة */
+    (() => {
+      "use strict";
+
+      /* =========================
+         1) الإعدادات والثوابت
+         ========================= */
+      const FIREBASE_CONFIG = {
+        apiKey: 'AIzaSyATdu2Jwz1M7BpzKTQiYmV7Cpq_-OphLRw',
+        authDomain: 'mongez-83ece.firebaseapp.com',
+        projectId: 'mongez-83ece',
+        appId: '1:3482020492:web:72d6f419712c0404a8e9a9'
+      };
+      const APP = { name:'منجز', version:'1.0.0', copyright:'© YS — جميع الحقوق محفوظة' };
+      const STORAGE_KEY = 'munjiz.state.v1';
+      const SCHEMA_VERSION = 1;
+      const DAY_MS = 86400000;
+
+      const STATUS = ['new','inProgress','done'];
+      const PRIORITIES = ['high','medium','low'];
+      const REPEATS = ['none','daily','weekly','custom'];
+      const GRADES = { A:4, B:3, C:2, D:1, F:0 };
+
+      const DICT = {
+        ar: {
+          appName:'منجز', tagline:'مساعد الطالب لإدارة المهام وتنظيم الوقت', copyright:'© YS — جميع الحقوق محفوظة',
+          login:'تسجيل الدخول', googleSignIn:'المتابعة بحساب جوجل', guestSignIn:'الدخول كضيف', rememberMe:'تذكّرني على هذا الجهاز',
+          language:'اللغة', arabic:'العربية', english:'English', theme:'المظهر', auto:'تلقائي', light:'فاتح', dark:'داكن',
+          home:'الرئيسية', tasks:'المهام', schedule:'الجدول', calendar:'التقويم', exams:'الامتحانات', focus:'التركيز',
+          stats:'الإحصاءات', habits:'العادات', gpa:'المعدل', notes:'الملاحظات', settings:'الإعدادات', about:'حول التطبيق',
+          today:'اليوم', upcoming:'القادمة', overdue:'المتأخرة', done:'منتهية', all:'الكل', search:'بحث', add:'إضافة',
+          edit:'تعديل', delete:'حذف', save:'حفظ', cancel:'إلغاء', close:'إغلاق', confirm:'تأكيد', title:'العنوان',
+          description:'الوصف', subject:'المادة', priority:'الأولوية', high:'عالية', medium:'متوسطة', low:'منخفضة',
+          dueDate:'تاريخ التسليم', estimate:'الوقت المقدّر (د)', status:'الحالة', statusNew:'جديدة', statusInProgress:'قيد التنفيذ', statusDone:'منتهية',
+          tags:'وسوم', link:'رابط', notesField:'ملاحظات', subtasks:'مهام فرعية', addSubtask:'إضافة خطوة', repeat:'تكرار',
+          none:'بدون', daily:'يومي', weekly:'أسبوعي', custom:'مخصص', intervalDays:'كل كم يوم؟',
+          quickAddPlaceholder:'أضف بسرعة: حل واجب الفيزياء بكرة 5 م', noTasks:'لا مهام هنا بعد', noSubjects:'لا مواد بعد',
+          addSubjectFirst:'أضف مادة أولًا', startFocus:'ابدأ تركيز', complete:'إكمال', undo:'تراجع', deleted:'تم الحذف',
+          saved:'تم الحفظ', requiredTitle:'العنوان مطلوب', invalidDate:'تاريخ/وقت غير صالح', notEnoughTime:'الوقت المتاح لا يكفي لكل المهام',
+          planAccepted:'تم اعتماد الخطة', planRejected:'تم رفض الخطة', nearestExam:'أقرب امتحان', daysLeft:'أيام', hoursLeft:'ساعات',
+          points:'نقاط', level:'المستوى', streak:'سلسلة الأيام', badges:'الشارات', firstTask:'أول مهمة', fiveSessions:'5 جلسات',
+          weekStreak:'7 أيام متتالية', hundredPoints:'100 نقطة', focusTimer:'مؤقت التركيز', workMin:'دقائق التركيز',
+          shortBreak:'استراحة قصيرة', longBreak:'استراحة طويلة', cycles:'دورة الاستراحة الطويلة', start:'ابدأ', pause:'إيقاف مؤقت',
+          resume:'استئناف', stop:'إيقاف', reset:'إعادة ضبط', sessionLogged:'تم تسجيل الجلسة', notifications:'التنبيهات',
+          enableNotifications:'تفعيل إشعارات المتصفح', notificationExplanation:'الإشعارات تعمل أثناء فتح التطبيق فقط في النسخة المحلية. بعد إضافة خادم يمكن تفعيل إشعارات خلفية.',
+          lead10:'قبل 10 دقائق', lead60:'قبل ساعة', lead1440:'قبل يوم', morningSummary:'ملخص الصباح', tasksToday:'مهام اليوم',
+          exportJson:'تصدير JSON', importJson:'استيراد JSON', exportCsv:'تصدير CSV', deleteAll:'حذف كل البيانات',
+          deleteAllWarning:'سيتم حذف كل البيانات نهائيًا. اكتب كلمة حذف للتأكيد.', typeDelete:'حذف', profile:'الملف الشخصي',
+          displayName:'الاسم المعروض', school:'المرحلة/الجامعة', connectAccount:'ربط حساب جوجل', logout:'تسجيل الخروج',
+          guestMode:'وضع الضيف', firebaseMissing:'إعدادات Firebase غير مضافة. يمكنك الدخول كضيف واستخدام التطبيق محليًا.',
+          popupClosed:'تم إغلاق نافذة جوجل قبل إكمال الدخول', networkError:'لا يوجد اتصال بالإنترنت. تحقّق من الشبكة ثم أعد المحاولة',
+          unauthorizedDomain:'هذا النطاق غير مسموح به في إعدادات Firebase', operationNotAllowed:'تسجيل دخول جوجل غير مفعّل في مشروع Firebase',
+          accountExists:'يوجد حساب بنفس البريد بطريقة مختلفة', unknownError:'حدث خطأ غير معروف', gpaCalculator:'حاسبة المعدل',
+          course:'المادة', credits:'الساعات', grade:'الدرجة', addCourse:'إضافة مادة', yourGpa:'معدلك', targetGpa:'هدف المعدل',
+          aboveTarget:'أنت فوق الهدف', belowTarget:'أنت تحت الهدف', habitTracker:'متتبع العادات', addHabit:'إضافة عادة',
+          last7Days:'آخر 7 أيام', notesTitle:'الملاحظات', addNote:'إضافة ملاحظة', content:'المحتوى', keywords:'كلمات مفتاحية',
+          scheduleWeekly:'الجدول الأسبوعي', addClass:'إضافة حصة', day:'اليوم', startTime:'من', endTime:'إلى', room:'القاعة',
+          teacher:'المدرّس', conflictDetected:'تعارض في المواعيد', totalPlanned:'إجمالي المخطط', planner:'مخطط اليوم',
+          generatePlan:'إنشاء خطة', acceptPlan:'اعتماد', rejectPlan:'رفض', suggestedPlan:'الخطة المقترحة', insufficientTime:'لا يوجد وقت كافٍ',
+          statsTitle:'الإحصاءات', totalFocus:'إجمالي التركيز', averageDaily:'المتوسط اليومي', completionRate:'نسبة الإنجاز',
+          mostProductiveDay:'أكثر يوم إنتاجية', focusBySubject:'التركيز حسب المادة', dailyFocus:'التركيز اليومي', noData:'لا توجد بيانات كافية',
+          storageError:'تعذّر الحفظ المحلي. قد تكون مساحة التخزين ممتلئة', connectLater:'يمكنك ربط الحساب لاحقًا دون فقد البيانات',
+          morningText:'لديك مهام اليوم. ابدأ بأهم مهمة.', open:'فتح', details:'تفاصيل', addTask:'مهمة جديدة', addExam:'إضافة امتحان',
+          addDelivery:'إضافة تسليم', exam:'امتحان', delivery:'تسليم', countdown:'العد التنازلي', plan:'خطة المراجعة', topics:'الموضوعات',
+          readiness:'الاستعداد', weekView:'أسبوعي', monthView:'شهري', dayView:'يومي', prev:'السابق', next:'التالي', current:'الحالي',
+          filter:'تصفية', sort:'فرز', dueSoon:'الأقرب موعدًا', prioritySort:'الأولوية', createdSort:'الأحدث', titleSort:'العنوان',
+          listView:'قائمة', kanbanView:'كانبان', dragHint:'اسحب البطاقات بين الأعمدة', keyboardShortcuts:'اختصارات: N مهمة جديدة، / بحث',
+          availableMinutes:'الوقت المتاح يوميًا (د)', breakMinutes:'استراحة بين الجلسات (د)', sound:'الصوت', vibration:'الاهتزاز',
+          accentColor:'اللون الرئيسي', weekStart:'بداية الأسبوع', timeFormat:'تنسيق الوقت', format12:'12 ساعة', format24:'24 ساعة',
+          dataManagement:'إدارة البيانات', dangerZone:'منطقة خطر', doubleConfirm:'تأكيد مزدوج', imported:'تم الاستيراد',
+          importFailed:'فشل الاستيراد: ملف غير صالح', exported:'تم التصدير', noAlerts:'لا تنبيهات', alerts:'تنبيهات',
+          markRead:'تعليم كمقروء', celebrate:'أحسنت!', taskCompleted:'تم إنهاء المهمة', recurringCreated:'تم إنشاء النسخة التالية',
+          levelUp:'ارتقيت إلى مستوى جديد', badgeUnlocked:'شارة جديدة', subjectName:'اسم المادة', color:'اللون',
+          deleteSubjectWarn:'هذه المادة مرتبطة بمهام. سيتم فك الارتباط فقط.', unlink:'فك ارتباط', deleteAnyway:'حذف مع فك الارتباط',
+          habitName:'اسم العادة', toggleHabit:'تبديل اليوم', courseName:'اسم المادة الدراسية', noteTitle:'عنوان الملاحظة',
+          noteContent:'اكتب ملخصك هنا...', searchNotes:'ابحث في الملاحظات', noNotes:'لا ملاحظات', noExams:'لا امتحانات قادمة',
+          noClasses:'لا حصص مجدولة', addFirstSubject:'أضف مادة لتظهر هنا', startNow:'ابدأ الآن', currentSession:'الجلسة الحالية',
+          noActiveSession:'لا توجد جلسة نشطة', todaySessions:'جلسات اليوم', completedSessions:'جلسات مكتملة', cancelled:'ملغاة',
+          completed:'مكتملة', planned:'مخططة', actual:'فعلي', expectedVsActual:'المتوقع مقابل الفعلي', settingsSaved:'تم حفظ الإعدادات',
+          profileSaved:'تم حفظ الملف', cloudSynced:'تمت المزامنة', syncError:'تعذّرت المزامنة السحابية', offlineReady:'التطبيق جاهز للعمل دون إنترنت',
+          installApp:'تثبيت التطبيق', share:'مشاركة', aboutText:'منجز تطبيق ويب محلي/سحابي اختياري لإدارة حياة الطالب. تطوير YS.'
+        },
+        en: {
+          appName:'Munjiz', tagline:'Student assistant for tasks and time management', copyright:'© YS — All rights reserved',
+          login:'Sign in', googleSignIn:'Continue with Google', guestSignIn:'Continue as guest', rememberMe:'Remember me on this device',
+          language:'Language', arabic:'Arabic', english:'English', theme:'Theme', auto:'Auto', light:'Light', dark:'Dark',
+          home:'Home', tasks:'Tasks', schedule:'Schedule', calendar:'Calendar', exams:'Exams', focus:'Focus',
+          stats:'Stats', habits:'Habits', gpa:'GPA', notes:'Notes', settings:'Settings', about:'About',
+          today:'Today', upcoming:'Upcoming', overdue:'Overdue', done:'Done', all:'All', search:'Search', add:'Add',
+          edit:'Edit', delete:'Delete', save:'Save', cancel:'Cancel', close:'Close', confirm:'Confirm', title:'Title',
+          description:'Description', subject:'Subject', priority:'Priority', high:'High', medium:'Medium', low:'Low',
+          dueDate:'Due date', estimate:'Estimate (min)', status:'Status', statusNew:'New', statusInProgress:'In progress', statusDone:'Done',
+          tags:'Tags', link:'Link', notesField:'Notes', subtasks:'Subtasks', addSubtask:'Add step', repeat:'Repeat',
+          none:'None', daily:'Daily', weekly:'Weekly', custom:'Custom', intervalDays:'Every how many days?',
+          quickAddPlaceholder:'Quick add: Physics homework tomorrow 5pm', noTasks:'No tasks yet', noSubjects:'No subjects yet',
+          addSubjectFirst:'Add a subject first', startFocus:'Start focus', complete:'Complete', undo:'Undo', deleted:'Deleted',
+          saved:'Saved', requiredTitle:'Title is required', invalidDate:'Invalid date/time', notEnoughTime:'Not enough available time',
+          planAccepted:'Plan accepted', planRejected:'Plan rejected', nearestExam:'Nearest exam', daysLeft:'days', hoursLeft:'hours',
+          points:'Points', level:'Level', streak:'Streak', badges:'Badges', firstTask:'First task', fiveSessions:'5 sessions',
+          weekStreak:'7-day streak', hundredPoints:'100 points', focusTimer:'Focus timer', workMin:'Focus minutes',
+          shortBreak:'Short break', longBreak:'Long break', cycles:'Long break cycle', start:'Start', pause:'Pause',
+          resume:'Resume', stop:'Stop', reset:'Reset', sessionLogged:'Session logged', notifications:'Notifications',
+          enableNotifications:'Enable browser notifications', notificationExplanation:'Notifications work while the app is open in local mode. A backend is required for background push.',
+          lead10:'10 minutes before', lead60:'1 hour before', lead1440:'1 day before', morningSummary:'Morning summary', tasksToday:'Tasks today',
+          exportJson:'Export JSON', importJson:'Import JSON', exportCsv:'Export CSV', deleteAll:'Delete all data',
+          deleteAllWarning:'All data will be permanently deleted. Type delete to confirm.', typeDelete:'delete', profile:'Profile',
+          displayName:'Display name', school:'School/University', connectAccount:'Connect Google', logout:'Sign out',
+          guestMode:'Guest mode', firebaseMissing:'Firebase config is empty. You can continue as guest and use local storage.',
+          popupClosed:'Google popup was closed before completing sign-in', networkError:'No internet connection. Check your network and retry',
+          unauthorizedDomain:'This domain is not authorized in Firebase settings', operationNotAllowed:'Google sign-in is not enabled in Firebase',
+          accountExists:'An account already exists with different credential', unknownError:'Unknown error', gpaCalculator:'GPA calculator',
+          course:'Course', credits:'Credits', grade:'Grade', addCourse:'Add course', yourGpa:'Your GPA', targetGpa:'GPA target',
+          aboveTarget:'Above target', belowTarget:'Below target', habitTracker:'Habit tracker', addHabit:'Add habit',
+          last7Days:'Last 7 days', notesTitle:'Notes', addNote:'Add note', content:'Content', keywords:'Keywords',
+          scheduleWeekly:'Weekly schedule', addClass:'Add class', day:'Day', startTime:'Start', endTime:'End', room:'Room',
+          teacher:'Teacher', conflictDetected:'Schedule conflict', totalPlanned:'Total planned', planner:'Daily planner',
+          generatePlan:'Generate plan', acceptPlan:'Accept', rejectPlan:'Reject', suggestedPlan:'Suggested plan', insufficientTime:'Not enough time',
+          statsTitle:'Statistics', totalFocus:'Total focus', averageDaily:'Daily average', completionRate:'Completion rate',
+          mostProductiveDay:'Most productive day', focusBySubject:'Focus by subject', dailyFocus:'Daily focus', noData:'Not enough data',
+          storageError:'Local save failed. Storage may be full', connectLater:'You can connect an account later without losing data',
+          morningText:'You have tasks today. Start with the most important one.', open:'Open', details:'Details', addTask:'New task', addExam:'Add exam',
+          addDelivery:'Add delivery', exam:'Exam', delivery:'Delivery', countdown:'Countdown', plan:'Review plan', topics:'Topics',
+          readiness:'Readiness', weekView:'Week', monthView:'Month', dayView:'Day', prev:'Prev', next:'Next', current:'Today',
+          filter:'Filter', sort:'Sort', dueSoon:'Due soon', prioritySort:'Priority', createdSort:'Newest', titleSort:'Title',
+          listView:'List', kanbanView:'Kanban', dragHint:'Drag cards between columns', keyboardShortcuts:'Shortcuts: N new task, / search',
+          availableMinutes:'Available minutes/day', breakMinutes:'Break between sessions (min)', sound:'Sound', vibration:'Vibration',
+          accentColor:'Accent color', weekStart:'Week start', timeFormat:'Time format', format12:'12-hour', format24:'24-hour',
+          dataManagement:'Data management', dangerZone:'Danger zone', doubleConfirm:'Double confirmation', imported:'Imported',
+          importFailed:'Import failed: invalid file', exported:'Exported', noAlerts:'No alerts', alerts:'Alerts',
+          markRead:'Mark read', celebrate:'Great job!', taskCompleted:'Task completed', recurringCreated:'Next occurrence created',
+          levelUp:'Level up', badgeUnlocked:'New badge', subjectName:'Subject name', color:'Color',
+          deleteSubjectWarn:'This subject has tasks. They will be unlinked only.', unlink:'Unlink', deleteAnyway:'Delete and unlink',
+          habitName:'Habit name', toggleHabit:'Toggle today', courseName:'Course name', noteTitle:'Note title',
+          noteContent:'Write your summary here...', searchNotes:'Search notes', noNotes:'No notes', noExams:'No upcoming exams',
+          noClasses:'No scheduled classes', addFirstSubject:'Add a subject to see it here', startNow:'Start now', currentSession:'Current session',
+          noActiveSession:'No active session', todaySessions:'Today sessions', completedSessions:'Completed sessions', cancelled:'Cancelled',
+          completed:'Completed', planned:'Planned', actual:'Actual', expectedVsActual:'Expected vs actual', settingsSaved:'Settings saved',
+          profileSaved:'Profile saved', cloudSynced:'Cloud synced', syncError:'Cloud sync failed', offlineReady:'Ready to work offline',
+          installApp:'Install app', share:'Share', aboutText:'Munjiz is a local/optional-cloud web app for student life management. Developed by YS.'
+        }
+      };
+
+      const ICONS = {
+        home:'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/>',
+        tasks:'<path d="M9 11l3 3 9-9"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+        schedule:'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><circle cx="12" cy="16" r="2"/>',
+        calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+        exams:'<circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/>',
+        focus:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/>',
+        stats:'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
+        habits:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8z"/>',
+        gpa:'<path d="M4 19.5V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14"/><path d="M8 7h8M8 11h8M8 15h5"/>',
+        notes:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/>',
+        settings:'<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+        plus:'<path d="M12 5v14M5 12h14"/>', edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+        trash:'<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6M14 11v6"/>',
+        check:'<path d="M20 6 9 17l-5-5"/>', play:'<path d="M5 3l14 9-14 9V3z"/>', pause:'<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>',
+        stop:'<rect x="5" y="5" width="14" height="14" rx="2"/>', clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>',
+        bell:'<path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>',
+        search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>', sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+        moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>', user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+        menu:'<path d="M3 6h18M3 12h18M3 18h18"/>', close:'<path d="M18 6 6 18M6 6l12 12"/>', arrowRight:'<path d="M5 12h14M12 5l7 7-7 7"/>',
+        arrowLeft:'<path d="M19 12H5M12 19l-7-7 7-7"/>', download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+        upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>', logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/>',
+        star:'<path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/>', trophy:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a4 4 0 0 1-4 4M7 5H4v2a4 4 0 0 0 4 4"/>',
+        book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>'
+      };
+
+      const GOOGLE_ICON = `<svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.5 29.5 4.5 24 4.5 13.2 4.5 4.5 13.2 4.5 24S13.2 43.5 24 43.5 43.5 34.8 43.5 24c0-1.2-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.5 29.5 4.5 24 4.5 16.3 4.5 9.7 8.9 6.3 14.7z"/><path fill="#4CAF50" d="M24 43.5c5.2 0 10-2 13.6-5.2l-6.3-5.2C29.6 34.7 27 36 24 36c-5.3 0-9.7-3.3-11.3-7.9l-6.5 5C9.5 39.1 16.2 43.5 24 43.5z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.3 5.6l6.3 5.2C41.4 35.4 43.5 30.1 43.5 24c0-1.2-.1-2.3-.4-3.5z"/></svg>`;
+
+      /* =========================
+         2) أدوات مساعدة
+         ========================= */
+      const $ = (s, r=document) => r.querySelector(s);
+      const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+      const uid = () => crypto.randomUUID ? crypto.randomUUID() : 'id-'+Math.random().toString(36).slice(2)+Date.now().toString(36);
+      const esc = v => String(v ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+      const num = (v,d=0) => { const n=Number(v); return Number.isFinite(n)?n:d; };
+      const clamp = (v,a,b) => Math.min(b, Math.max(a, v));
+      const pad = n => String(n).padStart(2,'0');
+      const iso = () => new Date().toISOString();
+      const dateKey = d => { const x=new Date(d); return `${x.getFullYear()}-${pad(x.getMonth()+1)}-${pad(x.getDate())}`; };
+      const parseDate = s => { if(!s) return null; const d=new Date(s); return isNaN(d)?null:d; };
+      const toLocalInput = d => { const x=new Date(d); return `${x.getFullYear()}-${pad(x.getMonth()+1)}-${pad(x.getDate())}T${pad(x.getHours())}:${pad(x.getMinutes())}`; };
+      const toDateInput = d => { const x=new Date(d); return `${x.getFullYear()}-${pad(x.getMonth()+1)}-${pad(x.getDate())}`; };
+      const startOfDay = d => { const x=new Date(d); x.setHours(0,0,0,0); return x; };
+      const endOfDay = d => { const x=new Date(d); x.setHours(23,59,59,999); return x; };
+      const addDays = (d,n) => { const x=new Date(d); x.setDate(x.getDate()+n); return x; };
+      const sameDay = (a,b) => dateKey(a) === dateKey(b);
+      const minutesBetween = (a,b) => (new Date(b)-new Date(a))/60000;
+      const debounce = (fn,ms=220) => { let t; return (...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms);}; };
+      const download = (name,content,mime='text/plain') => {
+        const blob = new Blob([content], {type:`${mime};charset=utf-8`});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href=url; a.download=name; document.body.appendChild(a); a.click();
+        setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},300);
+      };
+      const csvEsc = v => { const s=String(v??''); return /[",\n]/.test(s)?`"${s.replace(/"/g,'""')}"`:s; };
+      const toCSV = rows => '\uFEFF'+rows.map(r=>r.map(csvEsc).join(',')).join('\n');
+      const icon = (name,size=20) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]||''}</svg>`;
+      const logo = (size=42) => `<svg width="${size}" height="${size}" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="14" fill="currentColor" opacity=".15"/><path d="M13 25l8 8 15-16" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      const t = (key, vars={}) => {
+        const lang = window.__state?.settings?.lang || 'ar';
+        let s = DICT[lang]?.[key] || DICT.ar[key] || key;
+        return Object.entries(vars).reduce((a,[k,v])=>a.replaceAll(`{${k}}`, v), s);
+      };
+      const statusLabel = s => t(s==='new'?'statusNew':s==='inProgress'?'statusInProgress':'statusDone');
+      const priorityLabel = p => t(p);
+      const subjectById = id => state.subjects.find(x=>x.id===id) || null;
+      const subjectName = id => subjectById(id)?.name || t('noSubjects');
+      const taskById = id => state.tasks.find(x=>x.id===id) || null;
+      const isOverdue = task => task.status!=='done' && task.dueAt && parseDate(task.dueAt) < new Date();
+      const fmtDuration = min => { min=Math.round(num(min,0)); if(min<60) return `${min} ${state.settings.lang==='ar'?'د':'m'}`; const h=Math.floor(min/60), m=min%60; return m?`${h} ${state.settings.lang==='ar'?'س':'h'} ${m} ${state.settings.lang==='ar'?'د':'m'}`:`${h} ${state.settings.lang==='ar'?'س':'h'}`; };
+      const fmtTime = d => {
+        const x = new Date(d); let h=x.getHours(), m=pad(x.getMinutes());
+        if(state.settings.timeFormat===12){ const suffix=h<12?(state.settings.lang==='ar'?'ص':'AM'):(state.settings.lang==='ar'?'م':'PM'); h=h%12||12; return `${h}:${m} ${suffix}`; }
+        return `${pad(h)}:${m}`;
+      };
+      const fmtDate = d => new Date(d).toLocaleDateString(state.settings.lang==='ar'?'ar-EG':'en-US',{day:'numeric',month:'short',year:'numeric'});
+      const fmtDateTime = d => `${fmtDate(d)} ${fmtTime(d)}`;
+      const relativeDue = s => {
+        const d=parseDate(s); if(!d) return '—';
+        const mins=minutesBetween(new Date(),d);
+        if(mins<0) return (state.settings.lang==='ar'?'متأخرة ':'Overdue ') + fmtDuration(Math.abs(mins));
+        if(mins<60) return (state.settings.lang==='ar'?'خلال ':'in ') + Math.round(mins) + (state.settings.lang==='ar'?' د':' min');
+        if(mins<1440) return (state.settings.lang==='ar'?'خلال ':'in ') + Math.round(mins/60) + (state.settings.lang==='ar'?' س':' h');
+        return (state.settings.lang==='ar'?'متبقي ':'in ') + Math.ceil(mins/1440) + ' ' + t('daysLeft');
+      };
+      const weekStartDate = (d=new Date(), ws=state.settings.weekStart) => { const x=startOfDay(d); const diff=(x.getDay()-ws+7)%7; return addDays(x,-diff); };
+      const lastNDays = n => Array.from({length:n},(_,i)=>addDays(new Date(), i-n+1));
+      const completedSessions = () => state.sessions.filter(s=>s.status==='completed' && s.mode==='focus');
+      const focusMinutesOn = d => completedSessions().filter(s=>sameDay(new Date(s.startedAt),d)).reduce((a,s)=>a+s.actualSec/60,0);
+      const focusMinutesRange = (from,to) => { const a=new Date(from).getTime(), b=new Date(to).getTime(); return completedSessions().filter(s=>{const t=new Date(s.startedAt).getTime(); return t>=a && t<b;}).reduce((x,s)=>x+s.actualSec/60,0); };
+      const tasksCompletedRange = (from,to) => { const a=new Date(from).getTime(), b=new Date(to).getTime(); return state.tasks.filter(t=>t.status==='done' && t.completedAt && new Date(t.completedAt).getTime()>=a && new Date(t.completedAt).getTime()<b); };
+
+      /* =========================
+         3) التخزين والحالة
+         ========================= */
+      const DEFAULT_STATE = {
+        schemaVersion: SCHEMA_VERSION,
+        updatedAt: Date.now(),
+        meta: { lastMorning: '' },
+        auth: { provider:'guest', uid:'guest', displayName:'', photoURL:'', email:'' },
+        profile: { name:'', school:'', avatarColor:'#2563eb' },
+        settings: {
+          lang:'ar', theme:'auto', accent:'#2563eb', weekStart:0, timeFormat:24,
+          pomodoro:{ work:25, short:5, long:15, cycle:4 },
+          notifyLead:60, sound:true, vibration:true, availableMinutes:180, breakMinutes:5
+        },
+        subjects:[], tasks:[], classes:[], exams:[], sessions:[], habits:[], courses:[], notes:[],
+        game:{ points:0, streak:0, lastStudyDate:'', badges:{} },
+        notifications:{ seen:{} },
+        activeFocus:null,
+        gpaTarget:3,
+        ui:{ view:'home', taskFilter:'today', taskView:'list', taskSearch:'', taskSort:'due', noteSearch:'', sidebarOpen:false, planDraft:null }
+      };
+
+      let state = normalizeState(loadRaw());
+      window.__state = state;
+
+      function loadRaw(){
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if(!raw) return null;
+          const parsed = JSON.parse(raw);
+          return migrate(parsed);
+        } catch(e) { console.warn(e); return null; }
+      }
+
+      function migrate(s){
+        if(!s || typeof s !== 'object') return null;
+        if(!s.schemaVersion || s.schemaVersion < 1) s.schemaVersion = 1;
+        return s;
+      }
+
+      function normalizeTask(tsk={}) {
+        const subtasks = Array.isArray(tsk.subtasks) ? tsk.subtasks.map(s=>({id:s.id||uid(), title:String(s.title||'').slice(0,180), done:!!s.done})).filter(s=>s.title) : [];
+        const doneCount = subtasks.filter(s=>s.done).length;
+        return {
+          id: tsk.id || uid(),
+          title: String(tsk.title || '').slice(0,220) || '—',
+          description: String(tsk.description || ''),
+          subjectId: tsk.subjectId || null,
+          priority: PRIORITIES.includes(tsk.priority) ? tsk.priority : 'medium',
+          status: STATUS.includes(tsk.status) ? tsk.status : 'new',
+          dueAt: tsk.dueAt || null,
+          estimate: Math.max(0, Math.round(num(tsk.estimate, 25))),
+          actualMin: Math.max(0, Math.round(num(tsk.actualMin, 0))),
+          tags: Array.isArray(tsk.tags) ? tsk.tags.map(String).slice(0,10) : [],
+          link: String(tsk.link || ''),
+          notes: String(tsk.notes || ''),
+          subtasks,
+          repeat: REPEATS.includes(tsk.repeat) ? tsk.repeat : 'none',
+          repeatInterval: Math.max(1, Math.round(num(tsk.repeatInterval, 7))),
+          createdAt: tsk.createdAt || iso(),
+          updatedAt: tsk.updatedAt || iso(),
+          completedAt: tsk.status==='done' ? (tsk.completedAt || iso()) : null,
+          progress: tsk.status==='done' ? 100 : subtasks.length ? Math.round(doneCount/subtasks.length*100) : (tsk.status==='inProgress'?30:0)
+        };
+      }
+
+      function normalizeSubject(s={}) { return { id:s.id||uid(), name:String(s.name||'').slice(0,120)||'—', color:/^#[0-9a-f]{6}$/i.test(s.color)?s.color:'#2563eb', description:String(s.description||'') }; }
+      function normalizeClass(c={}) { return { id:c.id||uid(), title:String(c.title||'').slice(0,160)||'—', subjectId:c.subjectId||null, day:clamp(Math.round(num(c.day,0)),0,6), start:String(c.start||'08:00'), end:String(c.end||'09:00'), room:String(c.room||''), teacher:String(c.teacher||'') }; }
+      function normalizeExam(e={}) { return { id:e.id||uid(), title:String(e.title||'').slice(0,160)||'—', subjectId:e.subjectId||null, date:e.date||toLocalInput(addDays(new Date(),1)), type:e.type==='delivery'?'delivery':'exam', topics:String(e.topics||''), plan:String(e.plan||''), readiness:clamp(Math.round(num(e.readiness,0)),0,100), notes:String(e.notes||'') }; }
+      function normalizeSession(s={}) { return { id:s.id||uid(), taskId:s.taskId||null, subjectId:s.subjectId||null, mode:s.mode==='break'?'break':'focus', startedAt:s.startedAt||iso(), endedAt:s.endedAt||iso(), plannedSec:Math.max(0,Math.round(num(s.plannedSec,0))), actualSec:Math.max(0,Math.round(num(s.actualSec,0))), status:s.status==='cancelled'?'cancelled':'completed' }; }
+      function normalizeHabit(h={}) { return { id:h.id||uid(), title:String(h.title||'').slice(0,120)||'—', logs:Array.isArray(h.logs)?h.logs.map(String):[] }; }
+      function normalizeCourse(c={}) { return { id:c.id||uid(), name:String(c.name||'').slice(0,120)||'—', credits:Math.max(0,num(c.credits,3)), grade:Object.keys(GRADES).includes(c.grade)?c.grade:'A' }; }
+      function normalizeNote(n={}) { return { id:n.id||uid(), title:String(n.title||'').slice(0,160)||'—', content:String(n.content||''), subjectId:n.subjectId||null, keywords:String(n.keywords||''), updatedAt:n.updatedAt||iso() }; }
+      function normalizeActive(a){ if(!a) return null; return { sessionId:a.sessionId||uid(), taskId:a.taskId||null, subjectId:a.subjectId||null, mode:a.mode==='break'?'break':'focus', plannedSec:Math.max(1,Math.round(num(a.plannedSec,1500))), startedAt:Number(a.startedAt||Date.now()), pausedAt:a.pausedAt?Number(a.pausedAt):null, accumulatedMs:Math.max(0,Number(a.accumulatedMs||0)), cycle:Number(a.cycle||0) }; }
+
+      function normalizeState(input){
+        const s = input && typeof input==='object' ? input : {};
+        const out = JSON.parse(JSON.stringify(DEFAULT_STATE));
+        Object.assign(out, s);
+        out.schemaVersion = SCHEMA_VERSION;
+        out.meta = { ...DEFAULT_STATE.meta, ...(s.meta||{}) };
+        out.auth = { ...DEFAULT_STATE.auth, ...(s.auth||{}) };
+        out.profile = { ...DEFAULT_STATE.profile, ...(s.profile||{}) };
+        out.settings = { ...DEFAULT_STATE.settings, ...(s.settings||{}) };
+        out.settings.pomodoro = { ...DEFAULT_STATE.settings.pomodoro, ...(s.settings?.pomodoro||{}) };
+        out.game = { ...DEFAULT_STATE.game, ...(s.game||{}) };
+        out.notifications = { seen:{}, ...(s.notifications||{}) };
+        out.gpaTarget = num(s.gpaTarget, 3);
+        ['subjects','tasks','classes','exams','sessions','habits','courses','notes'].forEach(k => out[k] = Array.isArray(s[k]) ? s[k] : []);
+        out.subjects = out.subjects.map(normalizeSubject);
+        out.tasks = out.tasks.map(normalizeTask);
+        out.classes = out.classes.map(normalizeClass);
+        out.exams = out.exams.map(normalizeExam);
+        out.sessions = out.sessions.map(normalizeSession);
+        out.habits = out.habits.map(normalizeHabit);
+        out.courses = out.courses.map(normalizeCourse);
+        out.notes = out.notes.map(normalizeNote);
+        out.activeFocus = normalizeActive(s.activeFocus);
+        out.ui = { ...DEFAULT_STATE.ui, ...(s.ui||{}), sidebarOpen:false, planDraft:null };
+        return out;
+      }
+
+      function saveState(sync=true){
+        state.updatedAt = Date.now();
+        window.__state = state;
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+        catch(e){ console.error(e); toast(t('storageError'),'error'); }
+        if(sync) scheduleSync();
+      }
+
+      /* =========================
+         4) Firebase / Auth / Sync
+         ========================= */
+      const fb = { ready:false, app:null, auth:null, db:null, error:null };
+      let syncTimer = null;
+
+      const OWNER_EMAIL = 'yassinmohmmed555@gmail.com';
+      const isOwner = () => !!state.auth.email && state.auth.email.toLowerCase() === OWNER_EMAIL;
+
+      /* يسجّل بروفايل المستخدم ليراه المالك فقط في لوحة التحكم */
+      async function reportProfile(){
+        if(!fb.ready || state.auth.provider!=='firebase') return;
+        try {
+          const ref = fb.db.collection('munjiz_profiles').doc(state.auth.uid), snap = await ref.get(), ts = firebase.firestore.FieldValue.serverTimestamp();
+          const ua = navigator.userAgent, os = /Android/i.test(ua)?'Android':/iPhone|iPad/i.test(ua)?'iOS':/Windows/i.test(ua)?'Windows':/Mac/i.test(ua)?'Mac':'Other';
+          await ref.set({ name:state.auth.displayName||'', email:state.auth.email||'', photo:state.auth.photoURL||'', os, lang:navigator.language,
+            tasks:(state.tasks||[]).length, lastSeen:ts, ...(snap.exists?{}:{createdAt:ts}) }, { merge:true });
+        } catch(e){ console.warn(e); }
+      }
+
+      /* ترحيب خاص بالمطور (VIP) يظهر لحسابه فقط */
+      function showOwnerVip(){
+        if(!isOwner() || document.getElementById('vipBadge')) return;
+        const b = document.createElement('div'); b.id='vipBadge';
+        b.textContent = '👑 المطور · VIP';
+        b.style.cssText = 'position:fixed;top:calc(8px + env(safe-area-inset-top));inset-inline-start:10px;z-index:9999;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-weight:800;font-size:12px;padding:5px 12px;border-radius:999px;box-shadow:0 4px 14px rgba(217,119,6,.45);pointer-events:none';
+        document.body.appendChild(b);
+        if(!sessionStorage.getItem('munjiz.vipWelcome')){ sessionStorage.setItem('munjiz.vipWelcome','1'); toast('👑 مرحبًا بالمطور YS — حسابك VIP','success'); }
+      }
+
+      function hasFirebaseConfig(){ return !!(FIREBASE_CONFIG && FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.projectId); }
+
+      function loadScript(src){
+        return new Promise((resolve,reject)=>{
+          const s=document.createElement('script'); s.src=src; s.async=true;
+          s.onload=resolve; s.onerror=()=>reject(new Error('Failed '+src));
+          document.head.appendChild(s);
+        });
+      }
+
+      async function initFirebase(){
+        if(!hasFirebaseConfig()) return false;
+        try {
+          if(!window.firebase) {
+            await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
+            await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js');
+            await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');
+          }
+          fb.app = firebase.initializeApp(FIREBASE_CONFIG, 'munjiz');
+          fb.auth = fb.app.auth();
+          fb.db = fb.app.firestore();
+          try { await fb.db.enablePersistence({ synchronizeTabs:true }); } catch(e) { console.warn('offline persistence', e); }
+          fb.ready = true;
+          return true;
+        } catch(e) { fb.error=e; console.warn(e); return false; }
+      }
+
+      function authErrorMessage(code){
+        const map = {
+          'auth/popup-closed-by-user':'popupClosed',
+          'auth/cancelled-popup-request':'popupClosed',
+          'auth/network-request-failed':'networkError',
+          'auth/unauthorized-domain':'unauthorizedDomain',
+          'auth/operation-not-allowed':'operationNotAllowed',
+          'auth/account-exists-with-different-credential':'accountExists'
+        };
+        return t(map[code] || 'unknownError');
+      }
+
+      async function signInWithGoogle(remember=true){
+        if(!fb.ready){ toast(t('firebaseMissing'),'warn'); return; }
+        try {
+          await fb.auth.setPersistence(remember ? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION);
+          const provider = new firebase.auth.GoogleAuthProvider();
+          await fb.auth.signInWithPopup(provider);
+        } catch(e){
+          console.error(e);
+          if(e.code==='auth/popup-blocked' || e.code==='auth/operation-not-supported-in-this-environment'){
+            try { await fb.auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()); return; } catch(e2){ console.error(e2); }
+          }
+          toast(authErrorMessage(e.code), 'error');
+        }
+      }
+
+      async function signOutUser(){
+        if(fb.ready && fb.auth.currentUser) await fb.auth.signOut().catch(()=>{});
+        setGuestActive(false);
+        state.auth = { ...DEFAULT_STATE.auth };
+        saveState(false);
+        render();
+      }
+
+      function watchAuth(){
+        if(!fb.ready) return;
+        fb.auth.onAuthStateChanged(async user => {
+          if(user){
+            state.auth = { provider:'firebase', uid:user.uid, displayName:user.displayName||'', photoURL:user.photoURL||'', email:user.email||'' };
+            state.profile.name = state.profile.name || user.displayName || '';
+            setGuestActive(false);
+            saveState(false);
+            await pullCloud();
+            reportProfile(); showOwnerVip();
+            render();
+          } else {
+            if(state.auth.provider==='firebase') state.auth = { ...DEFAULT_STATE.auth };
+            render();
+          }
+        });
+      }
+
+      function scheduleSync(){
+        if(!fb.ready || state.auth.provider!=='firebase') return;
+        clearTimeout(syncTimer);
+        syncTimer = setTimeout(pushCloud, 1200);
+      }
+
+      async function pushCloud(){
+        if(!fb.ready || state.auth.provider!=='firebase') return;
+        try {
+          const clean = JSON.parse(JSON.stringify(state));
+          await fb.db.collection('munjiz_users').doc(state.auth.uid).collection('data').doc('main').set({ state:clean, updatedAt:state.updatedAt }, { merge:true });
+        } catch(e){ console.warn(e); }
+      }
+
+      async function pullCloud(){
+        if(!fb.ready || state.auth.provider!=='firebase') return;
+        try {
+          const snap = await fb.db.collection('munjiz_users').doc(state.auth.uid).collection('data').doc('main').get();
+          if(snap.exists){
+            const data = snap.data();
+            const cloudState = normalizeState(data.state || {});
+            if((data.updatedAt || 0) > state.updatedAt){
+              state = cloudState;
+              window.__state = state;
+              saveState(false);
+              applySettings();
+            } else {
+              await pushCloud();
+            }
+          } else {
+            await pushCloud();
+          }
+        } catch(e){ console.warn(e); toast(t('syncError'),'warn'); }
+      }
+
+      function setGuestActive(v, remember=true){
+        if(v){ (remember?localStorage:sessionStorage).setItem('munjiz.guest','1'); }
+        else { localStorage.removeItem('munjiz.guest'); sessionStorage.removeItem('munjiz.guest'); }
+      }
+      function getGuestActive(){ return localStorage.getItem('munjiz.guest')==='1' || sessionStorage.getItem('munjiz.guest')==='1'; }
+      function isLoggedIn(){ return state.auth.provider==='firebase' || getGuestActive(); }
+
+      /* =========================
+         5) الخدمات
+         ========================= */
+      const Tasks = {
+        create(data){ const task=normalizeTask(data); state.tasks.unshift(task); saveState(); checkBadges(); return task; },
+        update(id, patch){ const tsk=taskById(id); if(!tsk) return; Object.assign(tsk, patch); const norm=normalizeTask(tsk); Object.assign(tsk, norm); saveState(); },
+        remove(id){ const idx=state.tasks.findIndex(x=>x.id===id); if(idx<0) return; const item=state.tasks[idx]; state.tasks.splice(idx,1); saveState(); setUndo(()=>{ state.tasks.splice(idx,0,item); saveState(); render(); }, t('deleted')); toast(t('deleted'),'info',{label:t('undo'), action:'undo-last'}); },
+        setStatus(id,status){ const tsk=taskById(id); if(!tsk) return; if(status==='done') Tasks.complete(id); else { tsk.status=status; tsk.completedAt=null; tsk.updatedAt=iso(); saveState(); render(); } },
+        complete(id){
+          const tsk=taskById(id); if(!tsk || tsk.status==='done') return;
+          tsk.status='done'; tsk.completedAt=iso(); tsk.subtasks.forEach(s=>s.done=true); tsk.progress=100; tsk.updatedAt=iso();
+          addPoints(10); markStudyDay(); celebrate();
+          if(tsk.repeat!=='none' && tsk.dueAt){
+            const days = tsk.repeat==='daily'?1:tsk.repeat==='weekly'?7:tsk.repeatInterval;
+            const next = normalizeTask({ ...tsk, id:uid(), status:'new', completedAt:null, createdAt:iso(), updatedAt:iso(), dueAt:new Date(parseDate(tsk.dueAt).getTime()+days*DAY_MS).toISOString(), subtasks:tsk.subtasks.map(s=>({id:uid(),title:s.title,done:false})), progress:0, actualMin:0 });
+            state.tasks.unshift(next);
+            toast(t('recurringCreated'),'info');
+          }
+          saveState(); checkBadges(); render(); toast(t('taskCompleted'),'success');
+        },
+        toggle(id){ const tsk=taskById(id); if(!tsk) return; if(tsk.status==='done') Tasks.update(id,{status:'new',completedAt:null}); else Tasks.complete(id); }
+      };
+
+      const Subjects = {
+        upsert(data){ const s=normalizeSubject(data); const i=state.subjects.findIndex(x=>x.id===s.id); if(i>=0) state.subjects[i]=s; else state.subjects.push(s); saveState(); return s; },
+        remove(id){ const linked=state.tasks.filter(x=>x.subjectId===id).length; if(linked){ confirmModal({title:t('delete'),message:t('deleteSubjectWarn'),confirmText:t('unlink')}).then(ok=>{ if(!ok) return; state.tasks.forEach(x=>{if(x.subjectId===id)x.subjectId=null;}); state.exams.forEach(x=>{if(x.subjectId===id)x.subjectId=null;}); state.classes.forEach(x=>{if(x.subjectId===id)x.subjectId=null;}); state.notes.forEach(x=>{if(x.subjectId===id)x.subjectId=null;}); state.subjects=state.subjects.filter(x=>x.id!==id); saveState(); render(); toast(t('deleted'),'success'); }); } else { state.subjects=state.subjects.filter(x=>x.id!==id); saveState(); render(); toast(t('deleted'),'success'); } }
+      };
+
+      const Exams = {
+        upsert(data){ const e=normalizeExam(data); const i=state.exams.findIndex(x=>x.id===e.id); if(i>=0) state.exams[i]=e; else state.exams.unshift(e); saveState(); return e; },
+        remove(id){ const idx=state.exams.findIndex(x=>x.id===id); if(idx<0)return; const item=state.exams[idx]; state.exams.splice(idx,1); saveState(); setUndo(()=>{state.exams.splice(idx,0,item);saveState();render();},t('deleted')); toast(t('deleted'),'info',{label:t('undo'),action:'undo-last'}); }
+      };
+
+      const Classes = {
+        upsert(data){ const c=normalizeClass(data); const i=state.classes.findIndex(x=>x.id===c.id); if(i>=0) state.classes[i]=c; else state.classes.push(c); saveState(); return c; },
+        remove(id){ state.classes=state.classes.filter(x=>x.id!==id); saveState(); toast(t('deleted'),'success'); }
+      };
+
+      const Notes = {
+        upsert(data){ const n=normalizeNote(data); const i=state.notes.findIndex(x=>x.id===n.id); if(i>=0) state.notes[i]=n; else state.notes.unshift(n); saveState(); return n; },
+        remove(id){ state.notes=state.notes.filter(x=>x.id!==id); saveState(); toast(t('deleted'),'success'); }
+      };
+
+      const Habits = {
+        upsert(data){ const h=normalizeHabit(data); const i=state.habits.findIndex(x=>x.id===h.id); if(i>=0) state.habits[i]=h; else state.habits.push(h); saveState(); return h; },
+        toggle(id,date=dateKey(new Date())){ const h=state.habits.find(x=>x.id===id); if(!h)return; if(h.logs.includes(date)) h.logs=h.logs.filter(d=>d!==date); else h.logs.push(date); saveState(); render(); },
+        remove(id){ state.habits=state.habits.filter(x=>x.id!==id); saveState(); }
+      };
+
+      const Courses = {
+        upsert(data){ const c=normalizeCourse(data); const i=state.courses.findIndex(x=>x.id===c.id); if(i>=0) state.courses[i]=c; else state.courses.push(c); saveState(); return c; },
+        remove(id){ state.courses=state.courses.filter(x=>x.id!==id); saveState(); }
+      };
+
+      function addPoints(n){
+        const before = levelFromPoints(state.game.points);
+        state.game.points = Math.max(0, state.game.points + n);
+        const after = levelFromPoints(state.game.points);
+        if(after > before) toast(`${t('levelUp')}: ${after}`, 'success');
+      }
+      function levelFromPoints(p){ return Math.floor(Math.sqrt(Math.max(0,p)/25)) + 1; }
+      function levelProgress(p){ const lvl=levelFromPoints(p); const cur=(lvl-1)**2*25; const next=lvl**2*25; return clamp(Math.round((p-cur)/(next-cur)*100),0,100); }
+      function markStudyDay(){
+        const today=dateKey(new Date());
+        if(state.game.lastStudyDate===today) return;
+        const yesterday=dateKey(addDays(new Date(),-1));
+        state.game.streak = state.game.lastStudyDate===yesterday ? state.game.streak+1 : 1;
+        state.game.lastStudyDate = today;
+      }
+
+      const BADGES = [
+        { id:'first_task', title:'firstTask', check:()=>state.tasks.some(t=>t.status==='done') },
+        { id:'five_sessions', title:'fiveSessions', check:()=>completedSessions().length>=5 },
+        { id:'week_streak', title:'weekStreak', check:()=>state.game.streak>=7 },
+        { id:'hundred_points', title:'hundredPoints', check:()=>state.game.points>=100 }
+      ];
+      function checkBadges(){
+        BADGES.forEach(b=>{
+          if(!state.game.badges[b.id] && b.check()){
+            state.game.badges[b.id] = { unlockedAt: iso() };
+            addPoints(25);
+            toast(`${t('badgeUnlocked')}: ${t(b.title)}`, 'success');
+          }
+        });
+        saveState(false);
+      }
+
+      /* =========================
+         6) التركيز
+         ========================= */
+      let timerInterval = null;
+      function ensureTimer(){ if(!timerInterval) timerInterval = setInterval(tickTimer, 1000); }
+      function activeElapsedMs(){ const a=state.activeFocus; if(!a) return 0; return a.accumulatedMs + (a.pausedAt ? 0 : Date.now()-a.startedAt); }
+      function activeRemainingSec(){ const a=state.activeFocus; if(!a) return 0; return Math.max(0, Math.ceil((a.plannedSec*1000 - activeElapsedMs())/1000)); }
+
+      function startFocus({taskId=null, subjectId=null, minutes=25, mode='focus'}={}){
+        if(state.activeFocus){ toast(t('currentSession'),'warn'); return; }
+        const task = taskId ? taskById(taskId) : null;
+        state.activeFocus = normalizeActive({
+          sessionId: uid(), taskId, subjectId: subjectId || task?.subjectId || null, mode,
+          plannedSec: Math.max(1, Math.round(minutes*60)), startedAt: Date.now(), pausedAt:null, accumulatedMs:0,
+          cycle: completedSessions().filter(s=>sameDay(new Date(s.startedAt), new Date())).length + 1
+        });
+        if(task && task.status==='new') Tasks.update(task.id,{status:'inProgress'});
+        saveState(); ensureTimer(); render(); toast(mode==='focus'?t('start'):t('shortBreak'),'success');
+      }
+      function pauseFocus(){ const a=state.activeFocus; if(!a||a.pausedAt)return; a.accumulatedMs += Date.now()-a.startedAt; a.pausedAt=Date.now(); saveState(); updateFocusUI(); toast(t('pause'),'info'); }
+      function resumeFocus(){ const a=state.activeFocus; if(!a||!a.pausedAt)return; a.startedAt=Date.now(); a.pausedAt=null; saveState(); updateFocusUI(); toast(t('resume'),'info'); }
+      function stopFocus(cancel=true){
+        const a=state.activeFocus; if(!a)return;
+        const elapsedSec = Math.floor(activeElapsedMs()/1000);
+        if(cancel && elapsedSec>10) logSession(a, 'cancelled', elapsedSec);
+        state.activeFocus=null; saveState(); render(); toast(cancel?t('cancelled'):t('reset'), cancel?'warn':'info');
+      }
+      function finishFocusEarly(){
+        const a=state.activeFocus; if(!a)return;
+        const elapsedSec = Math.floor(activeElapsedMs()/1000);
+        logSession(a, 'completed', elapsedSec);
+        state.activeFocus=null; saveState(); render(); toast(t('sessionLogged'),'success');
+      }
+      function logSession(a, status, actualSecOverride=null){
+        const actualSec = actualSecOverride!=null ? Math.max(0, Math.round(actualSecOverride)) : (status==='completed' ? Math.min(a.plannedSec, Math.max(1, Math.floor(activeElapsedMs()/1000))) : Math.floor(activeElapsedMs()/1000));
+        const session = normalizeSession({ id:a.sessionId, taskId:a.taskId, subjectId:a.subjectId, mode:a.mode, startedAt:new Date(a.startedAt - a.accumulatedMs).toISOString(), endedAt:iso(), plannedSec:a.plannedSec, actualSec, status });
+        state.sessions.unshift(session);
+        if(status==='completed' && a.mode==='focus'){
+          if(a.taskId){ const tsk=taskById(a.taskId); if(tsk){ tsk.actualMin += Math.round(actualSec/60); tsk.updatedAt=iso(); } }
+          addPoints(Math.max(1, Math.round(actualSec/60)));
+          markStudyDay();
+          playSound(); vibrate();
+          notifyBrowser(t('focusTimer'), `${t('sessionLogged')} • ${fmtDuration(actualSec/60)}`);
+        }
+        saveState(); checkBadges();
+      }
+      function tickTimer(){
+        const a=state.activeFocus;
+        if(!a){ if(timerInterval){clearInterval(timerInterval); timerInterval=null;} return; }
+        updateFocusUI();
+        if(!a.pausedAt && activeRemainingSec()<=0){
+          logSession(a,'completed',a.plannedSec);
+          state.activeFocus=null; saveState(); render(); toast(t('sessionLogged'),'success');
+        }
+      }
+      function updateFocusUI(){
+        const a=state.activeFocus; if(!a) return;
+        const rem=activeRemainingSec(); const txt=`${pad(Math.floor(rem/60))}:${pad(rem%60)}`;
+        $$('[data-remaining]').forEach(n=>n.textContent=txt);
+        $$('[data-focus-progress]').forEach(n=>n.style.width = clamp(100-(rem/a.plannedSec*100),0,100)+'%');
+        $$('[data-focus-state]').forEach(n=>n.textContent = a.pausedAt ? t('pause') : t('start'));
+        const pauseBtn=$('[data-action="focus-pause"]'), resumeBtn=$('[data-action="focus-resume"]');
+        if(pauseBtn) pauseBtn.classList.toggle('hidden', !!a.pausedAt);
+        if(resumeBtn) resumeBtn.classList.toggle('hidden', !a.pausedAt);
+      }
+      function recoverFocus(){
+        const a=state.activeFocus; if(!a) return;
+        if(!a.pausedAt && activeElapsedMs() > a.plannedSec*1000 + 5*60000){
+          openModal({ title:t('currentSession'), size:'sm', dismissible:false, body:`<p>${t('notEnoughTime')}</p>`, footer:`<button class="btn primary" data-action="focus-recover-complete">${t('completed')}</button><button class="btn danger" data-action="focus-recover-cancel">${t('cancelled')}</button>` });
+        } else ensureTimer();
+      }
+      function playSound(){ if(!state.settings.sound)return; try{ const Ctx=window.AudioContext||window.webkitAudioContext; const ctx=new Ctx(); const o=ctx.createOscillator(); const g=ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.value=880; g.gain.value=.08; o.start(); setTimeout(()=>{o.stop();ctx.close();},180); }catch{} }
+      function vibrate(){ if(state.settings.vibration && navigator.vibrate) navigator.vibrate([80,40,80]); }
+      function celebrate(){ if(matchMedia('(prefers-reduced-motion: reduce)').matches) return; const colors=['#2563eb','#7c3aed','#059669','#d97706','#dc2626']; for(let i=0;i<28;i++){ const el=document.createElement('div'); el.className='confetti-piece'; el.style.left=Math.random()*100+'vw'; el.style.background=colors[i%colors.length]; el.style.animationDelay=(Math.random()*.25)+'s'; document.body.appendChild(el); setTimeout(()=>el.remove(),1500); } }
+
+      /* =========================
+         7) التنبيهات
+         ========================= */
+      function getAlerts(){
+        const now=Date.now(); const lead=state.settings.notifyLead*60000; const alerts=[];
+        state.tasks.filter(t=>t.status!=='done' && t.dueAt).forEach(t=>{ const due=Date.parse(t.dueAt); if(due-now<=lead && due-now>-lead*2) alerts.push({type:'task', id:t.id, title:t.title, due:t.dueAt, overdue:due<now}); });
+        state.exams.forEach(e=>{ const due=Date.parse(e.date); if(due-now<=lead && due-now>-lead*2) alerts.push({type:'exam', id:e.id, title:e.title, due:e.date, overdue:due<now}); });
+        return alerts.sort((a,b)=>Date.parse(a.due)-Date.parse(b.due));
+      }
+      function alertKey(a){ return `${a.type}-${a.id}-${a.due}`; }
+      function unreadAlerts(){ return getAlerts().filter(a=>!state.notifications.seen[alertKey(a)]); }
+      function checkNotifications(){
+        const alerts=unreadAlerts();
+        if(Notification?.permission==='granted'){
+          alerts.slice(0,3).forEach(a=>{
+            try { new Notification(a.overdue ? t('overdue') : t('notifications'), { body:a.title }); } catch(e){}
+            state.notifications.seen[alertKey(a)] = true;
+          });
+          saveState(false);
+        }
+        updateBell();
+      }
+      function notifyBrowser(title,body){ if(Notification?.permission==='granted'){ try{ new Notification(title,{body}); }catch{} } }
+      function requestNotificationPermission(){
+        if(!('Notification' in window)){ toast(t('notificationExplanation'),'warn'); return; }
+        Notification.requestPermission().then(p=>{ toast(p==='granted'?t('saved'):t('notificationExplanation'), p==='granted'?'success':'warn'); render(); });
+      }
+      function updateBell(){
+        const badge=$('#bellCount'); if(!badge)return;
+        const count=unreadAlerts().length;
+        badge.textContent=count>99?'99+':count;
+        badge.classList.toggle('hidden', count===0);
+      }
+      function maybeMorningSummary(){
+        const today=dateKey(new Date());
+        if(state.meta.lastMorning===today) return;
+        const todays = state.tasks.filter(t=>t.status!=='done' && t.dueAt && sameDay(parseDate(t.dueAt), new Date()));
+        if(todays.length){
+          state.meta.lastMorning=today; saveState(false);
+          openModal({ title:t('morningSummary'), size:'sm', body:`<p>${t('morningText')}</p><div class="list">${todays.slice(0,5).map(taskRowHtml).join('')}</div>`, footer:`<button class="btn primary" data-close>${t('open')}</button>` });
+        }
+      }
+
+      /* =========================
+         8) التخطيط الذكي
+         ========================= */
+      function generatePlan(){
+        const now=new Date(); const end=endOfDay(now);
+        const avail=state.settings.availableMinutes;
+        const candidates=state.tasks.filter(t=>t.status!=='done' && (isOverdue(t) || (t.dueAt && parseDate(t.dueAt)<=end) || t.priority==='high'))
+          .sort((a,b)=>{
+            const ao=isOverdue(a)?0:1, bo=isOverdue(b)?0:1; if(ao!==bo)return ao-bo;
+            const ad=parseDate(a.dueAt)?.getTime()||Infinity, bd=parseDate(b.dueAt)?.getTime()||Infinity; if(ad!==bd)return ad-bd;
+            const pw={high:3,medium:2,low:1}; return pw[b.priority]-pw[a.priority];
+          });
+        let remaining=avail; const plan=[]; const skipped=[];
+        for(const tsk of candidates){
+          const need=Math.max(15, tsk.estimate||25);
+          if(need<=remaining){ plan.push({taskId:tsk.id, minutes:need}); remaining-=need; if(remaining>state.settings.breakMinutes) remaining-=state.settings.breakMinutes; }
+          else skipped.push(tsk);
+        }
+        return { plan, skipped, remaining };
+      }
+      function openPlannerModal(){
+        const draft=generatePlan(); state.ui.planDraft=draft;
+        const body = `
+          <p class="muted">${t('suggestedPlan')}</p>
+          ${draft.plan.length ? `<div class="list">${draft.plan.map((p,i)=>{ const tsk=taskById(p.taskId); return `<div class="list-item"><div class="list-main"><div class="list-title">${i+1}. ${esc(tsk?.title||'—')}</div><div class="meta"><span>${fmtDuration(p.minutes)}</span>${tsk?.dueAt?`<span>${esc(relativeDue(tsk.dueAt))}</span>`:''}</div></div><button class="icon-btn" data-action="plan-remove" data-index="${i}">${icon('close',16)}</button></div>`; }).join('')}</div>` : `<div class="empty">${esc(t('noTasks'))}</div>`}
+          ${draft.skipped.length ? `<div class="card" style="margin-top:10px;border-color:rgba(220,38,38,.35)"><strong>${t('insufficientTime')}</strong><div class="muted small">${draft.skipped.map(s=>esc(s.title)).join('، ')}</div></div>` : ''}
+        `;
+        openModal({ title:t('planner'), body, size:'lg', footer:`<button class="btn primary" data-action="plan-accept">${t('acceptPlan')}</button><button class="btn" data-action="plan-reject">${t('rejectPlan')}</button>` });
+      }
+
+      /* =========================
+         9) UI عام
+         ========================= */
+      let modalStack=[];
+      let undoFn=null;
+
+      function toast(msg, type='info', action=null){
+        const root=$('#toastRoot'); const el=document.createElement('div'); el.className=`toast ${type}`;
+        el.innerHTML = `<div style="flex:1">${esc(msg)}</div>`;
+        if(action){ const btn=document.createElement('button'); btn.className='btn sm'; btn.textContent=action.label; btn.dataset.action=action.action; el.appendChild(btn); }
+        root.appendChild(el);
+        setTimeout(()=>{ el.classList.add('hide'); setTimeout(()=>el.remove(),220); }, action?6000:3200);
+      }
+      function setUndo(fn,label){ undoFn={fn,label}; }
+
+      function openModal(opts){
+        const id=uid(); const backdrop=document.createElement('div'); backdrop.className='modal-backdrop';
+        const modal=document.createElement('div'); modal.className=`modal ${opts.size||''}`; modal.setAttribute('role','dialog'); modal.setAttribute('aria-modal','true');
+        modal.innerHTML = `
+          <div class="modal-head"><h3>${esc(opts.title||'')}</h3><button class="icon-btn" data-close aria-label="${esc(t('close'))}">${icon('close',18)}</button></div>
+          <div class="modal-body">${opts.body||''}</div>
+          ${opts.footer?`<div class="modal-foot">${opts.footer}</div>`:''}
+        `;
+        backdrop.appendChild(modal); $('#modalRoot').appendChild(backdrop);
+        requestAnimationFrame(()=>backdrop.classList.add('show'));
+        const api={ id, el:modal, backdrop, close(){ backdrop.classList.remove('show'); setTimeout(()=>backdrop.remove(),180); modalStack=modalStack.filter(m=>m.id!==id); } };
+        backdrop.addEventListener('mousedown', e=>{ if(e.target===backdrop && opts.dismissible!==false) api.close(); });
+        modal.querySelector('[data-close]').addEventListener('click', api.close);
+        modalStack.push(api);
+        if(opts.onMount) opts.onMount(api);
+        setTimeout(()=>modal.querySelector('input,select,textarea,button')?.focus(),60);
+        return api;
+      }
+      function confirmModal({title='',message='',confirmText='',cancelText='',danger=false}={}){
+        return new Promise(resolve=>{
+          const m=openModal({ title, size:'sm', body:`<p>${esc(message)}</p>`, footer:`<button class="btn ${danger?'danger':'primary'}" id="ok">${esc(confirmText||t('confirm'))}</button><button class="btn" id="cx">${esc(cancelText||t('cancel'))}</button>`, dismissible:false });
+          m.el.querySelector('#ok').onclick=()=>{m.close();resolve(true);};
+          m.el.querySelector('#cx').onclick=()=>{m.close();resolve(false);};
+        });
+      }
+      function dangerConfirm({title='',message='',keyword='' }={}){
+        return new Promise(resolve=>{
+          const m=openModal({ title, size:'sm', dismissible:false, body:`<p>${esc(message)}</p><label class="field"><span>${esc(keyword)}</span><input class="input" id="kw"></label>`, footer:`<button class="btn danger" id="ok">${esc(t('confirm'))}</button><button class="btn" id="cx">${esc(t('cancel'))}</button>` });
+          m.el.querySelector('#ok').onclick=()=>{ if(m.el.querySelector('#kw').value.trim().toLowerCase()===keyword.toLowerCase()){ m.close(); resolve(true);} else toast(t('invalidDate'),'error'); };
+          m.el.querySelector('#cx').onclick=()=>{m.close();resolve(false);};
+        });
+      }
+
+      function applySettings(){
+        const lang=state.settings.lang;
+        document.documentElement.lang=lang;
+        document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+        const dark=state.settings.theme==='dark' || (state.settings.theme==='auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.theme=dark?'dark':'light';
+        document.documentElement.style.setProperty('--accent', state.settings.accent);
+        const meta=document.querySelector('meta[name=theme-color]'); if(meta) meta.content=state.settings.accent;
+      }
+
+      function navItems(){
+        return [
+          ['home','home'],['tasks','tasks'],['schedule','schedule'],['calendar','calendar'],['exams','exams'],
+          ['focus','focus'],['stats','stats'],['habits','habits'],['gpa','gpa'],['notes','notes'],['settings','settings']
+        ];
+      }
+      function bottomItems(){ return ['home','tasks','focus','calendar','stats']; }
+
+      function render(){
+        applySettings();
+        const root=$('#app');
+        if(!isLoggedIn()) root.innerHTML = renderLogin();
+        else root.innerHTML = renderShell();
+        updateBell();
+        if(state.activeFocus){ ensureTimer(); updateFocusUI(); }
+      }
+
+      function renderLogin(){
+        return `
+        <div class="login">
+          <div class="login-card card">
+            <div class="logo" style="color:var(--accent)">${logo(46)}</div>
+            <div><h1 style="margin:0">${esc(t('appName'))}</h1><p class="muted">${esc(t('tagline'))}</p></div>
+            <div class="row" style="justify-content:center">
+              <button class="chip ${state.settings.lang==='ar'?'active':''}" data-action="set-lang" data-lang="ar">${esc(t('arabic'))}</button>
+              <button class="chip ${state.settings.lang==='en'?'active':''}" data-action="set-lang" data-lang="en">${esc(t('english'))}</button>
+            </div>
+            ${!hasFirebaseConfig()?`<div class="card small muted">${esc(t('firebaseMissing'))}</div>`:''}
+            <button class="btn google-btn" data-action="google-login" ${hasFirebaseConfig()?'':'disabled'}>${GOOGLE_ICON}<span>${esc(t('googleSignIn'))}</span></button>
+            <button class="btn" data-action="guest-login">${esc(t('guestSignIn'))}</button>
+            <label class="checkbox-line"><input type="checkbox" id="rememberBox" checked><span>${esc(t('rememberMe'))}</span></label>
+            <p class="muted small">${esc(t('connectLater'))}</p>
+            <div class="muted small">${esc(APP.copyright)}</div>
+          </div>
+        </div>`;
+      }
+
+      function renderShell(){
+        const view=state.ui.view;
+        return `
+        <div class="shell">
+          <aside class="sidebar ${state.ui.sidebarOpen?'open':''}">
+            <div class="brand"><div class="brand-logo">${logo(24)}</div><div><strong>${esc(t('appName'))}</strong><div class="muted small">v${esc(APP.version)}</div></div></div>
+            <nav class="nav">${navItems().map(([v,k])=>`<button class="nav-item ${view===v?'active':''}" data-action="nav" data-view="${v}">${icon(k,20)}<span>${esc(t(v))}</span></button>`).join('')}</nav>
+            <div class="sidebar-footer">${esc(APP.copyright)}</div>
+          </aside>
+          <div class="overlay ${state.ui.sidebarOpen?'show':''}" data-action="close-sidebar"></div>
+          <main class="main">
+            <header class="topbar">
+              <button class="icon-btn" data-action="toggle-sidebar" aria-label="${esc(t('schedule'))}">${icon('menu',20)}</button>
+              <div class="top-title"><h1>${esc(t(view))}</h1><p class="muted">${esc(greeting())}</p></div>
+              <button class="icon-btn" data-action="open-alerts" aria-label="${esc(t('notifications'))}" style="position:relative">${icon('bell',20)}<span id="bellCount" class="badge hidden" style="position:absolute;top:2px;inset-inline-end:2px;min-width:18px;height:18px;padding:0 4px;background:var(--danger);color:#fff;border:0"></span></button>
+              <button class="icon-btn" data-action="toggle-theme" aria-label="${esc(t('theme'))}">${icon(document.documentElement.dataset.theme==='dark'?'sun':'moon',20)}</button>
+              ${avatarHtml()}
+            </header>
+            <section class="view">${renderView(view)}</section>
+          </main>
+          <nav class="bottom-nav">${bottomItems().map(v=>{const item=navItems().find(x=>x[0]===v); return `<button class="nav-item ${view===v?'active':''}" data-action="nav" data-view="${v}">${icon(item[1],18)}<span>${esc(t(v))}</span></button>`;}).join('')}</nav>
+        </div>`;
+      }
+
+      function avatarHtml(){
+        if(state.auth.photoURL) return `<img class="avatar" src="${esc(state.auth.photoURL)}" alt="">`;
+        const name = state.profile.name || state.auth.displayName || (state.auth.provider==='firebase'?'U':'G');
+        return `<div class="avatar" style="background:${esc(state.profile.avatarColor)}">${esc(name.slice(0,1).toUpperCase())}</div>`;
+      }
+      function greeting(){
+        const h=new Date().getHours(); const name=state.profile.name || state.auth.displayName || '';
+        const g = h<12 ? (state.settings.lang==='ar'?'صباح الخير':'Good morning') : h<18 ? (state.settings.lang==='ar'?'مساء الخير':'Good afternoon') : (state.settings.lang==='ar'?'مساء الخير':'Good evening');
+        return name ? `${g}، ${name}` : g;
+      }
+
+      function renderView(view){
+        switch(view){
+          case 'home': return renderHome();
+          case 'tasks': return renderTasks();
+          case 'schedule': return renderSchedule();
+          case 'calendar': return renderCalendar();
+          case 'exams': return renderExams();
+          case 'focus': return renderFocus();
+          case 'stats': return renderStats();
+          case 'habits': return renderHabits();
+          case 'gpa': return renderGpa();
+          case 'notes': return renderNotes();
+          case 'settings': return renderSettings();
+          default: return renderHome();
+        }
+      }
+
+      /* =========================
+         10) الصفحات
+         ========================= */
+      function renderHome(){
+        const todays = state.tasks.filter(t=>t.status!=='done' && t.dueAt && sameDay(parseDate(t.dueAt), new Date()));
+        const overdue = state.tasks.filter(isOverdue);
+        const nearest = state.exams.map(e=>({e,d:parseDate(e.date)})).filter(x=>x.d>=new Date()).sort((a,b)=>a.d-b.d)[0];
+        const doneToday = tasksCompletedRange(startOfDay(new Date()), endOfDay(new Date())).length;
+        const focusToday = Math.round(focusMinutesOn(new Date()));
+        const motivation = state.settings.lang==='ar'
+          ? ['ابدأ بخطوة صغيرة.','الانتظام أقوى من الحماس.','أنجز الآن، واحتفل لاحقًا.','ركز على الأهم أولًا.']
+          : ['Start small.','Consistency beats motivation.','Do it now, celebrate later.','Focus on the essential first.'];
+        return `
+        <div class="grid stats">
+          ${statCard(t('tasksToday'), todays.length, `${overdue.length} ${t('overdue')}`, 'tasks')}
+          ${statCard(t('completed'), doneToday, '', 'check')}
+          ${statCard(t('focus'), fmtDuration(focusToday), '', 'focus')}
+          ${statCard(t('points'), state.game.points, `${t('level')} ${levelFromPoints(state.game.points)}`, 'star')}
+        </div>
+        <div class="grid cols-2" style="margin-top:12px">
+          <div class="card">
+            <div class="row between"><div><h2 class="title">${esc(t('quickAddPlaceholder'))}</h2></div></div>
+            <form id="quickAddForm" class="row" style="margin-top:10px">
+              <input class="input" name="text" placeholder="${esc(t('quickAddPlaceholder'))}" required>
+              <button class="btn primary" type="submit">${icon('plus',18)} ${esc(t('add'))}</button>
+            </form>
+            <p class="muted small" style="margin-top:8px">${esc(t('keyboardShortcuts'))}</p>
+          </div>
+          <div class="card">
+            <h2 class="title">${esc(t('nearestExam'))}</h2>
+            ${nearest ? `<div style="font-size:1.6rem;font-weight:900;color:var(--accent)">${Math.ceil((nearest.d-new Date())/DAY_MS)} ${esc(t('daysLeft'))}</div><div class="muted">${esc(nearest.e.title)} • ${esc(fmtDateTime(nearest.d))}</div>` : `<div class="muted">${esc(t('noExams'))}</div>`}
+            <div class="row" style="margin-top:10px"><button class="btn sm" data-action="nav" data-view="exams">${esc(t('details'))}</button><button class="btn sm primary" data-action="new-exam">${esc(t('addExam'))}</button></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <div class="row between"><h2 class="title">${esc(t('today'))}</h2><button class="btn sm" data-action="nav" data-view="tasks">${esc(t('all'))}</button></div>
+          <div class="list">${todays.length ? todays.slice(0,6).map(taskRowHtml).join('') : emptyHtml(t('noTasks'))}</div>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <h2 class="title">${esc(motivation[new Date().getDate()%motivation.length])}</h2>
+          <div class="row">
+            <button class="btn primary" data-action="open-planner">${icon('schedule',18)} ${esc(t('generatePlan'))}</button>
+            <button class="btn" data-action="nav" data-view="focus">${icon('focus',18)} ${esc(t('startFocus'))}</button>
+          </div>
+        </div>`;
+      }
+
+      function statCard(title,value,sub,ic){ return `<div class="card"><div class="row between"><div><div class="muted small">${esc(title)}</div><div style="font-size:1.5rem;font-weight:900">${esc(value)}</div><div class="muted small">${esc(sub||'')}</div></div><div style="color:var(--accent)">${icon(ic,24)}</div></div></div>`; }
+      function emptyHtml(text){ return `<div class="empty"><span class="emoji">📭</span><div>${esc(text)}</div></div>`; }
+
+      function taskRowHtml(tsk){
+        const subj=subjectById(tsk.subjectId); const done=tsk.status==='done'; const od=isOverdue(tsk);
+        return `<div class="list-item ${done?'done':''}">
+          <input type="checkbox" ${done?'checked':''} data-action="toggle-task" data-id="${tsk.id}" aria-label="${esc(t('complete'))}" style="width:22px;height:22px;min-height:auto">
+          <div class="list-main">
+            <div class="list-title">${esc(tsk.title)}</div>
+            <div class="meta">
+              <span class="badge ${tsk.priority}">${esc(priorityLabel(tsk.priority))}</span>
+              <span><span class="dot" style="background:${esc(subj?.color||'var(--muted)')}"></span> ${esc(subj?.name||t('noSubjects'))}</span>
+              <span style="${od?'color:var(--danger);font-weight:800':''}">${esc(tsk.dueAt?relativeDue(tsk.dueAt):'—')}</span>
+              <span>${icon('clock',14)} ${esc(fmtDuration(tsk.estimate))}</span>
+              ${tsk.subtasks.length?`<span>${tsk.subtasks.filter(s=>s.done).length}/${tsk.subtasks.length}</span>`:''}
+            </div>
+            ${tsk.subtasks.length?`<div class="progress"><span style="width:${tsk.progress}%"></span></div>`:''}
+          </div>
+          <div class="row">
+            <button class="icon-btn" data-action="focus-task" data-id="${tsk.id}" title="${esc(t('startFocus'))}">${icon('play',16)}</button>
+            <button class="icon-btn" data-action="edit-task" data-id="${tsk.id}" title="${esc(t('edit'))}">${icon('edit',16)}</button>
+            <button class="icon-btn" data-action="delete-task" data-id="${tsk.id}" title="${esc(t('delete'))}">${icon('trash',16)}</button>
+          </div>
+        </div>`;
+      }
+
+      function renderTasks(){
+        return `
+        <div class="card">
+          <div class="toolbar">
+            <input id="taskSearch" class="input" placeholder="${esc(t('search'))}" value="${esc(state.ui.taskSearch)}">
+            <select id="taskSort" class="input" style="max-width:170px">
+              <option value="due" ${state.ui.taskSort==='due'?'selected':''}>${esc(t('dueSoon'))}</option>
+              <option value="priority" ${state.ui.taskSort==='priority'?'selected':''}>${esc(t('prioritySort'))}</option>
+              <option value="created" ${state.ui.taskSort==='created'?'selected':''}>${esc(t('createdSort'))}</option>
+              <option value="title" ${state.ui.taskSort==='title'?'selected':''}>${esc(t('titleSort'))}</option>
+            </select>
+            <button class="btn" data-action="toggle-task-view">${esc(state.ui.taskView==='list'?t('kanbanView'):t('listView'))}</button>
+            <button class="btn primary" data-action="new-task">${icon('plus',18)} ${esc(t('addTask'))}</button>
+          </div>
+          <div class="chips row" style="margin-bottom:10px">
+            ${['today','upcoming','overdue','done','all'].map(f=>`<button class="chip ${state.ui.taskFilter===f?'active':''}" data-action="task-filter" data-filter="${f}">${esc(t(f))}</button>`).join('')}
+          </div>
+          <div id="tasksContent">${renderTasksContent()}</div>
+          <p class="muted small" style="margin-top:8px">${esc(t('dragHint'))}</p>
+        </div>`;
+      }
+
+      function filteredTasks(){
+        const q=state.ui.taskSearch.trim().toLowerCase(); const now=new Date(); const f=state.ui.taskFilter;
+        let list=state.tasks.filter(tsk=>{
+          if(q && !`${tsk.title} ${tsk.description} ${tsk.notes} ${tsk.tags.join(' ')}`.toLowerCase().includes(q)) return false;
+          if(f==='today') return tsk.status!=='done' && tsk.dueAt && sameDay(parseDate(tsk.dueAt), now);
+          if(f==='upcoming') return tsk.status!=='done' && tsk.dueAt && parseDate(tsk.dueAt)>=now;
+          if(f==='overdue') return isOverdue(tsk);
+          if(f==='done') return tsk.status==='done';
+          return true;
+        });
+        const pw={high:3,medium:2,low:1};
+        list.sort((a,b)=>{
+          if(state.ui.taskSort==='due'){ const ad=parseDate(a.dueAt)?.getTime()||Infinity, bd=parseDate(b.dueAt)?.getTime()||Infinity; return ad-bd; }
+          if(state.ui.taskSort==='priority') return pw[b.priority]-pw[a.priority];
+          if(state.ui.taskSort==='created') return new Date(b.createdAt)-new Date(a.createdAt);
+          return a.title.localeCompare(b.title);
+        });
+        return list;
+      }
+
+      function renderTasksContent(){
+        const list=filteredTasks();
+        if(state.ui.taskView==='kanban'){
+          return `<div class="kanban">${STATUS.map(st=>`<div class="kanban-col" data-status="${st}"><div class="row between"><strong>${esc(statusLabel(st))}</strong><span class="badge">${list.filter(x=>x.status===st).length}</span></div>${list.filter(x=>x.status===st).map(kanbanCardHtml).join('')||emptyHtml(t('noTasks'))}</div>`).join('')}</div>`;
+        }
+        return `<div class="list">${list.length?list.map(taskRowHtml).join(''):emptyHtml(t('noTasks'))}</div>`;
+      }
+      function kanbanCardHtml(tsk){
+        return `<div class="kanban-card" draggable="true" data-id="${tsk.id}"><div class="list-title">${esc(tsk.title)}</div><div class="meta"><span class="badge ${tsk.priority}">${esc(priorityLabel(tsk.priority))}</span><span>${esc(tsk.dueAt?relativeDue(tsk.dueAt):'—')}</span></div></div>`;
+      }
+
+      function renderSchedule(){
+        const conflicts=classConflictIds();
+        const days=[0,1,2,3,4,5,6].map(d=>(state.settings.weekStart+d)%7);
+        return `
+        <div class="card">
+          <div class="row between"><h2 class="title">${esc(t('scheduleWeekly'))}</h2><button class="btn primary" data-action="new-class">${icon('plus',18)} ${esc(t('addClass'))}</button></div>
+          <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:10px">
+            ${days.map(d=>{
+              const items=state.classes.filter(c=>c.day===d).sort((a,b)=>a.start.localeCompare(b.start));
+              const total=items.reduce((s,c)=>s+minutesBetween(`1970-01-01T${c.start}`, `1970-01-01T${c.end}`),0);
+              return `<div class="card"><div class="row between"><strong>${esc(dayName(d))}</strong><span class="muted small">${esc(fmtDuration(total))}</span></div>
+                ${items.length?items.map(c=>`<div class="event ${conflicts.has(c.id)?'conflict':''}" style="margin-top:8px"><strong>${esc(c.title)}</strong><div class="muted small">${esc(c.start)} - ${esc(c.end)} • ${esc(c.room||'—')} • ${esc(c.teacher||'—')}</div>${conflicts.has(c.id)?`<div class="small" style="color:var(--danger);font-weight:800">${esc(t('conflictDetected'))}</div>`:''}<div class="row" style="margin-top:6px"><button class="btn sm" data-action="edit-class" data-id="${c.id}">${esc(t('edit'))}</button><button class="btn sm danger" data-action="delete-class" data-id="${c.id}">${esc(t('delete'))}</button></div></div>`).join(''):emptyHtml(t('noClasses'))}
+              </div>`;
+            }).join('')}
+          </div>
+        </div>`;
+      }
+      function dayName(d){ const names=state.settings.lang==='ar'?['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت']:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; return names[d]; }
+      function classConflictIds(){
+        const ids=new Set(); const byDay={};
+        state.classes.forEach(c=>{ (byDay[c.day] ||= []).push(c); });
+        Object.values(byDay).forEach(arr=>{ arr.sort((a,b)=>a.start.localeCompare(b.start)); for(let i=0;i<arr.length;i++) for(let j=i+1;j<arr.length;j++){ if(arr[j].start < arr[i].end){ ids.add(arr[i].id); ids.add(arr[j].id); } } });
+        return ids;
+      }
+
+      function renderCalendar(){
+        const anchor = state.ui.calendarAnchor ? parseDate(state.ui.calendarAnchor) : new Date();
+        state.ui.calendarAnchor = anchor.toISOString();
+        const mode = state.ui.calendarMode || 'month';
+        return `
+        <div class="card">
+          <div class="toolbar">
+            <button class="btn sm" data-action="cal-prev">${icon('arrowRight',16)}</button>
+            <button class="btn sm" data-action="cal-today">${esc(t('current'))}</button>
+            <button class="btn sm" data-action="cal-next">${icon('arrowLeft',16)}</button>
+            <strong>${esc(mode==='month'?anchor.toLocaleDateString(state.settings.lang==='ar'?'ar':'en',{month:'long',year:'numeric'}):t('weekView'))}</strong>
+            <div class="row" style="margin-inline-start:auto">
+              <button class="chip ${mode==='month'?'active':''}" data-action="cal-mode" data-mode="month">${esc(t('monthView'))}</button>
+              <button class="chip ${mode==='week'?'active':''}" data-action="cal-mode" data-mode="week">${esc(t('weekView'))}</button>
+              <button class="btn primary sm" data-action="new-task" data-date="${toDateInput(anchor)}">${esc(t('addTask'))}</button>
+            </div>
+          </div>
+          ${mode==='month'?renderMonth(anchor):renderWeek(anchor)}
+        </div>`;
+      }
+      function renderMonth(anchor){
+        const first=new Date(anchor.getFullYear(), anchor.getMonth(), 1);
+        const start=weekStartDate(first);
+        const days=Array.from({length:42},(_,i)=>addDays(start,i));
+        const heads=[0,1,2,3,4,5,6].map(i=>dayName((state.settings.weekStart+i)%7));
+        return `<div class="calendar">${heads.map(h=>`<div class="cal-head">${esc(h)}</div>`).join('')}${days.map(d=>{
+          const evs=dayEvents(d); const pressure=evs.reduce((s,e)=>s+(e.minutes||30),0);
+          const cls=pressure>240?'p3':pressure>120?'p2':pressure>0?'p1':'';
+          return `<div class="day ${sameDay(d,new Date())?'today':''} ${d.getMonth()!==anchor.getMonth()?'other':''} ${cls}" data-action="cal-day" data-date="${toDateInput(d)}">
+            <div class="day-num">${d.getDate()}</div>${evs.length?`<span class="count-pill">${evs.length}</span>`:''}
+            <div class="day-events">${evs.slice(0,3).map(e=>`<div class="day-event" style="border-inline-start:3px solid ${esc(e.color||'var(--accent)')}">${esc(e.title)}</div>`).join('')}</div>
+          </div>`;
+        }).join('')}</div>`;
+      }
+      function renderWeek(anchor){
+        const start=weekStartDate(anchor); const days=Array.from({length:7},(_,i)=>addDays(start,i));
+        return `<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">${days.map(d=>{
+          const evs=dayEvents(d);
+          return `<div class="card"><strong>${esc(dayName(d.getDay()))} ${d.getDate()}</strong>${evs.length?`<div class="timeline" style="margin-top:8px">${evs.map(e=>`<div class="event" style="border-inline-start-color:${esc(e.color||'var(--accent)')}"><strong>${esc(e.title)}</strong><div class="muted small">${esc(e.time||'')}</div></div>`).join('')}</div>`:emptyHtml(t('noTasks'))}</div>`;
+        }).join('')}</div>`;
+      }
+      function dayEvents(d){
+        const key=dateKey(d); const out=[];
+        state.tasks.filter(t=>t.dueAt && dateKey(parseDate(t.dueAt))===key).forEach(t=>out.push({title:t.title,color:subjectById(t.subjectId)?.color||'var(--accent)',minutes:t.estimate,time:t.dueAt?fmtTime(parseDate(t.dueAt)):'',type:'task',id:t.id}));
+        state.exams.filter(e=>dateKey(parseDate(e.date))===key).forEach(e=>out.push({title:e.title,color:subjectById(e.subjectId)?.color||'var(--danger)',minutes:60,time:fmtTime(parseDate(e.date)),type:e.type,id:e.id}));
+        state.classes.filter(c=>c.day===d.getDay()).forEach(c=>out.push({title:c.title,color:subjectById(c.subjectId)?.color||'var(--ok)',minutes:minutesBetween(`1970-01-01T${c.start}`,`1970-01-01T${c.end}`),time:`${c.start}-${c.end}`,type:'class',id:c.id}));
+        return out;
+      }
+
+      function renderExams(){
+        const now=new Date(); const upcoming=state.exams.filter(e=>parseDate(e.date)>=now).sort((a,b)=>parseDate(a.date)-parseDate(b.date));
+        const past=state.exams.filter(e=>parseDate(e.date)<now).sort((a,b)=>parseDate(b.date)-parseDate(a.date));
+        return `
+        <div class="card">
+          <div class="row between"><h2 class="title">${esc(t('upcoming'))}</h2><div class="row"><button class="btn primary" data-action="new-exam">${esc(t('addExam'))}</button><button class="btn" data-action="new-delivery">${esc(t('addDelivery'))}</button></div></div>
+          <div class="list">${upcoming.length?upcoming.map(examRowHtml).join(''):emptyHtml(t('noExams'))}</div>
+        </div>
+        <div class="card" style="margin-top:12px"><h2 class="title">${esc(t('done'))}</h2><div class="list">${past.length?past.slice(0,10).map(examRowHtml).join(''):emptyHtml(t('noData'))}</div></div>`;
+      }
+      function examRowHtml(e){
+        const d=parseDate(e.date); const days=Math.ceil((d-new Date())/DAY_MS); const subj=subjectById(e.subjectId);
+        return `<div class="list-item"><div class="list-main"><div class="list-title">${esc(e.title)}</div><div class="meta"><span class="badge ${e.type==='exam'?'high':'medium'}">${esc(t(e.type))}</span><span><span class="dot" style="background:${esc(subj?.color||'var(--muted)')}"></span> ${esc(subj?.name||t('noSubjects'))}</span><span>${esc(fmtDateTime(d))}</span><span>${days>=0?`${days} ${t('daysLeft')}`:t('done')}</span></div><div class="progress"><span style="width:${e.readiness}%"></span></div></div><div class="row"><button class="icon-btn" data-action="exam-to-task" data-id="${e.id}">${icon('plus',16)}</button><button class="icon-btn" data-action="edit-exam" data-id="${e.id}">${icon('edit',16)}</button><button class="icon-btn" data-action="delete-exam" data-id="${e.id}">${icon('trash',16)}</button></div></div>`;
+      }
+
+      function renderFocus(){
+        const a=state.activeFocus;
+        const todaySessions=state.sessions.filter(s=>sameDay(new Date(s.startedAt), new Date()));
+        const completed=todaySessions.filter(s=>s.status==='completed' && s.mode==='focus');
+        if(a){
+          const rem=activeRemainingSec();
+          return `<div class="card timer">
+            <span class="badge inProgress">${esc(a.mode==='focus'?t('focusTimer'):t('shortBreak'))}</span>
+            <div class="timer-display" data-remaining>${pad(Math.floor(rem/60))}:${pad(rem%60)}</div>
+            <div class="muted" data-focus-state>${esc(a.pausedAt?t('pause'):t('start'))}</div>
+            <div style="width:min(420px,90%)"><div class="progress"><span data-focus-progress style="width:${clamp(100-rem/a.plannedSec*100,0,100)}%"></span></div></div>
+            <div class="muted small">${esc(a.taskId?taskById(a.taskId)?.title||'':t('noActiveSession'))} • ${esc(subjectName(a.subjectId))}</div>
+            <div class="row">
+              <button class="btn primary hidden" data-action="focus-resume">${icon('play',16)} ${esc(t('resume'))}</button>
+              <button class="btn" data-action="focus-pause">${icon('pause',16)} ${esc(t('pause'))}</button>
+              <button class="btn ok" data-action="focus-finish">${icon('check',16)} ${esc(t('complete'))}</button>
+              <button class="btn danger" data-action="focus-stop">${icon('stop',16)} ${esc(t('stop'))}</button>
+            </div>
+          </div>`;
+        }
+        return `
+        <div class="grid cols-2">
+          <div class="card">
+            <h2 class="title">${esc(t('startFocus'))}</h2>
+            <form id="focusSetupForm" class="form-grid" style="margin-top:10px">
+              <label class="field full"><span>${esc(t('tasks'))}</span><select class="input" name="taskId"><option value="">${esc(t('noActiveSession'))}</option>${state.tasks.filter(x=>x.status!=='done').map(x=>`<option value="${x.id}">${esc(x.title)}</option>`).join('')}</select></label>
+              <label class="field"><span>${esc(t('workMin'))}</span><input class="input" type="number" name="minutes" min="1" max="240" value="${state.settings.pomodoro.work}"></label>
+              <label class="field"><span>${esc(t('subject'))}</span><select class="input" name="subjectId"><option value="">—</option>${state.subjects.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('')}</select></label>
+              <div class="full row">${[15,25,45,60].map(m=>`<button type="button" class="chip" data-action="focus-preset" data-min="${m}">${m} ${state.settings.lang==='ar'?'د':'min'}</button>`).join('')}</div>
+              <div class="full"><button class="btn primary" type="submit">${icon('play',18)} ${esc(t('start'))}</button></div>
+            </form>
+          </div>
+          <div class="card">
+            <h2 class="title">${esc(t('todaySessions'))}</h2>
+            <div class="kv"><span>${esc(t('completedSessions'))}</span><strong>${completed.length}</strong></div>
+            <div class="kv"><span>${esc(t('totalFocus'))}</span><strong>${fmtDuration(completed.reduce((s,x)=>s+x.actualSec/60,0))}</strong></div>
+            <div class="list" style="margin-top:10px">${todaySessions.length?todaySessions.map(sessionRowHtml).join(''):emptyHtml(t('noData'))}</div>
+          </div>
+        </div>`;
+      }
+      function sessionRowHtml(s){ return `<div class="list-item"><div class="list-main"><div class="list-title">${esc(s.taskId?taskById(s.taskId)?.title||'':subjectName(s.subjectId))}</div><div class="meta"><span>${esc(fmtDateTime(s.startedAt))}</span><span>${esc(fmtDuration(s.actualSec/60))}</span><span class="badge ${s.status==='completed'?'done':'new'}">${esc(s.status==='completed'?t('completed'):t('cancelled'))}</span></div></div></div>`; }
+
+      function renderStats(){
+        const days=7; const last=lastNDays(days); const values=last.map(d=>Math.round(focusMinutesOn(d))); const labels=last.map(d=>`${d.getDate()}/${d.getMonth()+1}`);
+        const total=values.reduce((a,b)=>a+b,0); const avg=total/days;
+        const done=state.tasks.filter(x=>x.status==='done').length; const totalTasks=state.tasks.length; const rate=totalTasks?Math.round(done/totalTasks*100):0;
+        const subjMap=new Map(); completedSessions().forEach(s=>{ const k=s.subjectId||'none'; subjMap.set(k,(subjMap.get(k)||0)+s.actualSec/60); });
+        const donut=Array.from(subjMap.entries()).map(([k,v])=>({label:k==='none'?t('noSubjects'):subjectName(k), value:v, color:k==='none'?'var(--muted)':subjectById(k)?.color||'var(--accent)'})).sort((a,b)=>b.value-a.value).slice(0,6);
+        const dayTotals=[0,1,2,3,4,5,6].map(d=>completedSessions().filter(s=>new Date(s.startedAt).getDay()===d).reduce((a,s)=>a+s.actualSec/60,0));
+        const bestDay=dayTotals.indexOf(Math.max(...dayTotals));
+        return `
+        <div class="grid stats">
+          ${statCard(t('totalFocus'), fmtDuration(total), `${t('averageDaily')}: ${fmtDuration(avg)}`, 'focus')}
+          ${statCard(t('completionRate'), rate+'%', `${done}/${totalTasks}`, 'check')}
+          ${statCard(t('streak'), state.game.streak, t('last7Days'), 'trophy')}
+          ${statCard(t('mostProductiveDay'), dayName(bestDay), fmtDuration(dayTotals[bestDay]), 'star')}
+        </div>
+        <div class="grid cols-2" style="margin-top:12px">
+          <div class="card"><h2 class="title">${esc(t('dailyFocus'))}</h2>${barChart(values,labels)}</div>
+          <div class="card"><h2 class="title">${esc(t('focusBySubject'))}</h2>${donutChart(donut)}</div>
+        </div>
+        <div class="card" style="margin-top:12px"><h2 class="title">${esc(t('badges'))}</h2><div class="row">${BADGES.map(b=>`<span class="chip ${state.game.badges[b.id]?'active':''}">${state.game.badges[b.id]?'🏆':''} ${esc(t(b.title))}</span>`).join('')}</div><div class="kv" style="margin-top:10px"><span>${esc(t('points'))}</span><strong>${state.game.points}</strong></div><div class="progress"><span style="width:${levelProgress(state.game.points)}%"></span></div></div>`;
+      }
+      function barChart(values, labels){
+        if(!values.length || values.every(v=>!v)) return emptyHtml(t('noData'));
+        const max=Math.max(...values,1); const w=300,h=140,bw=Math.max(8,(w-30)/values.length-6);
+        let bars=''; values.forEach((v,i)=>{ const bh=Math.max(2,v/max*100); const x=15+i*((w-30)/values.length); const y=110-bh; bars+=`<rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="4" fill="var(--accent)"><title>${esc(labels[i])}: ${v}</title></rect><text x="${x+bw/2}" y="125" text-anchor="middle" font-size="8" fill="var(--muted)">${esc(labels[i])}</text>`; });
+        return `<svg class="chart" viewBox="0 0 ${w} ${h}">${bars}<line x1="10" y1="110" x2="${w-10}" y2="110" stroke="var(--border)"/></svg>`;
+      }
+      function donutChart(items){
+        const total=items.reduce((s,i)=>s+i.value,0); if(!total) return emptyHtml(t('noData'));
+        const r=42,c=2*Math.PI*r; let off=0, circles='', legend='';
+        items.forEach(it=>{ const len=it.value/total*c; circles+=`<circle cx="60" cy="60" r="${r}" fill="none" stroke="${esc(it.color)}" stroke-width="16" stroke-dasharray="${len} ${c-len}" stroke-dashoffset="${-off}" transform="rotate(-90 60 60)"><title>${esc(it.label)}: ${Math.round(it.value)}</title></circle>`; off+=len; legend+=`<div class="legend-item"><span class="dot" style="background:${esc(it.color)}"></span><span>${esc(it.label)} (${Math.round(it.value/total*100)}%)</span></div>`; });
+        return `<div class="row"><svg width="120" height="120" viewBox="0 0 120 120">${circles}<text x="60" y="64" text-anchor="middle" font-size="14" font-weight="800" fill="var(--text)">${Math.round(total)}</text></svg><div class="legend">${legend}</div></div>`;
+      }
+
+      function renderHabits(){
+        const days=lastNDays(7);
+        return `<div class="card"><div class="row between"><h2 class="title">${esc(t('habitTracker'))}</h2><button class="btn primary" data-action="new-habit">${icon('plus',18)} ${esc(t('addHabit'))}</button></div>
+        ${state.habits.length?`<div class="table-wrap" style="overflow:auto;margin-top:10px"><table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:start;padding:8px">${esc(t('habitName'))}</th>${days.map(d=>`<th style="padding:8px">${d.getDate()}</th>`).join('')}<th></th></tr></thead><tbody>${state.habits.map(h=>`<tr><td style="padding:8px;font-weight:800">${esc(h.title)}</td>${days.map(d=>`<td style="text-align:center"><input type="checkbox" ${h.logs.includes(dateKey(d))?'checked':''} data-action="toggle-habit" data-id="${h.id}" data-date="${dateKey(d)}"></td>`).join('')}<td><button class="icon-btn" data-action="delete-habit" data-id="${h.id}">${icon('trash',16)}</button></td></tr>`).join('')}</tbody></table></div>`:emptyHtml(t('noData'))}
+        </div>`;
+      }
+
+      function renderGpa(){
+        const totalCredits=state.courses.reduce((s,c)=>s+c.credits,0);
+        const gpa=totalCredits?state.courses.reduce((s,c)=>s+c.credits*GRADES[c.grade],0)/totalCredits:0;
+        return `<div class="card"><div class="row between"><h2 class="title">${esc(t('gpaCalculator'))}</h2><button class="btn primary" data-action="new-course">${icon('plus',18)} ${esc(t('addCourse'))}</button></div>
+        <div class="grid stats" style="margin-top:10px">${statCard(t('yourGpa'), gpa.toFixed(2), '', 'gpa')}${statCard(t('targetGpa'), state.gpaTarget, gpa>=state.gpaTarget?t('aboveTarget'):t('belowTarget'), 'star')}</div>
+        <div class="list" style="margin-top:10px">${state.courses.length?state.courses.map(c=>`<div class="list-item"><div class="list-main"><div class="list-title">${esc(c.name)}</div><div class="meta"><span>${c.credits} ${esc(t('credits'))}</span><span>${esc(c.grade)}</span></div></div><div class="row"><button class="icon-btn" data-action="edit-course" data-id="${c.id}">${icon('edit',16)}</button><button class="icon-btn" data-action="delete-course" data-id="${c.id}">${icon('trash',16)}</button></div></div>`).join(''):emptyHtml(t('noData'))}</div>
+        <label class="field" style="margin-top:10px"><span>${esc(t('targetGpa'))}</span><input class="input" type="number" step="0.01" min="0" max="5" value="${state.gpaTarget}" data-action="gpa-target"></label>
+        </div>`;
+      }
+
+      function renderNotes(){
+        const q=state.ui.noteSearch.trim().toLowerCase();
+        const list=state.notes.filter(n=>!q || `${n.title} ${n.content} ${n.keywords}`.toLowerCase().includes(q)).sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt));
+        return `<div class="card"><div class="toolbar"><input id="noteSearch" class="input" placeholder="${esc(t('searchNotes'))}" value="${esc(state.ui.noteSearch)}"><button class="btn primary" data-action="new-note">${icon('plus',18)} ${esc(t('addNote'))}</button></div>
+        ${list.length?`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">${list.map(n=>`<div class="card"><div class="row between"><strong>${esc(n.title)}</strong><span class="muted small">${esc(fmtDate(n.updatedAt))}</span></div><div class="muted small">${esc(subjectName(n.subjectId))}</div><p style="white-space:pre-wrap">${esc(n.content.slice(0,180))}${n.content.length>180?'…':''}</p><div class="row"><button class="btn sm" data-action="edit-note" data-id="${n.id}">${esc(t('edit'))}</button><button class="btn sm danger" data-action="delete-note" data-id="${n.id}">${esc(t('delete'))}</button></div></div>`).join('')}</div>`:emptyHtml(t('noNotes'))}
+        </div>`;
+      }
+
+      function renderSettings(){
+        const s=state.settings;
+        return `
+        <div class="grid cols-2">
+          <div class="card"><h2 class="title">${esc(t('profile'))}</h2>
+            <form id="profileForm" class="form-grid">
+              <label class="field"><span>${esc(t('displayName'))}</span><input class="input" name="name" value="${esc(state.profile.name)}"></label>
+              <label class="field"><span>${esc(t('school'))}</span><input class="input" name="school" value="${esc(state.profile.school)}"></label>
+              <label class="field"><span>${esc(t('accentColor'))}</span><input class="input" type="color" name="accent" value="${esc(s.accent)}"></label>
+              <div class="full row"><button class="btn primary" type="submit">${esc(t('save'))}</button>${state.auth.provider==='firebase'?`<button type="button" class="btn danger" data-action="logout">${icon('logout',16)} ${esc(t('logout'))}</button>`:`<button type="button" class="btn" data-action="google-login">${GOOGLE_ICON} ${esc(t('connectAccount'))}</button>`}</div>
+            </form>
+          </div>
+          <div class="card"><h2 class="title">${esc(t('settings'))}</h2>
+            <form id="settingsForm" class="form-grid">
+              <label class="field"><span>${esc(t('language'))}</span><select class="input" name="lang"><option value="ar" ${s.lang==='ar'?'selected':''}>${esc(t('arabic'))}</option><option value="en" ${s.lang==='en'?'selected':''}>${esc(t('english'))}</option></select></label>
+              <label class="field"><span>${esc(t('theme'))}</span><select class="input" name="theme"><option value="auto" ${s.theme==='auto'?'selected':''}>${esc(t('auto'))}</option><option value="light" ${s.theme==='light'?'selected':''}>${esc(t('light'))}</option><option value="dark" ${s.theme==='dark'?'selected':''}>${esc(t('dark'))}</option></select></label>
+              <label class="field"><span>${esc(t('weekStart'))}</span><select class="input" name="weekStart">${[0,1,2,3,4,5,6].map(d=>`<option value="${d}" ${s.weekStart===d?'selected':''}>${esc(dayName(d))}</option>`).join('')}</select></label>
+              <label class="field"><span>${esc(t('timeFormat'))}</span><select class="input" name="timeFormat"><option value="24" ${s.timeFormat===24?'selected':''}>${esc(t('format24'))}</option><option value="12" ${s.timeFormat===12?'selected':''}>${esc(t('format12'))}</option></select></label>
+              <label class="field"><span>${esc(t('workMin'))}</span><input class="input" type="number" name="work" min="1" max="240" value="${s.pomodoro.work}"></label>
+              <label class="field"><span>${esc(t('shortBreak'))}</span><input class="input" type="number" name="short" min="1" max="120" value="${s.pomodoro.short}"></label>
+              <label class="field"><span>${esc(t('longBreak'))}</span><input class="input" type="number" name="long" min="1" max="120" value="${s.pomodoro.long}"></label>
+              <label class="field"><span>${esc(t('cycles'))}</span><input class="input" type="number" name="cycle" min="1" max="12" value="${s.pomodoro.cycle}"></label>
+              <label class="field"><span>${esc(t('availableMinutes'))}</span><input class="input" type="number" name="availableMinutes" min="0" max="1440" value="${s.availableMinutes}"></label>
+              <label class="field"><span>${esc(t('breakMinutes'))}</span><input class="input" type="number" name="breakMinutes" min="0" max="120" value="${s.breakMinutes}"></label>
+              <label class="field"><span>${esc(t('notifications'))}</span><select class="input" name="notifyLead"><option value="10" ${s.notifyLead===10?'selected':''}>${esc(t('lead10'))}</option><option value="60" ${s.notifyLead===60?'selected':''}>${esc(t('lead60'))}</option><option value="1440" ${s.notifyLead===1440?'selected':''}>${esc(t('lead1440'))}</option></select></label>
+              <label class="checkbox-line"><input type="checkbox" name="sound" ${s.sound?'checked':''}><span>${esc(t('sound'))}</span></label>
+              <label class="checkbox-line"><input type="checkbox" name="vibration" ${s.vibration?'checked':''}><span>${esc(t('vibration'))}</span></label>
+              <div class="full row"><button class="btn primary" type="submit">${esc(t('save'))}</button><button type="button" class="btn" data-action="request-notifications">${esc(t('enableNotifications'))}</button></div>
+              <p class="muted small full">${esc(t('notificationExplanation'))}</p>
+            </form>
+          </div>
+          <div class="card"><h2 class="title">${esc(t('dataManagement'))}</h2>
+            <div class="row"><button class="btn" data-action="export-json">${icon('download',16)} ${esc(t('exportJson'))}</button><button class="btn" data-action="import-json">${icon('upload',16)} ${esc(t('importJson'))}</button><button class="btn" data-action="export-csv">${icon('download',16)} ${esc(t('exportCsv'))}</button></div>
+            <h2 class="title" style="margin-top:14px">${esc(t('dangerZone'))}</h2><button class="btn danger" data-action="delete-all">${icon('trash',16)} ${esc(t('deleteAll'))}</button>
+          </div>
+          <div class="card"><h2 class="title">${esc(t('about'))}</h2><p>${esc(t('aboutText'))}</p><div class="kv"><span>${esc(t('appName'))}</span><strong>${esc(APP.name)}</strong></div><div class="kv"><span>Version</span><strong>${esc(APP.version)}</strong></div><div class="kv"><span>${esc(t('copyright'))}</span><strong>YS</strong></div><button class="btn" data-action="open-about">${esc(t('details'))}</button></div>
+          <div class="card"><h2 class="title">${esc(t('subjects'))}</h2><div class="list">${state.subjects.map(su=>`<div class="list-item"><span class="dot" style="background:${esc(su.color)}"></span><div class="list-main"><div class="list-title">${esc(su.name)}</div></div><div class="row"><button class="icon-btn" data-action="edit-subject" data-id="${su.id}">${icon('edit',16)}</button><button class="icon-btn" data-action="delete-subject" data-id="${su.id}">${icon('trash',16)}</button></div></div>`).join('')||emptyHtml(t('noSubjects'))}</div><button class="btn primary" data-action="new-subject">${icon('plus',16)} ${esc(t('add'))}</button></div>
+        </div>`;
+      }
+
+      /* =========================
+         11) النماذج
+         ========================= */
+      function openTaskModal(id=null, pre={}){
+        const tsk=id?taskById(id):null;
+        const dueVal = tsk?.dueAt ? toLocalInput(parseDate(tsk.dueAt)) : (pre.dueAt || '');
+        const body=`
+        <form id="taskForm" data-id="${tsk?.id||''}" class="form-grid">
+          <label class="field full"><span>${esc(t('title'))} *</span><input class="input" name="title" required maxlength="220" value="${esc(tsk?.title||pre.title||'')}"></label>
+          <label class="field"><span>${esc(t('subject'))}</span><select class="input" name="subjectId"><option value="">—</option>${state.subjects.map(s=>`<option value="${s.id}" ${(tsk?.subjectId||pre.subjectId)===s.id?'selected':''}>${esc(s.name)}</option>`).join('')}</select></label>
+          <label class="field"><span>${esc(t('priority'))}</span><select class="input" name="priority">${PRIORITIES.map(p=>`<option value="${p}" ${(tsk?.priority||'medium')===p?'selected':''}>${esc(priorityLabel(p))}</option>`).join('')}</select></label>
+          <label class="field"><span>${esc(t('dueDate'))}</span><input class="input" type="datetime-local" name="dueAt" value="${esc(dueVal)}"></label>
+          <label class="field"><span>${esc(t('estimate'))}</span><input class="input" type="number" name="estimate" min="0" max="1440" value="${tsk?.estimate??25}"></label>
+          <label class="field"><span>${esc(t('status'))}</span><select class="input" name="status">${STATUS.map(s=>`<option value="${s}" ${(tsk?.status||'new')===s?'selected':''}>${esc(statusLabel(s))}</option>`).join('')}</select></label>
+          <label class="field"><span>${esc(t('repeat'))}</span><select class="input" name="repeat">${REPEATS.map(r=>`<option value="${r}" ${(tsk?.repeat||'none')===r?'selected':''}>${esc(t(r))}</option>`).join('')}</select></label>
+          <label class="field"><span>${esc(t('intervalDays'))}</span><input class="input" type="number" name="repeatInterval" min="1" max="365" value="${tsk?.repeatInterval||7}"></label>
+          <label class="field full"><span>${esc(t('tags'))}</span><input class="input" name="tags" value="${esc((tsk?.tags||[]).join(', '))}" placeholder="رياضيات، واجب"></label>
+          <label class="field full"><span>${esc(t('link'))}</span><input class="input" type="url" name="link" value="${esc(tsk?.link||'')}"></label>
+          <label class="field full"><span>${esc(t('description'))}</span><textarea class="input" name="description" maxlength="2000">${esc(tsk?.description||'')}</textarea></label>
+          <label class="field full"><span>${esc(t('notesField'))}</span><textarea class="input" name="notes" maxlength="2000">${esc(tsk?.notes||'')}</textarea></label>
+          <div class="full"><div class="row between"><strong>${esc(t('subtasks'))}</strong><button type="button" class="btn sm" data-action="add-subtask">${icon('plus',14)} ${esc(t('addSubtask'))}</button></div><div class="subtasks-editor" style="margin-top:8px">${(tsk?.subtasks||[]).map(subtaskRowHtml).join('')}</div></div>
+        </form>`;
+        openModal({ title:tsk?t('edit'):t('addTask'), body, size:'lg', footer:`${tsk?`<button class="btn danger" data-action="delete-task-from-modal" data-id="${tsk.id}">${esc(t('delete'))}</button>`:''}<button class="btn primary" data-action="save-task">${esc(t('save'))}</button><button class="btn" data-close>${esc(t('cancel'))}</button>` });
+      }
+      function subtaskRowHtml(s={} ){ return `<div class="subtask-row" data-id="${s.id||uid()}"><input type="checkbox" ${s.done?'checked':''}><input class="input" name="subtaskTitle" value="${esc(s.title||'')}" maxlength="180"><button type="button" class="icon-btn" data-action="remove-subtask">${icon('trash',15)}</button></div>`; }
+
+      function openSubjectModal(id=null){
+        const s=id?subjectById(id):null;
+        openModal({ title:s?t('edit'):t('add'), size:'sm', body:`<form id="subjectForm" data-id="${s?.id||''}" class="form-grid"><label class="field full"><span>${esc(t('subjectName'))} *</span><input class="input" name="name" required value="${esc(s?.name||'')}"></label><label class="field"><span>${esc(t('color'))}</span><input class="input" type="color" name="color" value="${esc(s?.color||'#2563eb')}"></label><label class="field full"><span>${esc(t('description'))}</span><textarea class="input" name="description">${esc(s?.description||'')}</textarea></label></form>`, footer:`<button class="btn primary" data-action="save-subject">${esc(t('save'))}</button><button class="btn" data-close>${esc(t('cancel'))}</button>` });
+      }
+      function openExamModal(id=null, type='exam'){
+        const e=id?state.exams.find(x=>x.id===id):null;
+        openModal({ title:e?t('edit'):(type==='exam'?t('addExam'):t('addDelivery')), size:'lg', body:`<form id="examForm" data-id="${e?.id||''}" class="form-grid"><label class="field full"><span>${esc(t('title'))} *</span><input class="input" name="title" required value="${esc(e?.title||'')}"></label><label class="field"><span>${esc(t('subject'))}</span><select class="input" name="subjectId"><option value="">—</option>${state.subjects.map(s=>`<option value="${s.id}" ${e?.subjectId===s.id?'selected':''}>${esc(s.name)}</option>`).join('')}</select></label><label class="field"><span>${esc(t('dueDate'))} *</span><input class="input" type="datetime-local" name="date" required value="${esc(e?.date||toLocalInput(addDays(new Date(),1)))}"></label><label class="field full"><span>${esc(t('topics'))}</span><textarea class="input" name="topics">${esc(e?.topics||'')}</textarea></label><label class="field full"><span>${esc(t('plan'))}</span><textarea class="input" name="plan">${esc(e?.plan||'')}</textarea></label><label class="field full"><span>${esc(t('readiness'))}: <output id="readyOut">${e?.readiness||0}</output>%</span><input class="input" type="range" name="readiness" min="0" max="100" value="${e?.readiness||0}" oninput="document.getElementById('readyOut').value=this.value"></label><input type="hidden" name="type" value="${e?.type||type}"></form>`, footer:`<button class="btn primary" data-action="save-exam">${esc(t('save'))}</button><button class="btn" data-close>${esc(t('cancel'))}</button>` });
+      }
+      function openClassModal(id=null){
+        const c=id?state.classes.find(x=>x.id===id):null;
+        openModal({ title:c?t('edit'):t('addClass'), body:`<form id="classForm" data-id="${c?.id||''}" class="form-grid"><label class="field full"><span>${esc(t('title'))} *</span><input class="input" name="title" required value="${esc(c?.title||'')}"></label><label class="field"><span>${esc(t('subject'))}</span><select class="input" name="subjectId"><option value="">—</option>${state.subjects.map(s=>`<option value="${s.id}" ${c?.subjectId===s.id?'selected':''}>${esc(s.name)}</option>`).join('')}</select></label><label class="field"><span>${esc(t('day'))}</span><select class="input" name="day">${[0,1,2,3,4,5,6].map(d=>`<option value="${d}" ${(c?.day??0)===d?'selected':''}>${esc(dayName(d))}</option>`).join('')}</select></label><label class="field"><span>${esc(t('startTime'))}</span><input class="input" type="time" name="start" value="${esc(c?.start||'08:00')}"></label><label class="field"><span>${esc(t('endTime'))}</span><input class="input" type="time" name="end" value="${esc(c?.end||'09:00')}"></label><label class="field"><span>${esc(t('room'))}</span><input class="input" name="room" value="${esc(c?.room||'')}"></label><label class="field"><span>${esc(t('teacher'))}</span><input class="input" name="teacher" value="${esc(c?.teacher||'')}"></label></form>`, footer:`<button class="btn primary" data-action="save-class">${esc(t('save'))}</button><button class="btn" data-close>${esc(t('cancel'))}</button>` });
+      }
+      function openNoteModal(id=null){
+        const n=id?state.notes.find(x=>x.id===id):null;
+        openModal({ title:n?t('edit'):t('addNote'), size:'lg', body:`<form id="noteForm" data-id="${n?.id||''}" class="form-grid"><label class="field full"><span>${esc(t('noteTitle'))} *</span><input class="input" name="title" required value="${esc(n?.title||'')}"></label><label class="field"><span>${esc(t('subject'))}</span><select class="input" name="subjectId"><option value="">—</option>${state.subjects.map(s=>`<option value="${s.id}" ${n?.subjectId===s.id?'selected':''}>${esc(s.name)}</option>`).join('')}</select></label><label class="field"><span>${esc(t('keywords'))}</span><input class="input" name="keywords" value="${esc(n?.keywords||'')}"></label><label class="field full"><span>${esc(t('content'))}</span><textarea class="input" name="content" style="min-height:220px">${esc(n?.content||'')}</textarea></label></form>`, footer:`<button class="btn primary" data-action="save-note">${esc(t('save'))}</button><button class="btn" data-close>${esc(t('cancel'))}</button>` });
+      }
+      function openHabitModal(){ openModal({ title:t('addHabit'), size:'sm', body:`<form id="habitForm"><label class="field"><span>${esc(t('habitName'))} *</span><input class="input" name="title" required></label></form>`, footer:`<button class="btn primary" data-action="save-habit">${esc(t('save'))}</button><button class="btn" data-close>${esc(t('cancel'))}</button>` }); }
+      function openCourseModal(id=null){ const c=id?state.courses.find(x=>x.id===id):null; openModal({ title:c?t('edit'):t('addCourse'), size:'sm', body:`<form id="courseForm" data-id="${c?.id||''}" class="form-grid"><label class="field full"><span>${esc(t('courseName'))} *</span><input class="input" name="name" required value="${esc(c?.name||'')}"></label><label class="field"><span>${esc(t('credits'))}</span><input class="input" type="number" name="credits" min="0" step="0.5" value="${c?.credits??3}"></label><label class="field"><span>${esc(t('grade'))}</span><select class="input" name="grade">${Object.keys(GRADES).map(g=>`<option value="${g}" ${c?.grade===g?'selected':''}>${g}</option>`).join('')}</select></label></form>`, footer:`<button class="btn primary" data-action="save-course">${esc(t('save'))}</button><button class="btn" data-close>${esc(t('cancel'))}</button>` }); }
+      function openAlertsModal(){
+        const alerts=getAlerts();
+        openModal({ title:t('alerts'), body: alerts.length?`<div class="list">${alerts.map(a=>`<div class="list-item"><div class="list-main"><div class="list-title">${esc(a.title)}</div><div class="meta"><span>${esc(a.overdue?t('overdue'):t('upcoming'))}</span><span>${esc(fmtDateTime(a.due))}</span></div></div><button class="btn sm" data-action="open-alert" data-type="${a.type}" data-id="${a.id}">${esc(t('open'))}</button></div>`).join('')}</div>`:emptyHtml(t('noAlerts')), footer:`<button class="btn" data-action="mark-alerts-read">${esc(t('markRead'))}</button><button class="btn primary" data-close>${esc(t('close'))}</button>` });
+      }
+      function openAboutModal(){ openModal({ title:t('about'), size:'sm', body:`<div class="center"><div class="logo" style="color:var(--accent)">${logo(42)}</div><h3>${esc(APP.name)}</h3><p class="muted">v${esc(APP.version)}</p><p>${esc(t('aboutText'))}</p><strong>${esc(APP.copyright)}</strong></div>`, footer:`<button class="btn primary" data-close>${esc(t('close'))}</button>` }); }
+
+      /* =========================
+         12) parsing quick add
+         ========================= */
+      function parseQuickAdd(text){
+        let title=text.trim(); const res={ title, tags:[], priority:'medium', dueAt:null, estimate:25, subjectId:null };
+        title=title.replace(/#(\S+)/g,(m,w)=>{res.tags.push(w);return '';});
+        if(/!(high|عالية|عاجل)/i.test(title)){res.priority='high'; title=title.replace(/!(high|عالية|عاجل)/gi,'');}
+        if(/!(low|منخفض|منخفضة)/i.test(title)){res.priority='low'; title=title.replace(/!(low|منخفض|منخفضة)/gi,'');}
+        state.subjects.forEach(s=>{ if(title.includes(s.name)){ res.subjectId=s.id; title=title.replace(s.name,' '); } });
+        const now=new Date(); let d=new Date(); let hasDate=false;
+        if(/اليوم|today/i.test(title)){hasDate=true; title=title.replace(/اليوم|today/gi,'');}
+        if(/بكرة|غدًا|غدا|tomorrow/i.test(title)){d=addDays(now,1); hasDate=true; title=title.replace(/بكرة|غدًا|غدا|tomorrow/gi,'');}
+        const afterDays=title.match(/بعد\s*(\d+)\s*(يوم|أيام|days?)/i); if(afterDays){d=addDays(now,Number(afterDays[1])); hasDate=true; title=title.replace(afterDays[0],'');}
+        if(/أسبوع|week/i.test(title)){d=addDays(now,7); hasDate=true; title=title.replace(/أسبوع|week/gi,'');}
+        const timeMatch=title.match(/(?:الساعة\s*)?([01]?\d|2[0-3])[:\s\.]?([0-5]\d)?\s*(ص|م|am|pm)?/i);
+        if(timeMatch){ let h=Number(timeMatch[1]); const m=Number(timeMatch[2]||0); const mer=(timeMatch[3]||'').toLowerCase(); if(['م','pm'].includes(mer) && h<12) h+=12; if(['ص','am'].includes(mer) && h===12) h=0; d.setHours(h,m,0,0); if(!hasDate && d<now) d=addDays(d,1); res.dueAt=d.toISOString(); title=title.replace(timeMatch[0],''); }
+        else if(hasDate){ d.setHours(20,0,0,0); res.dueAt=d.toISOString(); }
+        const estMin=title.match(/(\d+)\s*(د|دقيقة|دقائق|min|minutes?)/i); const estHour=title.match(/(\d+)\s*(س|ساعة|ساعات|h|hours?)/i);
+        if(estMin){res.estimate=Number(estMin[1]); title=title.replace(estMin[0],'');} else if(estHour){res.estimate=Number(estHour[1])*60; title=title.replace(estHour[0],'');}
+        res.title=title.replace(/\s+/g,' ').trim() || text.trim();
+        return res;
+      }
+
+      /* =========================
+         13) الأحداث
+         ========================= */
+      document.addEventListener('click', async e => {
+        const el=e.target.closest('[data-action]');
+        if(!el) return;
+        const a=el.dataset.action; const id=el.dataset.id;
+        switch(a){
+          case 'set-lang': state.settings.lang=el.dataset.lang; saveState(); render(); break;
+          case 'google-login': await signInWithGoogle($('#rememberBox')?.checked ?? true); break;
+          case 'guest-login': setGuestActive(true, $('#rememberBox')?.checked ?? true); state.auth={...DEFAULT_STATE.auth}; saveState(false); render(); break;
+          case 'toggle-sidebar': state.ui.sidebarOpen=!state.ui.sidebarOpen; render(); break;
+          case 'close-sidebar': state.ui.sidebarOpen=false; render(); break;
+          case 'nav': state.ui.view=el.dataset.view; state.ui.sidebarOpen=false; saveState(false); render(); break;
+          case 'toggle-theme': state.settings.theme=document.documentElement.dataset.theme==='dark'?'light':'dark'; saveState(); render(); break;
+          case 'open-alerts': openAlertsModal(); break;
+          case 'mark-alerts-read': getAlerts().forEach(x=>state.notifications.seen[alertKey(x)]=true); saveState(); updateBell(); modalStack.at(-1)?.close(); break;
+          case 'open-alert': { const type=el.dataset.type; if(type==='task') openTaskModal(id); else openExamModal(id); modalStack.at(-1)?.close(); break; }
+          case 'new-task': openTaskModal(null, { dueAt: el.dataset.date ? el.dataset.date+'T12:00' : '' }); break;
+          case 'edit-task': openTaskModal(id); break;
+          case 'delete-task': if(await confirmModal({title:t('delete'),message:t('delete'),danger:true,confirmText:t('delete')})) Tasks.remove(id); break;
+          case 'delete-task-from-modal': if(await confirmModal({title:t('delete'),message:t('delete'),danger:true,confirmText:t('delete')})){ Tasks.remove(id); modalStack.at(-1)?.close(); } break;
+          case 'save-task': { const form=$('#taskForm'); if(saveTaskForm(form)) modalStack.at(-1)?.close(); break; }
+          case 'add-subtask': { const ed=el.closest('.modal').querySelector('.subtasks-editor'); const div=document.createElement('div'); div.innerHTML=subtaskRowHtml(); ed.appendChild(div.firstElementChild); break; }
+          case 'remove-subtask': el.closest('.subtask-row').remove(); break;
+          case 'toggle-task': Tasks.toggle(id); break;
+          case 'focus-task': state.ui.focusTask=id; navigate('focus'); break;
+          case 'task-filter': state.ui.taskFilter=el.dataset.filter; saveState(false); $('#tasksContent').innerHTML=renderTasksContent(); render(); break;
+          case 'toggle-task-view': state.ui.taskView=state.ui.taskView==='list'?'kanban':'list'; saveState(false); render(); break;
+          case 'undo-last': undoFn?.fn(); undoFn=null; break;
+          case 'new-subject': openSubjectModal(); break;
+          case 'edit-subject': openSubjectModal(id); break;
+          case 'delete-subject': Subjects.remove(id); break;
+          case 'save-subject': { const form=$('#subjectForm'); const fd=new FormData(form); const name=fd.get('name').trim(); if(!name){toast(t('requiredTitle'),'error');break;} Subjects.upsert({id:form.dataset.id||uid(), name, color:fd.get('color'), description:fd.get('description')}); modalStack.at(-1)?.close(); render(); toast(t('saved'),'success'); break; }
+          case 'new-exam': openExamModal(null,'exam'); break;
+          case 'new-delivery': openExamModal(null,'delivery'); break;
+          case 'edit-exam': openExamModal(id); break;
+          case 'delete-exam': if(await confirmModal({title:t('delete'),message:t('delete'),danger:true,confirmText:t('delete')})) Exams.remove(id); break;
+          case 'save-exam': { const form=$('#examForm'); const fd=new FormData(form); if(!fd.get('title').trim() || !parseDate(fd.get('date'))){toast(t('requiredTitle'),'error');break;} Exams.upsert({id:form.dataset.id||uid(), title:fd.get('title'), subjectId:fd.get('subjectId')||null, date:fd.get('date'), type:fd.get('type'), topics:fd.get('topics'), plan:fd.get('plan'), readiness:num(fd.get('readiness'),0)}); modalStack.at(-1)?.close(); render(); toast(t('saved'),'success'); break; }
+          case 'exam-to-task': { const e=state.exams.find(x=>x.id===id); if(e) openTaskModal(null,{title:`${t('exam')}: ${e.title}`, subjectId:e.subjectId, dueAt:toLocalInput(addDays(parseDate(e.date),-1))}); break; }
+          case 'new-class': openClassModal(); break;
+          case 'edit-class': openClassModal(id); break;
+          case 'delete-class': if(await confirmModal({title:t('delete'),message:t('delete'),danger:true,confirmText:t('delete')})) Classes.remove(id); break;
+          case 'save-class': { const form=$('#classForm'); const fd=new FormData(form); if(!fd.get('title').trim()){toast(t('requiredTitle'),'error');break;} Classes.upsert({id:form.dataset.id||uid(), title:fd.get('title'), subjectId:fd.get('subjectId')||null, day:Number(fd.get('day')), start:fd.get('start'), end:fd.get('end'), room:fd.get('room'), teacher:fd.get('teacher')}); modalStack.at(-1)?.close(); render(); toast(t('saved'),'success'); break; }
+          case 'cal-prev': shiftCalendar(-1); break;
+          case 'cal-next': shiftCalendar(1); break;
+          case 'cal-today': state.ui.calendarAnchor=new Date().toISOString(); render(); break;
+          case 'cal-mode': state.ui.calendarMode=el.dataset.mode; render(); break;
+          case 'cal-day': { const date=el.dataset.date; openModal({ title:fmtDate(date), body:`<div class="list">${dayEvents(parseDate(date)).map(ev=>`<div class="list-item"><div class="list-main"><div class="list-title">${esc(ev.title)}</div><div class="meta"><span>${esc(ev.time||'')}</span></div></div></div>`).join('')||emptyHtml(t('noTasks'))}</div>`, footer:`<button class="btn primary" data-action="new-task" data-date="${date}">${esc(t('addTask'))}</button><button class="btn" data-close>${esc(t('close'))}</button>` }); break; }
+          case 'open-planner': openPlannerModal(); break;
+          case 'plan-remove': { const i=Number(el.dataset.index); state.ui.planDraft.plan.splice(i,1); modalStack.at(-1)?.close(); openPlannerModal(); break; }
+          case 'plan-accept': { const draft=state.ui.planDraft; if(draft?.plan?.length){ startFocus({taskId:draft.plan[0].taskId, minutes:draft.plan[0].minutes}); toast(t('planAccepted'),'success'); } modalStack.at(-1)?.close(); state.ui.planDraft=null; break; }
+          case 'plan-reject': state.ui.planDraft=null; modalStack.at(-1)?.close(); toast(t('planRejected'),'info'); break;
+          case 'focus-preset': $('#focusSetupForm [name=minutes]').value=el.dataset.min; break;
+          case 'focus-pause': pauseFocus(); break;
+          case 'focus-resume': resumeFocus(); break;
+          case 'focus-stop': if(await confirmModal({title:t('stop'),message:t('cancelled'),danger:true,confirmText:t('stop')})) stopFocus(true); break;
+          case 'focus-finish': if(await confirmModal({title:t('complete'),message:t('sessionLogged'),confirmText:t('complete')})) finishFocusEarly(); break;
+          case 'focus-recover-complete': logSession(state.activeFocus,'completed',state.activeFocus.plannedSec); state.activeFocus=null; saveState(); modalStack.at(-1)?.close(); render(); break;
+          case 'focus-recover-cancel': stopFocus(true); modalStack.at(-1)?.close(); break;
+          case 'new-habit': openHabitModal(); break;
+          case 'save-habit': { const fd=new FormData($('#habitForm')); if(!fd.get('title').trim()){toast(t('requiredTitle'),'error');break;} Habits.upsert({id:uid(), title:fd.get('title')}); modalStack.at(-1)?.close(); render(); break; }
+          case 'toggle-habit': Habits.toggle(id, el.dataset.date); break;
+          case 'delete-habit': Habits.remove(id); render(); break;
+          case 'new-course': openCourseModal(); break;
+          case 'edit-course': openCourseModal(id); break;
+          case 'delete-course': Courses.remove(id); render(); break;
+          case 'save-course': { const form=$('#courseForm'); const fd=new FormData(form); if(!fd.get('name').trim()){toast(t('requiredTitle'),'error');break;} Courses.upsert({id:form.dataset.id||uid(), name:fd.get('name'), credits:num(fd.get('credits'),3), grade:fd.get('grade')}); modalStack.at(-1)?.close(); render(); break; }
+          case 'new-note': openNoteModal(); break;
+          case 'edit-note': openNoteModal(id); break;
+          case 'delete-note': if(await confirmModal({title:t('delete'),message:t('delete'),danger:true,confirmText:t('delete')})) Notes.remove(id); break;
+          case 'save-note': { const form=$('#noteForm'); const fd=new FormData(form); if(!fd.get('title').trim()){toast(t('requiredTitle'),'error');break;} Notes.upsert({id:form.dataset.id||uid(), title:fd.get('title'), content:fd.get('content'), subjectId:fd.get('subjectId')||null, keywords:fd.get('keywords')}); modalStack.at(-1)?.close(); render(); toast(t('saved'),'success'); break; }
+          case 'request-notifications': requestNotificationPermission(); break;
+          case 'export-json': exportJSON(); break;
+          case 'import-json': importJSON(); break;
+          case 'export-csv': exportTasksCSV(); break;
+          case 'delete-all': await deleteAllData(); break;
+          case 'open-about': openAboutModal(); break;
+          case 'logout': await signOutUser(); break;
+        }
+      });
+
+      document.addEventListener('submit', e => {
+        e.preventDefault();
+        const form=e.target;
+        if(form.id==='quickAddForm'){ const fd=new FormData(form); const parsed=parseQuickAdd(fd.get('text')); Tasks.create(parsed); form.reset(); render(); toast(t('saved'),'success'); }
+        if(form.id==='focusSetupForm'){ const fd=new FormData(form); startFocus({ taskId:fd.get('taskId')||null, subjectId:fd.get('subjectId')||null, minutes:clamp(Math.round(num(fd.get('minutes'),25)),1,240) }); }
+      });
+
+      document.addEventListener('input', debounce(e => {
+        if(e.target.id==='taskSearch'){ state.ui.taskSearch=e.target.value; const c=$('#tasksContent'); if(c) c.innerHTML=renderTasksContent(); }
+        if(e.target.id==='noteSearch'){ state.ui.noteSearch=e.target.value; render(); }
+        if(e.target.matches('[data-action="gpa-target"]')){ state.gpaTarget=num(e.target.value,3); saveState(); }
+      }, 180));
+
+      document.addEventListener('change', e => {
+        if(e.target.id==='taskSort'){ state.ui.taskSort=e.target.value; saveState(false); $('#tasksContent').innerHTML=renderTasksContent(); }
+      });
+
+      document.addEventListener('keydown', e => {
+        if(e.key==='Escape' && modalStack.length){ modalStack.at(-1).close(); return; }
+        if(e.target.matches('input,textarea,select,[contenteditable="true"]')) return;
+        if(modalStack.length) return;
+        if(e.key.toLowerCase()==='n'){ openTaskModal(); }
+        if(e.key==='/'){ e.preventDefault(); state.ui.view='tasks'; render(); setTimeout(()=>$('#taskSearch')?.focus(),50); }
+      });
+
+      document.addEventListener('dragstart', e => { const card=e.target.closest('.kanban-card'); if(card) e.dataTransfer.setData('text/plain', card.dataset.id); });
+      document.addEventListener('dragover', e => { const col=e.target.closest('.kanban-col'); if(col){ e.preventDefault(); col.classList.add('dragover'); } });
+      document.addEventListener('dragleave', e => { const col=e.target.closest('.kanban-col'); if(col) col.classList.remove('dragover'); });
+      document.addEventListener('drop', e => { const col=e.target.closest('.kanban-col'); if(!col)return; e.preventDefault(); col.classList.remove('dragover'); const id=e.dataTransfer.getData('text/plain'); const status=col.dataset.status; if(status==='done') Tasks.complete(id); else Tasks.setStatus(id,status); });
+
+      function saveTaskForm(form){
+        const fd=new FormData(form); const title=String(fd.get('title')||'').trim();
+        if(!title){ toast(t('requiredTitle'),'error'); return false; }
+        const dueRaw=fd.get('dueAt'); const dueDate=dueRaw?parseDate(dueRaw):null;
+        if(dueRaw && !dueDate){ toast(t('invalidDate'),'error'); return false; }
+        const subtasks=$$('.subtask-row', form).map(row=>({ id:row.dataset.id||uid(), title:row.querySelector('[name=subtaskTitle]').value.trim(), done:row.querySelector('input[type=checkbox]').checked })).filter(x=>x.title);
+        const data={ id:form.dataset.id||uid(), title, description:fd.get('description'), subjectId:fd.get('subjectId')||null, priority:fd.get('priority'), status:fd.get('status'), dueAt:dueDate?dueDate.toISOString():null, estimate:Math.max(0,num(fd.get('estimate'),25)), tags:String(fd.get('tags')||'').split(',').map(x=>x.trim()).filter(Boolean), link:fd.get('link'), notes:fd.get('notes'), subtasks, repeat:fd.get('repeat'), repeatInterval:Math.max(1,num(fd.get('repeatInterval'),7)) };
+        const existing=taskById(data.id);
+        Tasks.update(existing?data.id:null, data);
+        if(!existing) Tasks.create(data); else saveState();
+        toast(t('saved'),'success'); return true;
+      }
+
+      function shiftCalendar(dir){
+        const a=parseDate(state.ui.calendarAnchor)||new Date();
+        if((state.ui.calendarMode||'month')==='month') a.setMonth(a.getMonth()+dir); else a.setDate(a.getDate()+7*dir);
+        state.ui.calendarAnchor=a.toISOString(); render();
+      }
+      function navigate(view){ state.ui.view=view; saveState(false); render(); }
+
+      function exportJSON(){ download(`munjiz-${dateKey(new Date())}.json`, JSON.stringify(state,null,2), 'application/json'); toast(t('exported'),'success'); }
+      function exportTasksCSV(){ const rows=[['id','title','subject','priority','status','dueAt','estimate','actualMin','progress']]; state.tasks.forEach(t=>rows.push([t.id,t.title,subjectName(t.subjectId),t.priority,t.status,t.dueAt||'',t.estimate,t.actualMin,t.progress])); download(`munjiz-tasks-${dateKey(new Date())}.csv`, toCSV(rows), 'text/csv'); toast(t('exported'),'success'); }
+      function importJSON(){
+        const input=document.createElement('input'); input.type='file'; input.accept='application/json,.json';
+        input.onchange=async ()=>{ const file=input.files?.[0]; if(!file)return; const reader=new FileReader(); reader.onload=async ()=>{ try{ const obj=JSON.parse(reader.result); if(!obj || !Array.isArray(obj.tasks)) throw new Error('bad'); if(!await confirmModal({title:t('importJson'),message:t('deleteAllWarning'),danger:true,confirmText:t('confirm')})) return; state=normalizeState(obj); saveState(false); applySettings(); render(); toast(t('imported'),'success'); }catch{ toast(t('importFailed'),'error'); } }; reader.readAsText(file); };
+        input.click();
+      }
+      async function deleteAllData(){
+        if(!await confirmModal({title:t('deleteAll'),message:t('deleteAllWarning'),danger:true,confirmText:t('confirm')})) return;
+        if(!await dangerConfirm({title:t('doubleConfirm'),message:t('deleteAllWarning'),keyword:state.settings.lang==='ar'?'حذف':'delete'})) return;
+        localStorage.removeItem(STORAGE_KEY); setGuestActive(false); state=normalizeState({}); saveState(false); render(); toast(t('deleted'),'success');
+      }
+
+      /* =========================
+         14) التهيئة
+         ========================= */
+      async function registerSW(){
+        if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost' || location.hostname==='127.0.0.1')){
+          try { await navigator.serviceWorker.register('sw.js'); } catch(e){ console.warn(e); }
+        }
+      }
+
+      async function init(){
+        applySettings(); render();
+        await initFirebase();
+        watchAuth();
+        recoverFocus();
+        setInterval(checkNotifications, 60000);
+        setInterval(()=>{ if(['home','tasks','calendar','exams'].includes(state.ui.view)) render(); }, 60000);
+        registerSW();
+        setTimeout(maybeMorningSummary, 800);
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
