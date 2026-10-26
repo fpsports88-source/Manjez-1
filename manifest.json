@@ -1,7 +1,7 @@
 {
- "name": "منجز",
+ "name": "منجز Ultra",
  "short_name": "منجز",
- "description": "Munjiz — Student task and time management assistant",
+ "description": "Munjiz Ultra — Student assistant for tasks, teams, challenges and leaderboards",
  "start_url": "./",
  "scope": "./",
  "display": "standalone",
@@ -12,8 +12,7 @@
  "dir": "rtl",
  "categories": [
   "productivity",
-  "education",
-  "utilities"
+  "education"
  ],
  "icons": [
   {
