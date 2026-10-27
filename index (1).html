@@ -1,0 +1,1189 @@
+<!-- © YS — جميع الحقوق محفوظة -->
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="author" content="YS" />
+  <meta name="description" content="Munjiz Ultra — مساعد الطالب الذكي للمهام والفرق والإنجازات" />
+  <meta name="theme-color" content="#2563eb" />
+  <link rel="manifest" href="manifest.json" />
+  <title>منجز Ultra</title>
+  <style>
+    *{box-sizing:border-box}
+    :root{
+      --bg:#f5f7fb; --surface:#fff; --surface2:#eef2f7; --surface3:#e5eaf2;
+      --text:#0f172a; --muted:#64748b; --border:#dbe2ea;
+      --accent:#2563eb; --ok:#059669; --warn:#d97706; --danger:#dc2626;
+      --gold:#f59e0b; --silver:#94a3b8; --bronze:#b45309; --diamond:#22d3ee; --royal:#7c3aed;
+      --radius:16px; --shadow:0 10px 28px rgba(15,23,42,.08);
+      --safe-b:env(safe-area-inset-bottom,0px); --safe-t:env(safe-area-inset-top,0px);
+      --accent-soft:rgba(37,99,235,.12); --accent-soft:color-mix(in srgb, var(--accent) 12%, transparent);
+    }
+    [data-theme="dark"]{
+      --bg:#0b1220; --surface:#111827; --surface2:#172033; --surface3:#1f2937;
+      --text:#e5e7eb; --muted:#9aa4b2; --border:#334155;
+      --shadow:0 14px 36px rgba(0,0,0,.35);
+    }
+    html,body{height:100%;max-width:100%;overflow-x:hidden}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,"Noto Sans Arabic",sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+    button,input,select,textarea{font:inherit;color:inherit}
+    button{cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);min-height:44px;border-radius:12px;padding:10px 14px;font-weight:800;transition:.15s}
+    button:hover{background:var(--surface2)}
+    button:disabled{opacity:.55;cursor:not-allowed}
+    input,select,textarea{width:100%;min-height:44px;font-size:16px;border:1px solid var(--border);border-radius:12px;background:var(--surface);color:var(--text);padding:10px 12px}
+    textarea{min-height:90px;resize:vertical}
+    :focus-visible{outline:3px solid rgba(37,99,235,.35);outline-offset:2px;border-radius:10px}
+    .hidden{display:none!important}.muted{color:var(--muted)}.small{font-size:.86rem}.center{text-align:center}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}
+    .grid{display:grid;gap:12px}.stats{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.cols-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
+    .title{margin:0 0 4px;font-size:1.05rem;font-weight:900}.subtitle{margin:0;color:var(--muted);font-size:.9rem}
+    .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}.btn.danger{background:var(--danger);border-color:var(--danger);color:#fff}.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+    .btn.sm{min-height:36px;padding:7px 10px;font-size:.86rem;border-radius:10px}
+    .icon-btn{width:44px;height:44px;min-height:44px;padding:0;display:grid;place-items:center;border-radius:12px}
+    .chip{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:99px;border:1px solid var(--border);background:var(--surface2);font-size:.86rem;font-weight:800;min-height:38px}
+    .chip.active{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 35%,var(--border));color:var(--accent)}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:99px;font-size:.76rem;font-weight:900;background:var(--surface2);border:1px solid var(--border)}
+    .badge.high{color:var(--danger)}.badge.medium{color:var(--warn)}.badge.low{color:var(--ok)}
+    .badge.new{color:var(--muted)}.badge.inProgress{color:var(--accent)}.badge.done{color:var(--ok)}
+    .dot{width:10px;height:10px;border-radius:50%;display:inline-block;background:var(--muted)}
+    .progress{height:9px;background:var(--surface3);border-radius:99px;overflow:hidden;margin-top:8px}.progress>span{display:block;height:100%;background:var(--accent)}
+    .kv{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px dashed var(--border)}.kv:last-child{border-bottom:0}
+    .list{display:flex;flex-direction:column}.list-item{display:flex;gap:12px;align-items:flex-start;padding:14px;border-bottom:1px solid var(--border)}.list-item:last-child{border-bottom:0}.list-item.done{opacity:.62}
+    .list-main{flex:1;min-width:0}.list-title{font-weight:900;margin:0 0 4px;word-break:break-word}.meta{display:flex;flex-wrap:wrap;gap:8px;color:var(--muted);font-size:.82rem}
+    .empty{padding:30px 16px;text-align:center;color:var(--muted)}.empty .emoji{font-size:2rem;display:block;margin-bottom:8px}
+    .field{display:flex;flex-direction:column;gap:6px}.field span{font-size:.88rem;color:var(--muted);font-weight:800}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.form-grid .full{grid-column:1/-1}
+    .checkbox-line{display:flex;align-items:center;gap:8px;min-height:44px}.checkbox-line input{width:auto;min-height:auto}
+    .app-root{min-height:100dvh}
+    .auth-wrap{min-height:100dvh;display:grid;place-items:center;padding:16px;background:radial-gradient(circle at 18% 12%,var(--accent-soft),transparent 28%),radial-gradient(circle at 82% 78%,rgba(124,58,237,.14),transparent 26%),var(--bg)}
+    .auth-card{width:min(100%,580px);background:var(--surface);border:1px solid var(--border);border-radius:26px;box-shadow:var(--shadow);padding:18px;display:grid;gap:14px}
+    .auth-hero{text-align:center;display:grid;gap:8px}.auth-hero .logo{width:76px;height:76px;border-radius:24px;margin:auto;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--royal));color:#fff;box-shadow:var(--shadow);cursor:pointer}
+    .auth-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;background:var(--surface2);border:1px solid var(--border);padding:6px;border-radius:16px}
+    .tab-btn{min-height:42px;border:0;background:transparent;color:var(--muted);border-radius:12px;font-weight:900}.tab-btn.active{background:var(--surface);color:var(--accent);box-shadow:0 4px 14px rgba(0,0,0,.06)}
+    .panel{display:none}.panel.active{display:block;animation:fadeUp .18s ease}@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .auth-form{display:grid;gap:10px}.link-btn{background:transparent;border:0;color:var(--accent);font-weight:900;min-height:auto;padding:4px}
+    .profile-list{display:grid;gap:8px}.profile-row{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--border);border-radius:14px;background:var(--surface2)}
+    .profile-row .avatar{width:34px;height:34px}.profile-row .meta{flex:1;min-width:0}.profile-row strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .google-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#1f2937;border-color:#dadce0}[data-theme="dark"] .google-btn{background:#111827;color:#e5e7eb;border-color:#334155}
+    .shell{display:grid;grid-template-columns:260px 1fr;min-height:100dvh}
+    .sidebar{position:fixed;inset-block:0;width:260px;background:var(--surface);border-inline-end:1px solid var(--border);display:flex;flex-direction:column;z-index:60;padding-top:var(--safe-t)}
+    [dir="rtl"] .sidebar{right:0;transform:translateX(100%)}[dir="ltr"] .sidebar{left:0;transform:translateX(-100%)}.sidebar.open{transform:none}
+    .brand{display:flex;align-items:center;gap:12px;padding:16px;border-bottom:1px solid var(--border)}.brand-logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--royal));color:#fff;display:grid;place-items:center}
+    .nav{padding:10px;overflow:auto;flex:1}.nav-item{width:100%;display:flex;align-items:center;gap:10px;padding:11px 12px;margin:3px 0;border:0;background:transparent;color:var(--muted);border-radius:12px;text-align:start}
+    .nav-item:hover{background:var(--surface2);color:var(--text)}.nav-item.active{background:var(--accent-soft);color:var(--accent);font-weight:900}
+    .sidebar-footer{padding:14px;border-top:1px solid var(--border);color:var(--muted);font-size:.8rem}
+    .main{min-width:0;display:flex;flex-direction:column;min-height:100dvh}[dir="rtl"] .main{margin-right:260px}[dir="ltr"] .main{margin-left:260px}
+    .topbar{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--surface) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;padding:10px 14px;padding-top:calc(10px + var(--safe-t))}
+    .top-title{flex:1;min-width:0}.top-title h1{margin:0;font-size:1.08rem}.top-title p{margin:0;font-size:.8rem}
+    .view{padding:16px;max-width:1400px;width:100%;margin:auto}
+    .bottom-nav{display:none;position:fixed;inset-inline:0;bottom:0;height:68px;background:var(--surface);border-top:1px solid var(--border);z-index:55;padding-bottom:var(--safe-b)}
+    .bottom-nav .nav-item{flex:1;justify-content:center;text-align:center;flex-direction:column;gap:2px;font-size:.72rem;margin:0;border-radius:0}
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:.2s;z-index:50}.overlay.show{opacity:1;pointer-events:auto}
+    .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.toolbar .input{flex:1;min-width:200px}
+    .kanban{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.kanban-col{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:10px;min-height:220px}.kanban-col.dragover{outline:2px dashed var(--accent)}
+    .kanban-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:8px;cursor:grab}
+    .grid-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+    .entity-card{position:relative;overflow:hidden;display:grid;gap:10px;min-height:150px}.entity-card .strip{position:absolute;inset-inline:0;top:0;height:8px}.entity-card.active{outline:2px solid var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+    .mini-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.mini-stat{background:var(--surface2);border-radius:12px;padding:8px;text-align:center}.mini-stat strong{display:block;font-size:1.05rem}
+    .sync-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:99px;background:var(--surface2);border:1px solid var(--border);font-size:.78rem;font-weight:900;color:var(--muted)}
+    .sync-pill.online{color:var(--ok)}.sync-pill.offline{color:var(--warn)}
+    .segmented{display:inline-flex;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:4px;gap:4px;flex-wrap:wrap}.segmented button{min-height:36px;border:0;background:transparent;color:var(--muted);border-radius:10px;font-weight:900}.segmented button.active{background:var(--surface);color:var(--accent)}
+    .lb-table{width:100%;border-collapse:collapse}.lb-table th,.lb-table td{padding:10px 8px;border-bottom:1px solid var(--border);text-align:start}.lb-table th{color:var(--muted);font-size:.82rem}
+    .lb-rank{font-weight:900}.lb-rank.top1{color:var(--gold)}.lb-rank.top2{color:var(--silver)}.lb-rank.top3{color:var(--bronze)}
+    .challenge-card{display:grid;gap:10px;border:1px solid var(--border);border-radius:18px;padding:14px;background:linear-gradient(180deg,var(--surface),var(--surface2))}
+    .badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}.badge-item{display:grid;gap:6px;justify-items:center;text-align:center;padding:12px;border-radius:16px;border:1px solid var(--border);background:var(--surface2);opacity:.55}.badge-item.unlocked{opacity:1;border-color:color-mix(in srgb,var(--accent) 35%,var(--border));box-shadow:0 0 0 3px var(--accent-soft)}
+    .badge-icon{width:46px;height:46px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--royal));color:#fff}
+    .frame-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}.frame-item{display:grid;justify-items:center;gap:8px;padding:12px;border-radius:16px;border:1px solid var(--border);background:var(--surface2)}.frame-item.locked{opacity:.45}.frame-item.equipped{outline:2px solid var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+    .heat-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:10px}.heat-cell{aspect-ratio:1/1;border-radius:8px;background:var(--surface3);border:1px solid var(--border)}.heat-cell.on{background:var(--ok)}
+    .dev-panel{border:1px solid rgba(124,58,237,.28);background:linear-gradient(180deg,var(--surface),rgba(124,58,237,.08))}.dev-log{max-height:240px;overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:.82rem}
+    .avatar-wrap{position:relative;display:inline-grid;place-items:center}.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:900;overflow:hidden;border:2px solid var(--surface)}
+    .avatar.frame-none{box-shadow:0 0 0 2px var(--border)}.avatar.frame-bronze{box-shadow:0 0 0 3px var(--bronze)}.avatar.frame-silver{box-shadow:0 0 0 3px var(--silver)}.avatar.frame-gold{box-shadow:0 0 0 3px var(--gold),0 0 18px rgba(245,158,11,.35)}.avatar.frame-platinum{box-shadow:0 0 0 3px #e5e7eb}.avatar.frame-diamond{box-shadow:0 0 0 3px var(--diamond),0 0 20px rgba(34,211,238,.35)}.avatar.frame-royal{box-shadow:0 0 0 3px var(--royal),0 0 20px rgba(124,58,237,.35)}.avatar.frame-ember{box-shadow:0 0 0 3px #f97316}.avatar.frame-frost{box-shadow:0 0 0 3px #38bdf8}.avatar.frame-champion{box-shadow:0 0 0 3px var(--gold),0 0 0 5px var(--royal)}.avatar.frame-ys{box-shadow:0 0 0 3px transparent,0 0 0 5px rgba(37,99,235,.55),0 0 22px rgba(124,58,237,.45);border:3px solid transparent;background-image:linear-gradient(var(--surface),var(--surface)),linear-gradient(135deg,#2563eb,#7c3aed,#059669,#f59e0b);background-origin:border-box;background-clip:padding-box,border-box}
+    .ys-signature{font-weight:900;letter-spacing:.14em;background:linear-gradient(90deg,#2563eb,#7c3aed,#059669,#f59e0b);-webkit-background-clip:text;background-clip:text;color:transparent}.ys-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;background:linear-gradient(135deg,rgba(37,99,235,.16),rgba(124,58,237,.16));border:1px solid rgba(124,58,237,.28);font-weight:900;font-size:.78rem}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;padding:14px;z-index:150;opacity:0;transition:.18s}.modal-backdrop.show{opacity:1}
+    .modal{width:100%;max-width:680px;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);max-height:90dvh;display:flex;flex-direction:column;overflow:hidden;transform:translateY(8px) scale(.98);transition:.18s}.modal-backdrop.show .modal{transform:none}.modal.sm{max-width:430px}.modal.lg{max-width:920px}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border)}.modal-head h3{margin:0;font-size:1.02rem}.modal-body{padding:16px;overflow:auto}.modal-foot{padding:14px 16px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap}
+    .subtask-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}.subtask-row input[type="text"]{flex:1}
+    .toast-root{position:fixed;bottom:calc(18px + var(--safe-b));inset-inline-start:18px;display:flex;flex-direction:column;gap:10px;z-index:200;max-width:min(92vw,420px)}
+    .toast{background:var(--surface);border:1px solid var(--border);border-inline-start:5px solid var(--accent);box-shadow:var(--shadow);border-radius:14px;padding:12px 14px;display:flex;gap:10px;align-items:center;animation:slideIn .2s ease}.toast.success{border-inline-start-color:var(--ok)}.toast.error{border-inline-start-color:var(--danger)}.toast.warn{border-inline-start-color:var(--warn)}.toast.hide{opacity:0;transform:translateY(8px);transition:.2s}@keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .confetti-piece{position:fixed;width:9px;height:14px;top:-20px;z-index:300;border-radius:3px;animation:fall 1.2s linear forwards}@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:0}}
+    body.deep-focus .sidebar,body.deep-focus .bottom-nav,body.deep-focus .topbar{display:none!important}body.deep-focus .main{margin:0!important}body.deep-focus .view{min-height:100dvh;display:grid;place-items:center}
+    .photo-preview{width:88px;height:88px;border-radius:50%;object-fit:cover;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:900;overflow:hidden;border:2px solid var(--border)}
+    @media(max-width:900px){.shell{grid-template-columns:1fr}.main{margin:0!important;padding-bottom:calc(76px + var(--safe-b))}.bottom-nav{display:flex}.top-title p{display:none}}
+    @media(max-width:760px){.form-grid{grid-template-columns:1fr}.kanban{grid-template-columns:1fr}.cols-2{grid-template-columns:1fr}}
+    @media(max-width:520px){.auth-card{padding:14px;border-radius:22px}.badge-grid{grid-template-columns:repeat(auto-fill,minmax(105px,1fr))}}
+    @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <div id="app" class="app-root"></div>
+  <div id="toastRoot" class="toast-root" aria-live="polite"></div>
+  <div id="modalRoot"></div>
+
+  <script>
+    /* © YS — جميع الحقوق محفوظة */
+    (() => {
+      "use strict";
+
+      /* =========================
+         1) Firebase Config
+         اتركها فارغة ليعمل التطبيق محليًا.
+         ========================= */
+      const FIREBASE_CONFIG = {
+        apiKey: 'AIzaSyATdu2Jwz1M7BpzKTQiYmV7Cpq_-OphLRw',
+        authDomain: 'mongez-83ece.firebaseapp.com',
+        projectId: 'mongez-83ece',
+        appId: '1:3482020492:web:72d6f419712c0404a8e9a9'
+      };
+
+      const APP = { name:'منجز', version:'3.1.0-ultra', copyright:'© YS — جميع الحقوق محفوظة' };
+      const LS = { profiles:'munjiz.profiles', active:'munjiz.active', prefs:'munjiz.prefs', temp:'munjiz.temp' };
+      const DAY = 86400000;
+      const STATUS = ['new','inProgress','done'];
+      const PRIORITIES = ['high','medium','low'];
+
+      const M = {
+        ar: {
+          appName:'منجز', tagline:'مساعد الطالب الذكي للمهام والفرق والتحديات', copyright:'© YS — جميع الحقوق محفوظة', ultra:'ألترا',
+          login:'تسجيل الدخول', google:'المتابعة بحساب جوجل', email:'دخول بالبريد', guest:'الدخول كضيف', remember:'تذكّرني على هذا الجهاز',
+          arabic:'العربية', english:'English', theme:'المظهر', auto:'تلقائي', light:'فاتح', dark:'داكن', accent:'اللون الرئيسي', preset:'الثيم',
+          home:'الرئيسية', tasks:'المهام', groups:'المجموعات', teams:'الفرق', leaderboard:'المتصدّرون', challenges:'التحديات', focus:'التركيز', settings:'الإعدادات', developer:'المطور',
+          logout:'تسجيل الخروج', loggedOut:'تم تسجيل الخروج.', savedProfiles:'الملفات المحفوظة', addProfile:'إضافة ملف', openProfile:'فتح', deleteProfile:'حذف الملف',
+          profile:'الملف الشخصي', displayName:'الاسم', school:'المرحلة/الجامعة', photo:'الصورة', changePhoto:'تغيير الصورة', removePhoto:'إزالة الصورة',
+          save:'حفظ', cancel:'إلغاء', close:'إغلاق', confirm:'تأكيد', delete:'حذف', edit:'تعديل', add:'إضافة', search:'بحث', title:'العنوان', description:'الوصف',
+          subject:'المادة', group:'المجموعة', team:'الفريق', noSubject:'بدون مادة', noGroup:'بدون مجموعة', noTeam:'بدون فريق',
+          priority:'الأولوية', high:'عالية', medium:'متوسطة', low:'منخفضة', status:'الحالة', new:'جديدة', inProgress:'قيد التنفيذ', done:'منتهية',
+          due:'التسليم', estimate:'التقدير (د)', subtasks:'خطوات', addSubtask:'إضافة خطوة', repeat:'تكرار', none:'بدون', daily:'يومي', weekly:'أسبوعي', custom:'مخصص', interval:'كل كم يوم؟',
+          quickAdd:'أضف بسرعة: حل واجب الفيزياء بكرة 5 م', noTasks:'لا مهام', today:'اليوم', upcoming:'القادمة', overdue:'المتأخرة', all:'الكل', kanban:'كانبان', list:'قائمة',
+          sortDue:'الأقرب موعدًا', sortPriority:'الأولوية', sortCreated:'الأحدث', sortTitle:'العنوان',
+          startFocus:'ابدأ تركيز', complete:'إكمال', undo:'تراجع', deleted:'تم الحذف', savedMsg:'تم الحفظ', requiredTitle:'العنوان مطلوب', invalidDate:'تاريخ غير صالح',
+          taskCompleted:'تم إنهاء المهمة', nextOccurrence:'تم إنشاء النسخة التالية', sessionLogged:'تم تسجيل الجلسة', currentSession:'جلسة حالية', noActiveSession:'لا جلسة نشطة',
+          todaySessions:'جلسات اليوم', completedSessions:'مكتملة', cancelled:'ملغاة', completed:'مكتملة', focusTimer:'مؤقت التركيز', workMin:'دقائق التركيز', shortBreak:'استراحة قصيرة', longBreak:'استراحة طويلة', cycles:'دورة', start:'ابدأ', pause:'إيقاف', resume:'استئناف', stop:'إيقاف',
+          deepFocus:'تركيز عميق', notifications:'التنبيهات', alerts:'التنبيهات', noAlerts:'لا تنبيهات', markRead:'تعليم كمقروء', enableNotifications:'تفعيل الإشعارات', notificationExplanation:'الإشعارات تعمل أثناء فتح التطبيق فقط في الوضع المحلي.',
+          xp:'XP', level:'المستوى', streak:'السلسلة', bestStreak:'أطول سلسلة', heatMap:'خريطة الالتزام', badges:'الأوسمة', frames:'الأطارات', titles:'الألقاب', equip:'تجهيز', equipped:'مُجهَّز', locked:'مقفل', unlocked:'مفتوح',
+          levelUp:'مستوى جديد', badgeUnlocked:'وسام جديد', frameUnlocked:'إطار جديد', titleUnlocked:'لقب جديد', tasksCompleted:'مهام منجزة', focusMinutes:'دقائق تركيز', raceWins:'انتصارات', challengeWins:'تحديات',
+          friends:'الأصدقاء والشات', global:'عام', teamLb:'الفريق', refresh:'تحديث', noData:'لا بيانات', createTeam:'إنشاء فريق', joinTeam:'انضمام بكود', teamCode:'كود الفريق', leaveTeam:'مغادرة', deleteTeam:'حذف الفريق',
+          teamCreated:'تم إنشاء الفريق', teamJoined:'انضممت للفريق', teamLeft:'غادرت الفريق', invalidTeamCode:'كود غير صحيح', alreadyInTeam:'أنت في الفريق', notInTeam:'لست في الفريق',
+          newChallenge:'تحدي جديد', challengeTitle:'عنوان التحدي', challengeDesc:'وصف التحدي', challengeType:'النوع', race:'سباق', focusChallenge:'تركيز', streakChallenge:'التزام', teamChallenge:'فريق',
+          joinChallenge:'انضمام', submitChallenge:'تسليم', challengeJoined:'انضممت', challengeSubmitted:'تم التسليم', challengeWon:'فزت! 🏆', endsAt:'ينتهي', goal:'الهدف', rewardXp:'مكافأة XP',
+          users:'مستخدمون', members:'أعضاء', owner:'مالك', inquiry:'استفسار للمطور', inquirySent:'تم إرسال استفسارك', message:'رسالتك', send:'إرسال',
+          requiresFirebase:'يحتاج إعداد Firebase', firebaseMissing:'Firebase غير مضبوط. استخدم الوضع المحلي أو أضف الإعدادات.', syncStatus:'المزامنة', localOnly:'محلي', synced:'متزامن', offline:'غير متصل', storageError:'فشل الحفظ المحلي',
+          exportJson:'تصدير JSON', importJson:'استيراد JSON', exportCsv:'تصدير CSV', deleteAll:'حذف كل البيانات', deleteAllWarning:'سيتم حذف كل البيانات. اكتب حذف للتأكيد.', typeDelete:'حذف', doubleConfirm:'تأكيد مزدوج',
+          imported:'تم الاستيراد', importFailed:'ملف غير صالح', exported:'تم التصدير', about:'حول التطبيق', version:'الإصدار',
+          developerConsole:'لوحة المطور', developerAccess:'دخول المطور', developerHidden:'وصول المطور محمي.', developerMode:'وضع المطور', noDeveloperAccess:'لا توجد صلاحية مطور', developerReady:'تم فتح وضع YS',
+          sendAnnouncement:'إرسال إعلان', featureFlags:'مفاتيح', grantBadge:'منح وسام', grantFrame:'منح إطار', developerLogs:'السجل', maintenanceMode:'الصيانة', copyCode:'نسخ الكود', copied:'تم النسخ',
+          pinAnnouncement:'تثبيت الإعلان', pinned:'مثبّت', manageAnnouncements:'إدارة الإعلانات', unpin:'إلغاء التثبيت', deactivate:'إخفاء', active:'نشط', grantXp:'إهداء نقاط XP', grantLevel:'تعديل مستوى الطالب', targetUid:'معرّف المستخدم UID', amountXp:'عدد النقاط', targetLevel:'المستوى المطلوب', createGlobalChallenge:'إنشاء تحدٍ عام', challengeCreated:'تم نشر التحدي',
+          activeTeam:'الفريق النشط', noActiveTeam:'لا فريق نشط', selectTeam:'اختيار', createFirstTeam:'أنشئ فريقًا أو انضم بكود.', noTeams:'لا فرق', noGroups:'لا مجموعات', noSubjects:'لا مواد', noChallenges:'لا تحديات',
+          addSubject:'إضافة مادة', addGroup:'إضافة مجموعة', addTask:'مهمة جديدة', addChallenge:'إضافة تحدي', nearestChallenge:'أقرب تحدي', contactDeveloper:'تواصل مع المطور'
+        },
+        en: {
+          appName:'Munjiz', tagline:'Student assistant for tasks, teams and challenges', copyright:'© YS — All rights reserved', ultra:'Ultra',
+          login:'Sign in', google:'Continue with Google', email:'Email sign in', guest:'Continue as guest', remember:'Remember me',
+          arabic:'Arabic', english:'English', theme:'Theme', auto:'Auto', light:'Light', dark:'Dark', accent:'Accent', preset:'Preset',
+          home:'Home', tasks:'Tasks', groups:'Groups', teams:'Teams', leaderboard:'Leaderboard', challenges:'Challenges', focus:'Focus', settings:'Settings', developer:'Developer',
+          logout:'Sign out', loggedOut:'Signed out.', savedProfiles:'Saved profiles', addProfile:'Add profile', openProfile:'Open', deleteProfile:'Delete profile',
+          profile:'Profile', displayName:'Name', school:'School', photo:'Photo', changePhoto:'Change photo', removePhoto:'Remove photo',
+          save:'Save', cancel:'Cancel', close:'Close', confirm:'Confirm', delete:'Delete', edit:'Edit', add:'Add', search:'Search', title:'Title', description:'Description',
+          subject:'Subject', group:'Group', team:'Team', noSubject:'No subject', noGroup:'No group', noTeam:'No team',
+          priority:'Priority', high:'High', medium:'Medium', low:'Low', status:'Status', new:'New', inProgress:'In progress', done:'Done',
+          due:'Due', estimate:'Estimate (min)', subtasks:'Subtasks', addSubtask:'Add step', repeat:'Repeat', none:'None', daily:'Daily', weekly:'Weekly', custom:'Custom', interval:'Interval days',
+          quickAdd:'Quick add: Physics homework tomorrow 5pm', noTasks:'No tasks', today:'Today', upcoming:'Upcoming', overdue:'Overdue', all:'All', kanban:'Kanban', list:'List',
+          sortDue:'Due soon', sortPriority:'Priority', sortCreated:'Newest', sortTitle:'Title',
+          startFocus:'Start focus', complete:'Complete', undo:'Undo', deleted:'Deleted', savedMsg:'Saved', requiredTitle:'Title required', invalidDate:'Invalid date',
+          taskCompleted:'Task completed', nextOccurrence:'Next occurrence created', sessionLogged:'Session logged', currentSession:'Current session', noActiveSession:'No active session',
+          todaySessions:'Today sessions', completedSessions:'Completed', cancelled:'Cancelled', completed:'Completed', focusTimer:'Focus timer', workMin:'Focus minutes', shortBreak:'Short break', longBreak:'Long break', cycles:'Cycle', start:'Start', pause:'Pause', resume:'Resume', stop:'Stop',
+          deepFocus:'Deep focus', notifications:'Notifications', alerts:'Alerts', noAlerts:'No alerts', markRead:'Mark read', enableNotifications:'Enable notifications', notificationExplanation:'Notifications work while app is open in local mode.',
+          xp:'XP', level:'Level', streak:'Streak', bestStreak:'Best streak', heatMap:'Heat map', badges:'Badges', frames:'Frames', titles:'Titles', equip:'Equip', equipped:'Equipped', locked:'Locked', unlocked:'Unlocked',
+          levelUp:'Level up', badgeUnlocked:'Badge unlocked', frameUnlocked:'Frame unlocked', titleUnlocked:'Title unlocked', tasksCompleted:'Tasks completed', focusMinutes:'Focus minutes', raceWins:'Race wins', challengeWins:'Challenges',
+          friends:'Friends & Chat', global:'Global', teamLb:'Team', refresh:'Refresh', noData:'No data', createTeam:'Create team', joinTeam:'Join by code', teamCode:'Team code', leaveTeam:'Leave', deleteTeam:'Delete team',
+          teamCreated:'Team created', teamJoined:'Joined team', teamLeft:'Left team', invalidTeamCode:'Invalid code', alreadyInTeam:'Already in team', notInTeam:'Not in team',
+          newChallenge:'New challenge', challengeTitle:'Title', challengeDesc:'Description', challengeType:'Type', race:'Race', focusChallenge:'Focus', streakChallenge:'Streak', teamChallenge:'Team',
+          joinChallenge:'Join', submitChallenge:'Submit', challengeJoined:'Joined', challengeSubmitted:'Submitted', challengeWon:'Won! 🏆', endsAt:'Ends', goal:'Goal', rewardXp:'Reward XP',
+          users:'users', members:'members', owner:'owner', inquiry:'Developer inquiry', inquirySent:'Inquiry sent', message:'Message', send:'Send',
+          requiresFirebase:'Requires Firebase', firebaseMissing:'Firebase is not configured. Use local mode.', syncStatus:'Sync', localOnly:'Local', synced:'Synced', offline:'Offline', storageError:'Local save failed',
+          exportJson:'Export JSON', importJson:'Import JSON', exportCsv:'Export CSV', deleteAll:'Delete all', deleteAllWarning:'All data will be deleted. Type delete.', typeDelete:'delete', doubleConfirm:'Double confirm',
+          imported:'Imported', importFailed:'Invalid file', exported:'Exported', about:'About', version:'Version',
+          developerConsole:'Developer Console', developerAccess:'Developer Access', developerHidden:'Developer access is protected.', developerMode:'Developer mode', noDeveloperAccess:'No developer access', developerReady:'YS mode unlocked',
+          sendAnnouncement:'Send announcement', featureFlags:'Flags', grantBadge:'Grant badge', grantFrame:'Grant frame', developerLogs:'Logs', maintenanceMode:'Maintenance', copyCode:'Copy code', copied:'Copied',
+          pinAnnouncement:'Pin announcement', pinned:'Pinned', manageAnnouncements:'Manage announcements', unpin:'Unpin', deactivate:'Hide', active:'Active', grantXp:'Gift XP points', grantLevel:'Set student level', targetUid:'User UID', amountXp:'XP amount', targetLevel:'Target level', createGlobalChallenge:'Create global challenge', challengeCreated:'Challenge published',
+          activeTeam:'Active team', noActiveTeam:'No active team', selectTeam:'Select', createFirstTeam:'Create a team or join with code.', noTeams:'No teams', noGroups:'No groups', noSubjects:'No subjects', noChallenges:'No challenges',
+          addSubject:'Add subject', addGroup:'Add group', addTask:'New task', addChallenge:'Add challenge', nearestChallenge:'Nearest challenge', contactDeveloper:'Contact developer'
+        }
+      };
+
+      const ICONS = {
+        home:'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/>', tasks:'<path d="M9 11l3 3 9-9"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+        users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+        trophy:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a4 4 0 0 1-4 4M7 5H4v2a4 4 0 0 0 4 4"/>',
+        fire:'<path d="M12 2s4 4 4 8a4 4 0 0 1-8 0c0-1 .5-2 1-3-2 1-4 3.5-4 6a7 7 0 0 0 14 0c0-5-7-11-7-11z"/>',
+        focus:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/>', settings:'<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+        crown:'<path d="M3 18h18l-2-11-5 4-4-7-4 7-5-4z"/><path d="M5 21h14"/>', plus:'<path d="M12 5v14M5 12h14"/>', edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+        trash:'<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6M14 11v6"/>',
+        check:'<path d="M20 6 9 17l-5-5"/>', play:'<path d="M5 3l14 9-14 9V3z"/>', pause:'<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>', stop:'<rect x="5" y="5" width="14" height="14" rx="2"/>',
+        bell:'<path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>', search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+        menu:'<path d="M3 6h18M3 12h18M3 18h18"/>', close:'<path d="M18 6 6 18M6 6l12 12"/>', logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/>',
+        star:'<path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/>', medal:'<circle cx="12" cy="15" r="6"/><path d="M9 3l3 6 3-6"/><path d="M12 12v6M9 15h6"/>',
+        zap:'<path d="M13 2L3 14h7l-1 8 10-12h-7z"/>', palette:'<path d="M12 2a10 10 0 1 0 0 20 2 2 0 0 0 2-2v-1a2 2 0 0 1 2-2h1a4 4 0 0 0 4-4 9 9 0 0 0-9-9z"/>', user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+        download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>', upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>'
+      };
+
+      const GOOGLE_ICON = `<svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.5 29.5 4.5 24 4.5 13.2 4.5 4.5 13.2 4.5 24S13.2 43.5 24 43.5 43.5 34.8 43.5 24c0-1.2-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.5 29.5 4.5 24 4.5 16.3 4.5 9.7 8.9 6.3 14.7z"/><path fill="#4CAF50" d="M24 43.5c5.2 0 10-2 13.6-5.2l-6.3-5.2C29.6 34.7 27 36 24 36c-5.3 0-9.7-3.3-11.3-7.9l-6.5 5C9.5 39.1 16.2 43.5 24 43.5z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.3 5.6l6.3 5.2C41.4 35.4 43.5 30.1 43.5 24c0-1.2-.1-2.3-.4-3.5z"/></svg>`;
+
+      const THEME_PRESETS = [
+        { id:'ocean', ar:'محيطي', en:'Ocean', accent:'#2563eb' },
+        { id:'sunset', ar:'غروب', en:'Sunset', accent:'#f97316' },
+        { id:'forest', ar:'غابة', en:'Forest', accent:'#059669' },
+        { id:'royal', ar:'ملكي', en:'Royal', accent:'#7c3aed' },
+        { id:'mono', ar:'رمادي', en:'Mono', accent:'#475569' },
+        { id:'neon', ar:'نيون', en:'Neon', accent:'#06b6d4' }
+      ];
+
+      /* =========================
+         2) Utils
+         ========================= */
+      const $ = (s, r=document) => r.querySelector(s);
+      const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+      const uid = () => crypto.randomUUID ? crypto.randomUUID() : 'id-'+Math.random().toString(36).slice(2)+Date.now().toString(36);
+      const esc = v => String(v ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+      const num = (v,d=0) => { const n=Number(v); return Number.isFinite(n)?n:d; };
+      const clamp = (v,a,b) => Math.min(b, Math.max(a, v));
+      const pad = n => String(n).padStart(2,'0');
+      const iso = () => new Date().toISOString();
+      const dateKey = d => { const x=new Date(d); return `${x.getFullYear()}-${pad(x.getMonth()+1)}-${pad(x.getDate())}`; };
+      const parseDate = s => { if(!s) return null; const d=new Date(s); return Number.isNaN(d.getTime())?null:d; };
+      const toLocalInput = d => { const x=new Date(d); return `${x.getFullYear()}-${pad(x.getMonth()+1)}-${pad(x.getDate())}T${pad(x.getHours())}:${pad(x.getMinutes())}`; };
+      const addDays = (d,n) => { const x=new Date(d); x.setDate(x.getDate()+n); return x; };
+      const sameDay = (a,b) => dateKey(a) === dateKey(b);
+      const debounce = (fn,ms=200) => { let t; return (...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms);}; };
+      const download = (name,content,mime='text/plain') => { const blob=new Blob([content],{type:`${mime};charset=utf-8`}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},300); };
+      const csvEsc = v => { const s=String(v??''); return /[",\n]/.test(s)?`"${s.replace(/"/g,'""')}"`:s; };
+      const toCSV = rows => '\uFEFF'+rows.map(r=>r.map(csvEsc).join(',')).join('\n');
+      const icon = (name,size=20) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]||''}</svg>`;
+      const logo = (size=42) => `<svg width="${size}" height="${size}" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="14" fill="currentColor" opacity=".15"/><path d="M13 25l8 8 15-16" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      const t = key => (M[state.settings.lang]?.[key] || M.ar[key] || key);
+      const fmtDuration = min => { min=Math.round(num(min,0)); if(min<60) return `${min} ${state.settings.lang==='ar'?'د':'m'}`; const h=Math.floor(min/60), m=min%60; return m?`${h} ${state.settings.lang==='ar'?'س':'h'} ${m} ${state.settings.lang==='ar'?'د':'m'}`:`${h} ${state.settings.lang==='ar'?'س':'h'}`; };
+      const fmtDateTime = d => new Date(d).toLocaleString(state.settings.lang==='ar'?'ar-EG':'en-US',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+      const randomColor = () => ['#2563eb','#7c3aed','#059669','#d97706','#dc2626','#0891b2','#db2777','#65a30d','#475569','#ea580c'][Math.floor(Math.random()*10)];
+      const makeCode = () => Math.random().toString(36).slice(2,8).toUpperCase();
+      const getPreset = id => THEME_PRESETS.find(p=>p.id===id) || THEME_PRESETS[0];
+      const subjectById = id => state.subjects.find(x=>x.id===id) || null;
+      const groupById = id => state.groups.find(x=>x.id===id) || null;
+      const teamById = id => state.teams.find(x=>x.id===id) || null;
+      const taskById = id => state.tasks.find(x=>x.id===id) || null;
+      const isOverdue = task => task.status!=='done' && task.dueAt && parseDate(task.dueAt) < new Date();
+      const completedSessions = () => state.sessions.filter(s=>s.status==='completed' && s.mode==='focus');
+      const focusMinutesOn = d => completedSessions().filter(s=>sameDay(new Date(s.startedAt),d)).reduce((a,s)=>a+s.actualSec/60,0);
+
+      /* =========================
+         3) State
+         ========================= */
+      const DEFAULT_STATE = {
+        schemaVersion:3, updatedAt:Date.now(),
+        auth:{provider:'guest',uid:'guest',displayName:'',email:'',photoURL:''},
+        profile:{name:'',school:'',avatarColor:'#2563eb',photo:''},
+        settings:{lang:'ar',themeMode:'auto',themePreset:'ocean',accent:'#2563eb',pomodoro:{work:25,short:5,long:15,cycle:4},notifyLead:60,sound:true,vibration:true},
+        subjects:[], tasks:[], groups:[], teams:[], activeTeamId:null, sessions:[], social:{friends:[],requests:[],messages:[],selectedFriend:null,query:'',presence:{}},
+        game:{xp:0,level:1,streak:0,bestStreak:0,studyDates:[],badges:{},frames:{unlocked:['none'],equipped:'none'},titles:{unlocked:['student'],equipped:'student'},raceWins:0,challengeWins:0,firstCompletionDate:'',firstCompletionAt:null},
+        challenges:{local:[],cloud:[]}, leaderboard:{cache:[],updatedAt:null,tab:'global'},
+        developer:{unlocked:false,logs:[],flags:{},inquiries:[]}, announcements:[], notifications:{seen:{}}, activeFocus:null,
+        ui:{view:'home',taskFilter:'today',taskView:'list',taskSearch:'',taskSort:'due',groupFilter:'all',teamFilter:'all',leaderboardTab:'global'}
+      };
+
+      function normalizeTask(x={}) {
+        const subtasks = Array.isArray(x.subtasks) ? x.subtasks.map(s=>({id:s.id||uid(),title:String(s.title||'').slice(0,180),done:!!s.done})).filter(s=>s.title) : [];
+        const done = subtasks.filter(s=>s.done).length;
+        return {
+          id:x.id||uid(), title:String(x.title||'').slice(0,220)||'—', description:String(x.description||''),
+          subjectId:x.subjectId||null, groupId:x.groupId||null, teamId:x.teamId||null,
+          priority:PRIORITIES.includes(x.priority)?x.priority:'medium', status:STATUS.includes(x.status)?x.status:'new',
+          dueAt:x.dueAt||null, estimate:Math.max(0,Math.round(num(x.estimate,25))), actualMin:Math.max(0,Math.round(num(x.actualMin,0))),
+          tags:Array.isArray(x.tags)?x.tags.map(String).slice(0,10):[], notes:String(x.notes||''), subtasks,
+          repeat:['none','daily','weekly','custom'].includes(x.repeat)?x.repeat:'none', repeatInterval:Math.max(1,Math.round(num(x.repeatInterval,7))),
+          createdAt:x.createdAt||iso(), updatedAt:x.updatedAt||iso(), completedAt:x.status==='done'?(x.completedAt||iso()):null,
+          // Keep the reward claim on the task so reopening/re-completing it cannot award XP again.
+          rewardClaimed:x.rewardClaimed===undefined ? x.status==='done' : !!x.rewardClaimed, xpRewardedAt:x.xpRewardedAt||null, xpRewarded:Math.max(0,Math.round(num(x.xpRewarded,0))),
+          progress:x.status==='done'?100:subtasks.length?Math.round(done/subtasks.length*100):(x.status==='inProgress'?30:0)
+        };
+      }
+      function normalizeSubject(x={}) { return {id:x.id||uid(),name:String(x.name||'').slice(0,120)||'—',color:/^#[0-9a-f]{6}$/i.test(x.color)?x.color:'#2563eb',description:String(x.description||'')}; }
+      function normalizeGroup(x={}) { return {id:x.id||uid(),name:String(x.name||'مجموعة').slice(0,120),color:/^#[0-9a-f]{6}$/i.test(x.color)?x.color:randomColor(),description:String(x.description||''),createdAt:x.createdAt||iso()}; }
+      function normalizeTeam(x={}) { return {id:x.id||uid(),name:String(x.name||'فريق').slice(0,120),color:/^#[0-9a-f]{6}$/i.test(x.color)?x.color:randomColor(),description:String(x.description||''),joinCode:String(x.joinCode||makeCode()).slice(0,8).toUpperCase(),ownerId:x.ownerId||'local',memberIds:Array.isArray(x.memberIds)?x.memberIds.map(String):[],shared:!!x.shared,createdAt:x.createdAt||iso()}; }
+      function normalizeSession(x={}) { return {id:x.id||uid(),taskId:x.taskId||null,subjectId:x.subjectId||null,mode:x.mode==='break'?'break':'focus',startedAt:x.startedAt||iso(),endedAt:x.endedAt||iso(),plannedSec:Math.max(0,Math.round(num(x.plannedSec,0))),actualSec:Math.max(0,Math.round(num(x.actualSec,0))),status:x.status==='cancelled'?'cancelled':'completed'}; }
+      function normalizeChallenge(x={}) { return {id:x.id||uid(),title:String(x.title||'تحدي').slice(0,160),description:String(x.description||''),type:['race','focus','streak','team'].includes(x.type)?x.type:'race',goal:Math.max(1,Math.round(num(x.goal,1))),rewardXp:Math.max(0,Math.round(num(x.rewardXp,50))),startsAt:x.startsAt||iso(),endsAt:x.endsAt||new Date(Date.now()+7*DAY).toISOString(),ownerId:x.ownerId||'local',teamId:x.teamId||null,status:x.status||'active',source:x.source||'local',participants:Array.isArray(x.participants)?x.participants.map(String):[],submissions:Array.isArray(x.submissions)?x.submissions:[],createdAt:x.createdAt||iso()}; }
+      function normalizeActive(x){ if(!x) return null; return {sessionId:x.sessionId||uid(),taskId:x.taskId||null,subjectId:x.subjectId||null,mode:x.mode==='break'?'break':'focus',plannedSec:Math.max(1,Math.round(num(x.plannedSec,1500))),startedAt:Number(x.startedAt||Date.now()),pausedAt:x.pausedAt?Number(x.pausedAt):null,accumulatedMs:Math.max(0,Number(x.accumulatedMs||0)),cycle:Number(x.cycle||0)}; }
+      function levelFromXp(xp){ let l=1; while(xp >= xpForLevel(l+1)) l++; return l; }
+      function xpForLevel(l){ return Math.floor(100 * Math.pow(Math.max(1,l),1.8)); }
+
+      function normalizeState(input) {
+        const s = input && typeof input === 'object' ? input : {};
+        const out = JSON.parse(JSON.stringify(DEFAULT_STATE));
+        Object.assign(out, s);
+        out.schemaVersion=3;
+        out.auth={...DEFAULT_STATE.auth,...(s.auth||{})};
+        out.profile={...DEFAULT_STATE.profile,...(s.profile||{})};
+        out.settings={...DEFAULT_STATE.settings,...(s.settings||{})};
+        out.settings.pomodoro={...DEFAULT_STATE.settings.pomodoro,...(s.settings?.pomodoro||{})};
+        out.game={...DEFAULT_STATE.game,...(s.game||{})};
+        out.game.frames={...DEFAULT_STATE.game.frames,...(s.game?.frames||{})};
+        out.game.titles={...DEFAULT_STATE.game.titles,...(s.game?.titles||{})};
+        out.game.frames.unlocked=Array.isArray(out.game.frames.unlocked)?out.game.frames.unlocked:['none'];
+        out.game.titles.unlocked=Array.isArray(out.game.titles.unlocked)?out.game.titles.unlocked:['student'];
+        if(!out.game.frames.unlocked.includes('none')) out.game.frames.unlocked.unshift('none');
+        if(!out.game.titles.unlocked.includes('student')) out.game.titles.unlocked.unshift('student');
+        out.game.xp=Math.max(0,Math.round(num(out.game.xp,0))); out.game.level=levelFromXp(out.game.xp);
+        out.game.studyDates=Array.isArray(out.game.studyDates)?out.game.studyDates.map(String):[];
+        out.game.badges=out.game.badges&&typeof out.game.badges==='object'?out.game.badges:{};
+        out.subjects=Array.isArray(s.subjects)?s.subjects.map(normalizeSubject):[];
+        out.tasks=Array.isArray(s.tasks)?s.tasks.map(normalizeTask):[];
+        out.groups=Array.isArray(s.groups)?s.groups.map(normalizeGroup):[];
+        out.teams=Array.isArray(s.teams)?s.teams.map(normalizeTeam):[];
+        out.social={friends:[],requests:[],messages:[],selectedFriend:null,query:'',presence:{},...(s.social||{})};
+        for(const k of ['friends','requests','messages']) out.social[k]=Array.isArray(out.social[k])?out.social[k]:[];
+        out.sessions=Array.isArray(s.sessions)?s.sessions.map(normalizeSession):[];
+        out.challenges={local:Array.isArray(s.challenges?.local)?s.challenges.local.map(normalizeChallenge):[],cloud:Array.isArray(s.challenges?.cloud)?s.challenges.cloud.map(normalizeChallenge):[]};
+        out.leaderboard={...DEFAULT_STATE.leaderboard,...(s.leaderboard||{})};
+        out.developer={unlocked:false,logs:[],flags:{},inquiries:[],...(s.developer||{})};
+        out.developer.logs=Array.isArray(out.developer.logs)?out.developer.logs:[];
+        out.developer.flags=out.developer.flags&&typeof out.developer.flags==='object'?out.developer.flags:{};
+        out.developer.inquiries=Array.isArray(out.developer.inquiries)?out.developer.inquiries:[]; out.developer.unlocked=false; // صلاحية المطور لا تُستعاد من التخزين المحلي؛ تُتحقق من Firestore بعد تسجيل الدخول
+        out.announcements=Array.isArray(s.announcements)?s.announcements:[];
+        out.notifications={seen:{},...(s.notifications||{})};
+        out.activeFocus=normalizeActive(s.activeFocus);
+        out.ui={...DEFAULT_STATE.ui,...(s.ui||{}),sidebarOpen:false};
+        return out;
+      }
+
+      let state = normalizeState({});
+      window.__state = state;
+      let activeProfile = null;
+
+      function saveLocalPrefs(){ try{ localStorage.setItem(LS.prefs, JSON.stringify({lang:state.settings.lang,themeMode:state.settings.themeMode,themePreset:state.settings.themePreset,accent:state.settings.accent})); }catch{} }
+      function loadLocalPrefs(){ try{ const p=JSON.parse(localStorage.getItem(LS.prefs)||'{}'); Object.assign(state.settings,p); }catch{} }
+
+      /* =========================
+         4) Profiles
+         ========================= */
+      function getProfiles(){ try{ const raw=localStorage.getItem(LS.profiles); const list=raw?JSON.parse(raw):[]; return Array.isArray(list)?list:[]; }catch{return[];} }
+      function saveProfiles(list){ try{ localStorage.setItem(LS.profiles, JSON.stringify(list)); }catch(e){ toast(t('storageError'),'error'); } }
+      function profileKey(id){ return `munjiz.profile.${id}.state`; }
+      function loadProfile(id){ try{ const raw=localStorage.getItem(profileKey(id)); return raw?normalizeState(JSON.parse(raw)):normalizeState({}); }catch{return normalizeState({});} }
+      function saveProfile(id,s){ try{ localStorage.setItem(profileKey(id), JSON.stringify(s)); }catch(e){ toast(t('storageError'),'error'); } }
+      function createProfile(opts={}){
+        const id=uid();
+        const profile={id,uid:opts.uid||null,name:opts.name||'ملفي',color:opts.color||randomColor(),email:opts.email||'',photoURL:opts.photoURL||'',photo:opts.photo||'',provider:opts.provider||'local',createdAt:iso()};
+        const list=getProfiles(); list.push(profile); saveProfiles(list);
+        const st=normalizeState({settings:{...state.settings},profile:{name:profile.name,avatarColor:profile.color,photo:profile.photo||profile.photoURL},auth:{provider:profile.provider==='local'?'guest':'firebase',uid:profile.uid||'guest',displayName:profile.name,email:profile.email,photoURL:profile.photoURL}});
+        saveProfile(id,st); return profile;
+      }
+      function bootProfile(){
+        const id=localStorage.getItem(LS.active); const list=getProfiles(); const p=list.find(x=>x.id===id);
+        if(p){ activeProfile=p; state=loadProfile(p.id); state.profile.name=p.name; state.profile.avatarColor=p.color; state.profile.photo=p.photo||p.photoURL||state.profile.photo||''; state.auth={...state.auth,provider:p.provider==='local'?'guest':'firebase',uid:p.uid||state.auth.uid||'guest',displayName:p.name,email:p.email,photoURL:p.photoURL}; }
+        else { activeProfile=null; try{ const tmp=JSON.parse(localStorage.getItem(LS.temp)||'null'); if(tmp) state=normalizeState(tmp); }catch{} }
+      }
+      function switchProfile(id){
+        const p=getProfiles().find(x=>x.id===id); if(!p) return;
+        if(activeProfile) saveProfile(activeProfile.id,state);
+        activeProfile=p; localStorage.setItem(LS.active,p.id); state=loadProfile(p.id);
+        state.profile.name=p.name; state.profile.avatarColor=p.color; state.profile.photo=p.photo||p.photoURL||state.profile.photo||'';
+        state.auth={...state.auth,provider:p.provider==='local'?'guest':'firebase',uid:p.uid||state.auth.uid||'guest',displayName:p.name,email:p.email,photoURL:p.photoURL};
+        window.__state=state; applySettings(); Gamification.updateStreak(); render();
+      }
+      function deleteProfile(id){
+        const list=getProfiles(); if(list.length<=1){ toast(state.settings.lang==='ar'?'لا يمكن حذف آخر ملف.':'Cannot delete last profile.','warn'); return; }
+        const idx=list.findIndex(p=>p.id===id); if(idx<0) return;
+        localStorage.removeItem(profileKey(id)); list.splice(idx,1); saveProfiles(list);
+        if(activeProfile?.id===id){ localStorage.removeItem(LS.active); activeProfile=null; state=normalizeState({settings:state.settings}); window.__state=state; }
+        render(); toast(t('deleted'),'success');
+      }
+      function saveState(sync=true){
+        state.updatedAt=Date.now(); window.__state=state; saveLocalPrefs();
+        if(activeProfile) saveProfile(activeProfile.id,state); else localStorage.setItem(LS.temp, JSON.stringify(state));
+        if(sync) scheduleSync();
+      }
+
+      /* =========================
+         5) Firebase
+         ========================= */
+      const fb={ready:false,app:null,auth:null,db:null,functions:null};
+      let syncTimer=null, publishTimer=null, liveUnsubscribers=[];
+      function hasFirebaseConfig(){ return !!(FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.projectId); }
+      function loadScript(src){ return new Promise((res,rej)=>{ const s=document.createElement('script'); s.src=src; s.async=true; s.onload=res; s.onerror=()=>rej(new Error(src)); document.head.appendChild(s); }); }
+      async function initFirebase(){
+        if(!hasFirebaseConfig()) return false;
+        try{
+          if(!window.firebase){
+            await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
+            await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js');
+            await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');
+            await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-functions-compat.js');
+          }
+          fb.app=(firebase.apps && firebase.apps.length)
+            ? firebase.app()
+            : firebase.initializeApp(FIREBASE_CONFIG);
+          fb.auth=fb.app.auth(); fb.db=fb.app.firestore(); fb.functions=fb.app.functions();
+          try{ await fb.db.enablePersistence({synchronizeTabs:true}); }catch(e){ /* Persistence is optional: private browsing or multiple tabs may disable it. */ }
+          fb.ready=true; return true;
+        }catch(e){ console.warn('Firebase initialization failed; local mode remains available.',e); return false; }
+      }
+      function authError(code){
+        const map={'auth/popup-closed-by-user':'invalidCredentials','auth/cancelled-popup-request':'invalidCredentials','auth/network-request-failed':'requiresFirebase','auth/unauthorized-domain':'requiresFirebase','auth/operation-not-allowed':'requiresFirebase','auth/account-exists-with-different-credential':'invalidCredentials','auth/invalid-email':'invalidCredentials','auth/user-not-found':'invalidCredentials','auth/wrong-password':'invalidCredentials','auth/invalid-credential':'invalidCredentials','auth/email-already-in-use':'invalidCredentials','auth/weak-password':'invalidCredentials'};
+        return t(map[code]||'invalidCredentials');
+      }
+      async function setPersistence(remember){ if(fb.ready) await fb.auth.setPersistence(remember?firebase.auth.Auth.Persistence.LOCAL:firebase.auth.Auth.Persistence.SESSION); }
+      async function signInWithGoogle(remember=true){ if(!fb.ready){toast(t('firebaseMissing'),'warn');return false;} try{ await setPersistence(remember); await fb.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); return true; }catch(e){ toast(authError(e.code),'error'); return false; } }
+      async function loginWithEmail(email,password,remember=true){ if(!fb.ready){toast(t('requiresFirebase'),'warn');return false;} try{ await setPersistence(remember); await fb.auth.signInWithEmailAndPassword(String(email).trim(),password); return true; }catch(e){ toast(authError(e.code),'error'); return false; } }
+      async function registerWithEmail(name,email,password,remember=true){ if(!fb.ready){toast(t('requiresFirebase'),'warn');return false;} if(String(password).length<6){toast(t('invalidCredentials'),'error');return false;} try{ await setPersistence(remember); const c=await fb.auth.createUserWithEmailAndPassword(String(email).trim(),password); await c.user.updateProfile({displayName:String(name).trim()||email}); return true; }catch(e){ toast(authError(e.code),'error'); return false; } }
+      async function resetPassword(email){ if(!fb.ready){toast(t('requiresFirebase'),'warn');return false;} try{ await fb.auth.sendPasswordResetEmail(String(email).trim()); toast(t('savedMsg'),'success'); return true; }catch(e){ toast(authError(e.code),'error'); return false; } }
+      async function logout(){
+        try{ if(fb.ready && fb.auth.currentUser) await fb.auth.signOut(); }catch{}
+        if(activeProfile) saveProfile(activeProfile.id,state);
+        localStorage.removeItem(LS.active); activeProfile=null; state=normalizeState({settings:state.settings}); window.__state=state; render(); toast(t('loggedOut'),'success');
+      }
+      function scheduleSync(){
+        if(!fb.ready || state.auth.provider!=='firebase' || !state.auth.uid || state.auth.uid==='guest') return;
+        clearTimeout(syncTimer);
+        syncTimer=setTimeout(()=>{ pushCloud().catch(e=>console.warn('Cloud sync failed; local progress remains saved.',e)); },1200);
+      }
+      async function pushCloud(){
+        if(!fb.ready || state.auth.provider!=='firebase' || !state.auth.uid || state.auth.uid==='guest') return false;
+        try{
+          // Local storage is updated synchronously by saveState(); this cloud copy preserves
+          // XP, level, badges, unlocked items, task completion claims, streaks and sessions.
+          const clean=JSON.parse(JSON.stringify(state));
+          // XP/level are server-owned. Keep the cloud's authoritative values while syncing other state.
+          const mainRef=fb.db.collection('users').doc(state.auth.uid).collection('data').doc('main');
+          const statsRef=fb.db.collection('userStats').doc(state.auth.uid);
+          const [statsSnap, mainSnap]=await Promise.all([statsRef.get(), mainRef.get()]);
+          const oldGame=mainSnap.exists ? ((mainSnap.data().state||{}).game||{}) : {};
+          const trusted=statsSnap.exists ? statsSnap.data() : {xp:num(oldGame.xp,0),level:Math.max(1,num(oldGame.level,1))};
+          clean.game=clean.game||{}; clean.game.xp=Math.max(0,Math.round(num(trusted.xp,0))); clean.game.level=Math.max(1,Math.round(num(trusted.level,1)));
+          // Developer authorization/logs are deliberately not persisted as user-editable state.
+          clean.developer={unlocked:false,logs:[],flags:{},inquiries:[]};
+          await mainRef.set({state:clean,updatedAt:state.updatedAt},{merge:true});
+          return true;
+        }catch(e){
+          console.warn('Cloud progress sync failed; local progress remains saved.',e);
+          // Retry transient connectivity/rules errors without blocking the UI.
+          if(fb.ready && state.auth.provider==='firebase' && state.auth.uid!=='guest'){
+            clearTimeout(syncTimer);
+            syncTimer=setTimeout(()=>{ pushCloud().catch(err=>console.warn('Cloud sync retry failed.',err)); },4000);
+          }
+          return false;
+        }
+      }
+      async function pullCloud(){
+        if(!fb.ready || state.auth.provider!=='firebase' || !state.auth.uid || state.auth.uid==='guest') return;
+        try{
+          const snap=await fb.db.collection('users').doc(state.auth.uid).collection('data').doc('main').get();
+          if(snap.exists){ const data=snap.data(); const cloud=normalizeState(data.state||{}); if((data.updatedAt||0)>state.updatedAt){ const dev=state.developer.unlocked; state=cloud; state.developer.unlocked=dev; window.__state=state; if(activeProfile) saveProfile(activeProfile.id,state); applySettings(); } else await pushCloud(); } else await pushCloud();
+        }catch(e){ console.warn(e); }
+      }
+      function publishProfileToCloud(){
+        if(!fb.ready || state.auth.provider!=='firebase' || !state.auth.uid || state.auth.uid==='guest') return;
+        clearTimeout(publishTimer); publishTimer=setTimeout(async()=>{
+          try{
+            await fb.db.collection('publicProfiles').doc(state.auth.uid).set({
+              profileId:state.auth.uid, accountId:state.auth.uid, displayName:state.profile.name||state.auth.displayName||'Student', avatarColor:state.profile.avatarColor||'#2563eb', photo:state.auth.photoURL||'',
+              title:titleName(state.game.titles.equipped), frame:state.game.frames.equipped||'none', streak:state.game.streak, bestStreak:state.game.bestStreak,
+              tasksCompleted:state.tasks.filter(x=>x.status==='done').length, focusMinutes:Math.round(completedSessions().reduce((s,x)=>s+x.actualSec/60,0)),
+              raceWins:state.game.raceWins, challengeWins:state.game.challengeWins, firstCompletionDate:state.game.firstCompletionDate||'', firstCompletionAt:state.game.firstCompletionAt||null,
+              badgesCount:Object.keys(state.game.badges||{}).length, updatedAt:iso(), public:true
+            },{merge:true});
+          }catch(e){ console.warn(e); }
+        },1200);
+      }
+      async function handleAuthUser(user){
+        if(!fb.ready) return;
+        if(user){ const isBanned=await checkAccountBan(user.uid); if(isBanned)return; }
+        if(!user){ if(state.auth.provider==='firebase'){ state.developer.unlocked=false; saveState(false); render(); } return; }
+        const list=getProfiles(); let p=list.find(x=>x.uid===user.uid);
+        if(!p) p=createProfile({name:user.displayName||user.email||'Account',color:randomColor(),email:user.email||'',photoURL:user.photoURL||'',provider:user.providerData?.[0]?.providerId||'password',uid:user.uid,settings:state.settings});
+        switchProfile(p.id);
+        state.auth={provider:'firebase',uid:user.uid,displayName:user.displayName||'',photoURL:user.photoURL||'',email:user.email||''};
+        state.profile.name=state.profile.name||p.name; state.profile.avatarColor=p.color; saveState();
+        await Developer.check(); await pullCloud(); await Teams.fetch(); await Challenges.fetchCloud(); await Leaderboard.fetch(state.ui.leaderboardTab||'global'); subscribeLive(); publishProfileToCloud(); Social.startPresence(); if(state.ui.view==='friends'){Social.refresh();} render();
+      }
+      function watchAuth(){ if(fb.ready) fb.auth.onAuthStateChanged(handleAuthUser); }
+
+      /* =========================
+         6) Developer
+         ========================= */
+      const Developer={
+        async check(){
+          if(!fb.ready || !fb.auth.currentUser){ state.developer.unlocked=false; saveState(false); return false; }
+          try{
+            const snap=await fb.db.collection('developers').doc(fb.auth.currentUser.uid).get();
+            state.developer.unlocked=!!(snap.exists && snap.data().role==='developer'); saveState(false); render();
+            if(state.developer.unlocked){ Gamification.checkBadges(); toast(t('developerReady'),'success'); this.loadInquiries(); }
+            return state.developer.unlocked;
+          }catch{ state.developer.unlocked=false; return false; }
+        },
+        log(action,details={}){ if(!state.developer.unlocked)return; state.developer.logs.unshift({id:uid(),at:iso(),action,details}); state.developer.logs=state.developer.logs.slice(0,200); saveState(false); },
+        async sendAnnouncement(title,body,pinned=false){ if(!state.developer.unlocked||!fb.ready)throw new Error('Developer access/Firebase required'); await fb.db.collection('announcements').add({title:String(title).trim().slice(0,160),body:String(body).trim().slice(0,3000),createdAt:iso(),author:'YS',active:true,pinned:!!pinned}); this.log('announcement',{title,pinned:!!pinned}); toast(t('savedMsg'),'success'); },
+        async setAnnouncement(id,patch){ if(!state.developer.unlocked||!fb.ready)throw new Error('Developer access/Firebase required'); await fb.db.collection('announcements').doc(id).update(patch); this.log('announcement-update',{id,...patch}); },
+        async grantXp(targetUid,amount){ if(!state.developer.unlocked||!fb.ready)throw new Error('Developer access/Firebase required'); const n=Math.round(num(amount,0)); if(!targetUid||n<1||n>1000000)throw new Error('Invalid UID or XP amount'); const ref=fb.db.collection('users').doc(targetUid).collection('data').doc('main'); let newXp=0,newLevel=1; await fb.db.runTransaction(async tx=>{ const snap=await tx.get(ref); if(!snap.exists)throw new Error('User data not found'); const data=snap.data()||{}, st=data.state||{}; st.game=st.game||{}; newXp=Math.max(0,Math.round(num(st.game.xp,0))+n); newLevel=levelFromXp(newXp); st.game.xp=newXp; st.game.level=newLevel; tx.set(ref,{state:st,updatedAt:Date.now()},{merge:true}); }); await fb.db.collection('publicProfiles').doc(targetUid).set({xp:newXp,level:newLevel,updatedAt:iso()},{merge:true}); this.log('grant-xp',{targetUid,amount:n,newXp,newLevel}); toast(t('savedMsg'),'success'); },
+        async setLevel(targetUid,level){ if(!state.developer.unlocked||!fb.ready)throw new Error('Developer access/Firebase required'); const l=clamp(Math.round(num(level,1)),1,1000); const xp=xpForLevel(l); const ref=fb.db.collection('users').doc(targetUid).collection('data').doc('main'); await fb.db.runTransaction(async tx=>{ const snap=await tx.get(ref); if(!snap.exists)throw new Error('User data not found'); const data=snap.data()||{}, st=data.state||{}; st.game=st.game||{}; st.game.xp=xp; st.game.level=l; tx.set(ref,{state:st,updatedAt:Date.now()},{merge:true}); }); await fb.db.collection('publicProfiles').doc(targetUid).set({xp,level:l,updatedAt:iso()},{merge:true}); this.log('set-level',{targetUid,level:l,xp}); toast(t('savedMsg'),'success'); },
+        async createGlobalChallenge(d){ if(!state.developer.unlocked||!fb.ready)throw new Error('Developer access/Firebase required'); const c=normalizeChallenge({...d,ownerId:fb.auth.currentUser.uid,source:'cloud',status:'active'}); const payload={...c,createdAt:iso(),createdBy:fb.auth.currentUser.uid,global:true}; delete payload.id; const ref=await fb.db.collection('challenges').add(payload); c.id=ref.id; state.challenges.cloud.unshift(c); this.log('global-challenge',{id:c.id,title:c.title}); toast(t('challengeCreated'),'success'); return c; },
+        async setFlag(key,value){ if(!state.developer.unlocked||!fb.ready)return; await fb.db.collection('developer').doc('flags').set({[key]:value},{merge:true}); this.log('flag',{key,value}); toast(t('savedMsg'),'success'); },
+        async grantBadge(targetUid,badgeId){ if(!state.developer.unlocked||!fb.ready)return; await fb.db.collection('userBadges').doc(targetUid).collection('badges').doc(badgeId).set({grantedAt:iso(),by:'YS'}); this.log('grantBadge',{targetUid,badgeId}); toast(t('savedMsg'),'success'); },
+        async grantFrame(targetUid,frameId){ if(!state.developer.unlocked||!fb.ready)return; await fb.db.collection('userFrames').doc(targetUid).set({frames:firebase.firestore.FieldValue.arrayUnion(frameId)},{merge:true}); this.log('grantFrame',{targetUid,frameId}); toast(t('savedMsg'),'success'); },
+        async setBan(targetUid,banned,reason=''){ if(!state.developer.unlocked||!fb.ready)throw new Error('Developer access/Firebase required'); const id=String(targetUid||'').trim(); if(!/^[A-Za-z0-9_-]{8,128}$/.test(id))throw new Error('معرّف الحساب غير صحيح'); if(id===fb.auth.currentUser.uid)throw new Error('لا يمكن حظر حساب المطور الحالي'); const ref=fb.db.collection('bannedUsers').doc(id); if(banned) await ref.set({uid:id,banned:true,reason:String(reason||'').slice(0,500),by:fb.auth.currentUser.uid,at:iso(),appealAllowed:true},{merge:true}); else await ref.delete(); this.log(banned?'ban-user':'unban-user',{targetUid:id,reason:String(reason||'').slice(0,120)}); toast(banned?'تم حظر الحساب':'تم رفع الحظر','success'); },
+        async setModerator(targetUid,enabled){ if(!state.developer.unlocked||!fb.ready)throw new Error('Developer access/Firebase required'); const id=String(targetUid||'').trim(); if(!/^[A-Za-z0-9_-]{8,128}$/.test(id)||id===fb.auth.currentUser.uid)throw new Error('معرّف الحساب غير صحيح'); const ref=fb.db.collection('moderators').doc(id); if(enabled)await ref.set({uid:id,role:'moderator',active:true,by:fb.auth.currentUser.uid,at:iso()},{merge:true});else await ref.delete(); this.log(enabled?'grant-moderator':'revoke-moderator',{targetUid:id}); toast(enabled?'تم منح صلاحية المشرف':'تم سحب صلاحية المشرف','success'); },
+        async createCatalogItem(type,data){ if(!state.developer.unlocked||!fb.ready)throw new Error('Developer access/Firebase required'); const allowed=['achievements','customBadges','customFrames','customTitles','awards']; if(!allowed.includes(type))throw new Error('Invalid catalog'); const title=String(data.title||'').trim().slice(0,100); if(!title)throw new Error('اكتب الاسم'); const xp=clamp(Math.round(num(data.xp,0)),0,100000); const payload={title,description:String(data.description||'').slice(0,500),xp,condition:String(data.condition||'manual').slice(0,200),active:true,createdAt:iso(),createdBy:fb.auth.currentUser.uid}; const ref=await fb.db.collection('gameCatalog').doc(type).collection('items').add(payload); this.log('catalog-create',{type,id:ref.id,title,xp}); toast('تمت إضافة العنصر إلى الكتالوج','success'); return ref.id; },
+        async setBranding(name,logo){ if(!state.developer.unlocked||!fb.ready)throw new Error('Developer access/Firebase required'); const clean=String(name||'').trim().slice(0,60)||'منجز Ultra'; const payload={name:clean,logo:String(logo||'').trim().slice(0,500),updatedAt:iso(),updatedBy:fb.auth.currentUser.uid}; await fb.db.collection('developer').doc('branding').set(payload,{merge:true}); applyBranding(payload); this.log('branding',payload); toast('تم حفظ هوية التطبيق','success'); },
+        async loadBanned(){ if(!state.developer.unlocked||!fb.ready)return []; const snap=await fb.db.collection('bannedUsers').orderBy('at','desc').limit(100).get(); return snap.docs.map(d=>({id:d.id,...d.data()})); },
+        async loadInquiries(){ if(!state.developer.unlocked||!fb.ready)return; try{ const snap=await fb.db.collection('inquiries').orderBy('createdAt','desc').limit(50).get(); state.developer.inquiries=snap.docs.map(d=>({id:d.id,...d.data()})); saveState(false); if(state.ui.view==='developer') render(); }catch{} },
+        async replyInquiry(id,reply){ if(!state.developer.unlocked||!fb.ready)return; await fb.db.collection('inquiries').doc(id).update({developerReply:reply,status:'answered',answeredAt:iso()}); this.log('reply',{id}); toast(t('savedMsg'),'success'); this.loadInquiries(); },
+        async setInquiryStatus(id,status){ if(!state.developer.unlocked||!fb.ready)throw new Error('Developer access/Firebase required'); if(!['open','closed','answered'].includes(status))throw new Error('Invalid ticket status'); await fb.db.collection('inquiries').doc(id).update({status,updatedAt:iso()}); this.log('ticket-status',{id,status}); await this.loadInquiries(); }
+      };
+      function openDeveloperAccessModal(){
+        if(!fb.ready){ toast(t('requiresFirebase'),'warn'); return; }
+        openModal({title:t('developerAccess'),size:'sm',dismissible:false,body:`<p class="muted small">${esc(t('developerHidden'))}</p><form id="devLoginForm" class="auth-form"><label class="field"><span>${esc(t('email')||'Email')}</span><input class="input" type="email" name="email" required dir="ltr"></label><label class="field"><span>${esc(t('password')||'Password')}</span><input class="input" type="password" name="password" required></label></form>`,footer:`<button class="btn primary" data-action="dev-login">${esc(t('login'))}</button><button class="btn" data-close>${esc(t('cancel'))}</button>`});
+      }
+      async function loadGrants(){
+        if(!fb.ready || state.auth.provider!=='firebase' || !state.auth.uid) return;
+        try{
+          const b=await fb.db.collection('userBadges').doc(state.auth.uid).collection('badges').get();
+          b.docs.forEach(d=>{ if(!state.game.badges[d.id]){ state.game.badges[d.id]={at:iso(),granted:true}; Gamification.unlockFrameByBadge(d.id); Gamification.unlockTitleByBadge(d.id); } });
+          const f=await fb.db.collection('userFrames').doc(state.auth.uid).get();
+          if(f.exists) (f.data().frames||[]).forEach(id=>Gamification.unlockFrame(id));
+          saveState(false); Gamification.checkBadges();
+        }catch(e){ console.warn(e); }
+      }
+      function applyBranding(data){ if(!data)return; const name=String(data.name||'').slice(0,60); if(name){document.title=name; const el=document.querySelector('[data-app-brand]'); if(el)el.textContent=name;} if(data.logo){const iconLink=document.querySelector('link[rel="icon"]'); if(iconLink && /^https:\/\//i.test(data.logo))iconLink.href=data.logo;} }
+      async function checkAccountBan(uid){ if(!fb.ready||!uid)return false; try{const snap=await fb.db.collection('bannedUsers').doc(uid).get(); if(!snap.exists||snap.data().banned!==true)return false; const d=snap.data()||{}; await logout(); openModal({title:'الحساب موقوف',size:'sm',dismissible:true,body:`<p>تم إيقاف هذا الحساب مؤقتًا.</p><p class="muted">السبب: ${esc(d.reason||'غير محدد')}</p><p>إذا كنت ترى أن الإيقاف غير صحيح، تواصل مع المختصين من قناة الدعم الخارجية الخاصة بالتطبيق وأرفق معرّف الحساب:</p><code dir="ltr">${esc(uid)}</code>`,footer:`<button class="btn primary" data-close>حسنًا</button>`}); return true;}catch(e){console.warn('Ban status check failed',e);return false;} }
+      function subscribeLive(){
+        if(!fb.ready || state.auth.provider!=='firebase') return;
+        liveUnsubscribers.forEach(u=>u&&u()); liveUnsubscribers=[];
+        try{
+          liveUnsubscribers.push(fb.db.collection('announcements').orderBy('createdAt','desc').limit(10).onSnapshot(snap=>{ state.announcements=snap.docs.map(d=>({id:d.id,...d.data()})).filter(a=>a.active); saveState(false); if(state.ui.view==='home')render(); }));
+          liveUnsubscribers.push(fb.db.collection('developer').doc('flags').onSnapshot(doc=>{ if(doc.exists){ state.developer.flags=doc.data()||{}; saveState(false); applyFeatureFlags(); } }));
+          liveUnsubscribers.push(fb.db.collection('developer').doc('branding').onSnapshot(doc=>{if(doc.exists)applyBranding(doc.data());}));
+        }catch(e){ console.warn(e); }
+      }
+      let maintenanceShown=false;
+      function applyFeatureFlags(){
+        const flags=state.developer.flags||{};
+        if(flags.maintenance && !maintenanceShown){ maintenanceShown=true; openModal({title:t('maintenanceMode'),size:'sm',dismissible:false,body:`<p>${esc(String(flags.maintenance||'...'))}</p>`,footer:`<button class="btn primary" data-close>${esc(t('close'))}</button>`}); }
+        else if(!flags.maintenance) maintenanceShown=false;
+      }
+
+      /* =========================
+         7) Gamification
+         ========================= */
+      const FRAME_DEFS=[
+        {id:'none',ar:'بدون',en:'None',level:1},{id:'bronze',ar:'برونزي',en:'Bronze',level:2},{id:'silver',ar:'فضي',en:'Silver',level:4},{id:'gold',ar:'ذهبي',en:'Gold',level:7},{id:'platinum',ar:'بلاتيني',en:'Platinum',level:10},{id:'diamond',ar:'ألماسي',en:'Diamond',level:14},{id:'royal',ar:'ملكي',en:'Royal',level:18},{id:'ember',ar:'جَمْري',en:'Ember',badge:'streak_7'},{id:'frost',ar:'جليدي',en:'Frost',badge:'streak_30'},{id:'champion',ar:'بطل',en:'Champion',badge:'team_champion'},{id:'ys',ar:'YS',en:'YS',badge:'ys_founder'}
+      ];
+      const TITLE_DEFS=[
+        {id:'student',ar:'طالب',en:'Student',level:1},{id:'focused',ar:'مركّز',en:'Focused',level:3},{id:'productive',ar:'منتج',en:'Productive',level:5},{id:'scholar',ar:'عالِم',en:'Scholar',level:8},{id:'master',ar:'محترف',en:'Master',level:12},{id:'legend',ar:'أسطورة',en:'Legend',level:18},{id:'champion',ar:'بطل الفرق',en:'Team Champion',badge:'team_champion'},{id:'founder',ar:'مؤسس',en:'Founder',badge:'ys_founder'}
+      ];
+      const BADGE_DEFS=[
+        {id:'first_task',ar:'أول إنجاز',en:'First task',icon:'check',xp:20,check:()=>state.tasks.some(t=>t.status==='done')},
+        {id:'first_focus',ar:'أول تركيز',en:'First focus',icon:'focus',xp:20,check:()=>completedSessions().length>=1},
+        {id:'ten_tasks',ar:'10 مهام',en:'10 tasks',icon:'tasks',xp:50,check:()=>state.tasks.filter(t=>t.status==='done').length>=10},
+        {id:'fifty_tasks',ar:'50 مهمة',en:'50 tasks',icon:'trophy',xp:150,check:()=>state.tasks.filter(t=>t.status==='done').length>=50},
+        {id:'five_sessions',ar:'5 جلسات',en:'5 sessions',icon:'focus',xp:50,check:()=>completedSessions().length>=5},
+        {id:'focus_600',ar:'10 ساعات',en:'10 hours',icon:'fire',xp:200,check:()=>completedSessions().reduce((s,x)=>s+x.actualSec/60,0)>=600},
+        {id:'streak_3',ar:'3 أيام',en:'3 days',icon:'fire',xp:60,check:()=>state.game.streak>=3},
+        {id:'streak_7',ar:'أسبوع',en:'Week',icon:'trophy',xp:140,check:()=>state.game.streak>=7},
+        {id:'streak_30',ar:'شهر',en:'Month',icon:'crown',xp:400,check:()=>state.game.streak>=30},
+        {id:'group_creator',ar:'قائد مجموعة',en:'Group leader',icon:'users',xp:40,check:()=>state.groups.length>=1},
+        {id:'team_creator',ar:'مؤسس فريق',en:'Team founder',icon:'crown',xp:80,check:()=>state.teams.some(t=>t.ownerId===state.auth.uid)},
+        {id:'team_champion',ar:'بطل الفريق',en:'Team champion',icon:'trophy',xp:250,check:()=>state.game.challengeWins>=5 && state.teams.length>=1},
+        {id:'race_winner',ar:'فائز سباق',en:'Race winner',icon:'zap',xp:100,check:()=>state.game.raceWins>=1},
+        {id:'ys_founder',ar:'مؤسس YS',en:'YS Founder',icon:'crown',xp:500,check:()=>state.developer.unlocked}
+      ];
+      function frameName(id){ const f=FRAME_DEFS.find(x=>x.id===id); return f?(state.settings.lang==='ar'?f.ar:f.en):id; }
+      function titleName(id){ const f=TITLE_DEFS.find(x=>x.id===id); return f?(state.settings.lang==='ar'?f.ar:f.en):id; }
+      function badgeName(id){ const b=BADGE_DEFS.find(x=>x.id===id); return b?(state.settings.lang==='ar'?b.ar:b.en):id; }
+      let badgeLock=false;
+      const Gamification={
+        addXp(amount,skip=false){
+          let earned=Math.max(0,Math.floor(Number(amount)||0));
+          const dx=state.developer.flags?.doubleXp;
+          if(dx && (dx===true || (typeof dx==='object' && (!dx.endsAt || Date.parse(dx.endsAt)>Date.now()) && (!dx.startsAt || Date.parse(dx.startsAt)<=Date.now())))) earned*=2;
+          if(fb.ready && state.auth.provider==='firebase' && state.auth.uid && state.auth.uid!=='guest'){
+            if(!fb.functions){ toast('تعذر الاتصال بخدمة النقاط الآمنة.','error'); return; }
+            const eventId=(typeof crypto!=='undefined'&&crypto.randomUUID)?crypto.randomUUID().replace(/-/g,''):uid().replace(/-/g,'');
+            fb.functions.httpsCallable('awardStudyReward')({reason: earned>=25?'task':'focus',eventId,requestedAmount:Math.min(earned,25)})
+              .then(({data})=>{ const before=levelFromXp(state.game.xp); state.game.xp=Math.max(0,Math.round(num(data.xp,0))); state.game.level=Math.max(1,Math.round(num(data.level,1))); if(state.game.level>before){toast(`${t('levelUp')}: ${state.game.level}`,'success');this.unlockFramesByLevel();this.unlockTitlesByLevel();} if(!skip)this.checkBadges(); saveState(false); publishProfileToCloud(); })
+              .catch(e=>{console.warn('Secure XP award failed',e);toast('لم تُحفظ النقاط على السحابة. حاول مرة أخرى.','error');});
+            return;
+          }
+          const before=levelFromXp(state.game.xp); state.game.xp=Math.max(0,Math.round(state.game.xp+earned)); state.game.level=levelFromXp(state.game.xp); if(state.game.level>before){ toast(`${t('levelUp')}: ${state.game.level}`,'success'); this.unlockFramesByLevel(); this.unlockTitlesByLevel(); } if(!skip) this.checkBadges(); saveState(); publishProfileToCloud();
+        },
+        markStudyDay(){ const k=dateKey(new Date()); if(!state.game.studyDates.includes(k)) state.game.studyDates.push(k); this.updateStreak(); },
+        updateStreak(){ const dates=new Set(state.game.studyDates); let cur=dateKey(new Date()); if(!dates.has(cur)) cur=dateKey(addDays(new Date(),-1)); let c=0; while(dates.has(cur)){ c++; cur=dateKey(addDays(parseDate(cur+'T00:00')||new Date(),-1)); } state.game.streak=c; state.game.bestStreak=Math.max(state.game.bestStreak||0,c); },
+        completeTaskReward(task){
+          // This method is called only after the task has been marked as completed.
+          // Persist the claim before any asynchronous cloud sync to prevent double taps from farming XP.
+          if(!task || task.status!=='done' || task.rewardClaimed) return 0;
+          // Clamp every input and mark the reward claim synchronously before XP mutation.
+          const subtasks=Array.isArray(task.subtasks)?task.subtasks:[];
+          const priorityBonus=task.priority==='high'?15:(task.priority==='medium'?8:0);
+          const xp=clamp(Math.round(20+priorityBonus+subtasks.filter(s=>s&&s.done).length*3),1,500);
+          task.rewardClaimed=true; task.xpRewarded=xp; task.xpRewardedAt=iso(); task.updatedAt=iso();
+          saveState(false);
+          this.recordFirstCompletion(); this.markStudyDay(); this.addXp(xp);
+          toast(`+${xp} XP`,'success'); celebrate(); return xp;
+        },
+        focusReward(sec){ this.markStudyDay(); this.addXp(Math.max(1,Math.round(sec/60))); },
+        recordFirstCompletion(){ const today=dateKey(new Date()); if(state.game.firstCompletionDate!==today){ state.game.firstCompletionDate=today; state.game.firstCompletionAt=iso(); } },
+        unlockFrame(id){ if(!FRAME_DEFS.some(f=>f.id===id)) return; if(!state.game.frames.unlocked.includes(id)){ state.game.frames.unlocked.push(id); toast(`${t('frameUnlocked')}: ${frameName(id)}`,'success'); saveState(false); } },
+        unlockTitle(id){ if(!TITLE_DEFS.some(f=>f.id===id)) return; if(!state.game.titles.unlocked.includes(id)){ state.game.titles.unlocked.push(id); toast(`${t('titleUnlocked')}: ${titleName(id)}`,'success'); saveState(false); } },
+        unlockFramesByLevel(){ FRAME_DEFS.forEach(f=>{ if(f.level && state.game.level>=f.level) this.unlockFrame(f.id); }); },
+        unlockTitlesByLevel(){ TITLE_DEFS.forEach(f=>{ if(f.level && state.game.level>=f.level) this.unlockTitle(f.id); }); },
+        unlockFrameByBadge(b){ FRAME_DEFS.forEach(f=>{ if(f.badge===b) this.unlockFrame(f.id); }); },
+        unlockTitleByBadge(b){ TITLE_DEFS.forEach(f=>{ if(f.badge===b) this.unlockTitle(f.id); }); },
+        equipFrame(id){ if(!state.game.frames.unlocked.includes(id)){ toast(t('locked'),'warn'); return; } state.game.frames.equipped=id; saveState(); render(); toast(t('equipped'),'success'); },
+        equipTitle(id){ if(!state.game.titles.unlocked.includes(id)){ toast(t('locked'),'warn'); return; } state.game.titles.equipped=id; saveState(); render(); toast(t('equipped'),'success'); },
+        checkBadges(){ if(badgeLock) return; badgeLock=true; BADGE_DEFS.forEach(b=>{ try{ if(!state.game.badges[b.id] && b.check()){ state.game.badges[b.id]={at:iso()}; toast(`${t('badgeUnlocked')}: ${badgeName(b.id)}`,'success'); this.unlockFrameByBadge(b.id); this.unlockTitleByBadge(b.id); this.addXp(b.xp||20,true); } }catch{} }); badgeLock=false; saveState(false); }
+      };
+
+
+      /* Daily quests rotate by local calendar day and are idempotently rewarded per user/day. */
+      const DailyQuests={
+        today(){return dateKey(new Date());},
+        definitions(){
+          const tasks=state.tasks.filter(x=>x.status==='done'), today=this.today();
+          const doneToday=tasks.filter(x=>x.completedAt&&dateKey(parseDate(x.completedAt))===today).length;
+          const focusToday=completedSessions().filter(x=>x.startedAt&&dateKey(new Date(x.startedAt))===today).reduce((n,x)=>n+Math.floor((x.actualSec||0)/60),0);
+          const createdToday=state.tasks.filter(x=>x.createdAt&&dateKey(parseDate(x.createdAt))===today).length;
+          const subToday=tasks.filter(x=>x.completedAt&&dateKey(parseDate(x.completedAt))===today).reduce((n,x)=>n+(x.subtasks||[]).length,0);
+          return [
+            {id:'daily_task_1',title:'أنجز مهمة واحدة',description:'أكمل أي مهمة دراسية اليوم',goal:1,progress:doneToday,xp:35},
+            {id:'daily_task_3',title:'إنجاز 3 مهام',description:'أكمل ثلاث مهام اليوم',goal:3,progress:doneToday,xp:70},
+            {id:'daily_focus_25',title:'جلسة تركيز',description:'اجمع 25 دقيقة تركيز اليوم',goal:25,progress:focusToday,xp:45},
+            {id:'daily_subtasks_3',title:'خطوات صغيرة',description:'أكمل 3 خطوات فرعية من مهامك اليوم',goal:3,progress:subToday,xp:40},
+            {id:'daily_plan',title:'خطط ليومك',description:'أنشئ مهمة جديدة اليوم',goal:1,progress:createdToday,xp:20}
+          ];
+        },
+        data(){const day=this.today(); if(!state.game.dailyQuests||state.game.dailyQuests.date!==day) state.game.dailyQuests={date:day,claimed:{}}; if(!state.game.dailyQuests.claimed)state.game.dailyQuests.claimed={}; return state.game.dailyQuests;},
+        claim(id){const q=this.definitions().find(x=>x.id===id),d=this.data(); if(!q||q.progress<q.goal||d.claimed[id]){toast(d.claimed[id]?'المكافأة مستلمة بالفعل':'أكمل المهمة أولًا','warn');return;} d.claimed[id]=iso(); saveState(); Gamification.addXp(q.xp); publishProfileToCloud(); render(); toast(`تم استلام ${q.xp} XP`,'success');}
+      };
+
+      /* =========================
+         8) Services
+         ========================= */
+      let undoFn=null;
+      const Tasks={
+        create(data){ const task=normalizeTask(data); state.tasks.unshift(task); saveState(); Gamification.checkBadges(); return task; },
+        update(id,patch){ const x=taskById(id); if(!x)return; Object.assign(x,patch); Object.assign(x,normalizeTask(x)); saveState(); },
+        remove(id){ const i=state.tasks.findIndex(x=>x.id===id); if(i<0)return; const item=state.tasks[i]; state.tasks.splice(i,1); saveState(); undoFn=()=>{state.tasks.splice(i,0,item);saveState();render();}; toast(t('deleted'),'info',{label:t('undo'),action:'undo'}); },
+        complete(id){
+          const x=taskById(id); if(!x||x.status==='done')return false;
+          x.status='done'; x.completedAt=iso(); x.subtasks.forEach(s=>s.done=true); x.progress=100;
+          Gamification.completeTaskReward(x);
+          if(x.repeat!=='none' && x.dueAt){
+            const days=x.repeat==='daily'?1:x.repeat==='weekly'?7:x.repeatInterval;
+            state.tasks.unshift(normalizeTask({...x,id:uid(),status:'new',completedAt:null,rewardClaimed:false,xpRewardedAt:null,xpRewarded:0,dueAt:new Date(parseDate(x.dueAt).getTime()+days*DAY).toISOString(),subtasks:x.subtasks.map(s=>({id:uid(),title:s.title,done:false})),progress:0,actualMin:0}));
+            toast(t('nextOccurrence'),'info');
+          }
+          saveState(); Gamification.checkBadges(); saveState(); render(); toast(t('taskCompleted'),'success');
+          // Persist the task claim, XP and unlocked achievements to the signed-in account immediately.
+          // UI feedback is instant; the local copy is already saved even if the network is offline.
+          if(fb.ready && state.auth.provider==='firebase') pushCloud().catch(err=>console.warn('Immediate task reward sync failed; local copy is saved.',err));
+          publishProfileToCloud(); return true;
+        },
+        toggle(id){ const x=taskById(id); if(!x)return; if(x.status==='done') Tasks.update(id,{status:'new',completedAt:null}); else Tasks.complete(id); }
+      };
+      const Subjects={ upsert(d){ const s=normalizeSubject(d); const i=state.subjects.findIndex(x=>x.id===s.id); if(i>=0)state.subjects[i]=s; else state.subjects.push(s); saveState(); return s; }, remove(id){ state.tasks.forEach(t=>{if(t.subjectId===id)t.subjectId=null;}); state.subjects=state.subjects.filter(x=>x.id!==id); saveState(); toast(t('deleted'),'success'); } };
+      const Groups={ upsert(d){ const g=normalizeGroup(d); const i=state.groups.findIndex(x=>x.id===g.id); if(i>=0)state.groups[i]=g; else state.groups.unshift(g); saveState(); Gamification.checkBadges(); return g; }, remove(id){ state.groups=state.groups.filter(x=>x.id!==id); state.tasks.forEach(t=>{if(t.groupId===id)t.groupId=null;}); saveState(); toast(t('deleted'),'success'); } };
+      const Teams={
+        async create(d){ const g=normalizeTeam(d); if(fb.ready && state.auth.provider==='firebase' && state.auth.uid){ g.ownerId=state.auth.uid; g.memberIds=[state.auth.uid]; g.shared=true; const ref=await fb.db.collection('teams').add({...g,createdAt:firebase.firestore.FieldValue.serverTimestamp()}); g.id=ref.id; } else { g.ownerId='local'; g.memberIds=['local']; } state.teams.unshift(g); state.activeTeamId=g.id; saveState(); Gamification.checkBadges(); publishProfileToCloud(); toast(t('teamCreated'),'success'); return g; },
+        async joinByCode(code){ const c=String(code||'').trim().toUpperCase(); if(!c){toast(t('invalidTeamCode'),'error');return false;} if(!fb.ready || state.auth.provider!=='firebase'){toast(t('requiresFirebase'),'warn');return false;} try{ const snap=await fb.db.collection('teams').where('joinCode','==',c).limit(1).get(); if(snap.empty){toast(t('invalidTeamCode'),'error');return false;} const doc=snap.docs[0]; const data=doc.data(); const members=data.memberIds||[]; if(members.includes(state.auth.uid)){toast(t('alreadyInTeam'),'warn');return false;} await doc.ref.update({memberIds:firebase.firestore.FieldValue.arrayUnion(state.auth.uid),updatedAt:iso()}); const team=normalizeTeam({id:doc.id,...data,memberIds:[...members,state.auth.uid]}); const i=state.teams.findIndex(x=>x.id===team.id); if(i>=0)state.teams[i]=team; else state.teams.unshift(team); state.activeTeamId=team.id; saveState(); Gamification.checkBadges(); toast(t('teamJoined'),'success'); return true; }catch{ toast(t('invalidTeamCode'),'error'); return false; } },
+        async leave(id){ const team=teamById(id); if(!team)return; if(team.shared && fb.ready && state.auth.uid){ if(!team.memberIds.includes(state.auth.uid)){toast(t('notInTeam'),'warn');return;} await fb.db.collection('teams').doc(id).update({memberIds:firebase.firestore.FieldValue.arrayRemove(state.auth.uid),updatedAt:iso()}); } state.teams=state.teams.filter(x=>x.id!==id); if(state.activeTeamId===id)state.activeTeamId=state.teams[0]?.id||null; saveState(); toast(t('teamLeft'),'success'); },
+        async delete(id){ const team=teamById(id); if(!team)return; if(team.shared && fb.ready && state.auth.uid===team.ownerId) await fb.db.collection('teams').doc(id).delete().catch(()=>{}); state.teams=state.teams.filter(x=>x.id!==id); if(state.activeTeamId===id)state.activeTeamId=state.teams[0]?.id||null; saveState(); toast(t('deleted'),'success'); },
+        setActive(id){ state.activeTeamId=id; saveState(); render(); },
+        async fetch(){ if(!fb.ready || state.auth.provider!=='firebase' || !state.auth.uid)return; try{ const snap=await fb.db.collection('teams').where('memberIds','array-contains',state.auth.uid).limit(50).get(); const cloud=snap.docs.map(d=>normalizeTeam({id:d.id,...d.data()})); state.teams=[...cloud,...state.teams.filter(t=>!t.shared)]; if(state.activeTeamId && !state.teams.some(t=>t.id===state.activeTeamId)) state.activeTeamId=state.teams[0]?.id||null; saveState(false); }catch(e){ console.warn(e); } }
+      };
+      /* =========================
+         Friends, live presence and direct/team chat
+         Firestore collections: friendRequests, friendships, presence, chats/{chatId}/messages, teams/{id}/messages
+         ========================= */
+      let socialUnsubs=[]; let presenceTimer=null; let socialBusy=false;
+      const Social={
+        uid(){return state.auth.provider==='firebase'&&fb.auth.currentUser?fb.auth.currentUser.uid:null;},
+        requireCloud(){if(!fb.ready||!this.uid())throw new Error('سجّل الدخول بحساب Firebase لاستخدام الأصدقاء والشات');},
+        chatId(a,b){return [String(a),String(b)].sort().join('__');},
+        async search(q){this.requireCloud(); q=String(q||'').trim().toLowerCase(); if(q.length<2){toast('اكتب اسمًا أو معرّفًا من حرفين على الأقل','warn');return;} const uid=this.uid(); const out=[];
+          try{const snap=await fb.db.collection('publicProfiles').limit(100).get(); snap.forEach(d=>{const x=d.data()||{}, name=String(x.displayName||''); if(d.id!==uid&&(name.toLowerCase().includes(q)||d.id.toLowerCase()===q))out.push({uid:d.id,name,level:x.level||1,xp:x.xp||0,online:!!x.online,updatedAt:x.updatedAt});});
+          }catch(e){throw new Error('تعذر البحث؛ تحقق من قواعد قراءة publicProfiles');} state.social.searchResults=out.slice(0,20); render();},
+        async sendRequest(target){this.requireCloud(); const me=this.uid(), to=String(target||''); if(!to||to===me)throw new Error('لا يمكنك إضافة نفسك'); const existing=await fb.db.collection('friendships').doc(this.chatId(me,to)).get(); if(existing.exists){toast('أنتما صديقان بالفعل','info');return;} const id=me+'__'+to; await fb.db.collection('friendRequests').doc(id).set({from:me,to,fromName:state.profile.name||'طالب',status:'pending',createdAt:iso()}); toast('تم إرسال طلب الصداقة','success'); await this.refresh();},
+        async refresh(){if(!this.uid()||!fb.ready)return; const me=this.uid(); try{const [fr,inc,out]=await Promise.all([fb.db.collection('friendships').where('members','array-contains',me).limit(100).get(),fb.db.collection('friendRequests').where('to','==',me).where('status','==','pending').limit(50).get(),fb.db.collection('friendRequests').where('from','==',me).where('status','==','pending').limit(50).get()]);
+          const friends=[]; for(const d of fr.docs){const x=d.data()||{}, other=(x.members||[]).find(v=>v!==me);if(other){let pub={};try{const p=await fb.db.collection('publicProfiles').doc(other).get();if(p.exists)pub=p.data();}catch{} friends.push({uid:other,name:pub.displayName||other,online:!!pub.online,level:pub.level||1,xp:pub.xp||0,close:!!(x.closeFriends||[]).includes(me)});}}
+          state.social.friends=friends; state.social.requests=[...inc.docs.map(d=>({id:d.id,...d.data(),incoming:true})),...out.docs.map(d=>({id:d.id,...d.data(),incoming:false}))]; render();
+        }catch(e){console.warn('Social refresh failed',e);}},
+        async accept(requestId){this.requireCloud(); const me=this.uid(), ref=fb.db.collection('friendRequests').doc(requestId); await fb.db.runTransaction(async tx=>{const snap=await tx.get(ref);if(!snap.exists)throw new Error('الطلب غير موجود');const d=snap.data();if(d.to!==me||d.status!=='pending')throw new Error('لا يمكن قبول هذا الطلب');tx.update(ref,{status:'accepted',acceptedAt:iso()});tx.set(fb.db.collection('friendships').doc(this.chatId(d.from,d.to)),{members:[d.from,d.to],closeFriends:[],createdAt:iso(),updatedAt:iso()},{merge:true});});toast('تم قبول طلب الصداقة','success');await this.refresh();},
+        async decline(requestId){this.requireCloud(); const ref=fb.db.collection('friendRequests').doc(requestId),snap=await ref.get();if(!snap.exists||snap.data().to!==this.uid())throw new Error('الطلب غير صالح');await ref.update({status:'declined',updatedAt:iso()});await this.refresh();},
+        async toggleClose(other){this.requireCloud(); const me=this.uid(),ref=fb.db.collection('friendships').doc(this.chatId(me,other)); await fb.db.runTransaction(async tx=>{const snap=await tx.get(ref);if(!snap.exists)throw new Error('الصداقة غير موجودة');const d=snap.data(), arr=Array.isArray(d.closeFriends)?d.closeFriends:[], next=arr.includes(me)?arr.filter(x=>x!==me):[...arr,me];tx.update(ref,{closeFriends:next,updatedAt:iso()});});await this.refresh();toast('تم تحديث قائمة الأصدقاء المقربين','success');},
+        async openChat(other){this.requireCloud(); state.social.selectedFriend=other;state.ui.view='friends';await this.loadMessages();render();},
+        async loadMessages(){const me=this.uid(),other=state.social.selectedFriend;if(!me||!other)return; socialUnsubs.forEach(u=>{try{u()}catch{}});socialUnsubs=[];const cid=this.chatId(me,other);try{const snap=await fb.db.collection('chats').doc(cid).collection('messages').orderBy('createdAt','asc').limit(100).get();state.social.messages=snap.docs.map(d=>({id:d.id,...d.data()}));saveState(false);}catch(e){state.social.messages=[];console.warn('Chat history unavailable',e);}socialUnsubs.push(fb.db.collection('chats').doc(cid).collection('messages').orderBy('createdAt','asc').limit(100).onSnapshot(snap=>{state.social.messages=snap.docs.map(d=>({id:d.id,...d.data()}));if(state.ui.view==='friends'&&state.social.selectedFriend===other){const box=$('#chatMessages');if(box){box.innerHTML=renderChatMessages();box.scrollTop=box.scrollHeight;}}}));},
+        async sendMessage(textValue){this.requireCloud();const me=this.uid(),other=state.social.selectedFriend,body=String(textValue||'').trim();if(!other||!body)return;if(body.length>2000)throw new Error('الرسالة طويلة جدًا');const cid=this.chatId(me,other);await fb.db.collection('chats').doc(cid).collection('messages').add({from:me,to:other,text:body,createdAt:iso(),senderName:state.profile.name||'طالب'});},
+        async sendTeamMessage(textValue){this.requireCloud();const team=teamById(state.activeTeamId),body=String(textValue||'').trim();if(!team||!team.shared||!team.memberIds.includes(this.uid()))throw new Error('اختر فريقًا مشتركًا أنت عضو فيه');if(!body)return;if(body.length>2000)throw new Error('الرسالة طويلة جدًا');await fb.db.collection('teams').doc(team.id).collection('messages').add({from:this.uid(),text:body,senderName:state.profile.name||'طالب',createdAt:iso()});},
+        async loadTeamMessages(){const team=teamById(state.activeTeamId);if(!team||!team.shared||!this.uid())return;socialUnsubs.forEach(u=>{try{u()}catch{}});socialUnsubs=[];const ref=fb.db.collection('teams').doc(team.id).collection('messages').orderBy('createdAt','asc').limit(100);try{const snap=await ref.get();state.social.teamMessages=snap.docs.map(d=>({id:d.id,...d.data()}));}catch{state.social.teamMessages=[];}socialUnsubs.push(ref.onSnapshot(snap=>{state.social.teamMessages=snap.docs.map(d=>({id:d.id,...d.data()}));if(state.ui.view==='friends'){const box=$('#teamChatMessages');if(box){box.innerHTML=renderTeamMessages();box.scrollTop=box.scrollHeight;}}}));},
+        async setPresence(online){const me=this.uid();if(!me||!fb.ready)return;try{await fb.db.collection('publicProfiles').doc(me).set({online:!!online,lastSeen:iso()},{merge:true});await fb.db.collection('presence').doc(me).set({uid:me,online:!!online,lastSeen:iso()},{merge:true});}catch(e){console.warn('Presence update blocked by Firestore rules',e);}},
+        startPresence(){if(presenceTimer)clearInterval(presenceTimer);if(!this.uid())return;this.setPresence(true);presenceTimer=setInterval(()=>this.setPresence(document.visibilityState==='visible'&&navigator.onLine),60000);window.addEventListener('online',()=>this.setPresence(true));window.addEventListener('offline',()=>this.setPresence(false));document.addEventListener('visibilitychange',()=>this.setPresence(document.visibilityState==='visible'&&navigator.onLine));}
+      };
+      function renderChatMessages(){const me=Social.uid();return (state.social.messages||[]).map(m=>`<div class="list-item" style="justify-content:${m.from===me?'flex-start':'flex-end'}"><div class="card" style="max-width:85%;padding:10px 14px"><strong class="small">${esc(m.senderName||'طالب')}</strong><div style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(m.text||'')}</div><div class="muted small">${esc(m.createdAt?fmtDateTime(m.createdAt):'')}</div></div></div>`).join('')||emptyHtml('ابدأ المحادثة برسالة لطيفة 👋');}
+      function renderTeamMessages(){const me=Social.uid();return (state.social.teamMessages||[]).map(m=>`<div class="list-item"><div class="card" style="max-width:95%;padding:10px 14px"><strong class="small">${esc(m.senderName||'طالب')}${m.from===me?' · أنت':''}</strong><div style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(m.text||'')}</div><div class="muted small">${esc(m.createdAt?fmtDateTime(m.createdAt):'')}</div></div></div>`).join('')||emptyHtml('لا توجد رسائل في الفريق بعد');}
+      function renderFriends(){const me=Social.uid();if(!me)return `<div class="card"><h2>الأصدقاء والشات</h2><p class="muted">سجّل الدخول بحسابك لتفعيل الأصدقاء والشات والأونلاين.</p><button class="btn primary" data-action="nav" data-view="settings">تسجيل الدخول</button></div>`;
+        const selected=state.social.selectedFriend, friend=(state.social.friends||[]).find(x=>x.uid===selected), results=state.social.searchResults||[];
+        return `<div class="grid cols-2"><div class="card"><div class="row between"><h2 class="title">الأصدقاء</h2><button class="btn sm" data-action="social-refresh">تحديث</button></div><form id="friendSearchForm" class="row"><input class="input" name="query" minlength="2" placeholder="ابحث باسم الطالب أو UID" value="${esc(state.social.query||'')}" required><button class="btn primary">بحث</button></form><div class="list" style="margin-top:10px">${results.map(x=>`<div class="list-item"><div class="list-main"><strong>${esc(x.name)}</strong><div class="muted small">UID: ${esc(x.uid)} · مستوى ${x.level} · ${x.online?'🟢 متصل':'⚪ غير متصل'}</div></div><button class="btn sm primary" data-action="friend-add" data-id="${esc(x.uid)}">إضافة</button></div>`).join('')}</div><h3>طلبات الصداقة</h3><div class="list">${(state.social.requests||[]).map(r=>`<div class="list-item"><div class="list-main"><strong>${esc(r.fromName||r.from||r.to)}</strong><div class="muted small">${r.incoming?'طلب وارد':'طلب مرسل'}</div></div>${r.incoming?`<button class="btn sm primary" data-action="friend-accept" data-id="${esc(r.id)}">قبول</button><button class="btn sm danger" data-action="friend-decline" data-id="${esc(r.id)}">رفض</button>`:''}</div>`).join('')||emptyHtml('لا توجد طلبات')}</div><h3>قائمة أصدقائك</h3><div class="list">${(state.social.friends||[]).map(f=>`<div class="list-item"><div class="list-main"><strong>${esc(f.name)}</strong><div class="muted small">${f.online?'🟢 متصل الآن':'⚪ غير متصل'} · مستوى ${f.level}${f.close?' · ⭐ صديق مقرب':''}</div></div><button class="btn sm primary" data-action="open-chat" data-id="${esc(f.uid)}">شات</button><button class="btn sm" data-action="toggle-close-friend" data-id="${esc(f.uid)}">${f.close?'إلغاء التقريب':'صديق مقرب ⭐'}</button></div>`).join('')||emptyHtml('أضف أصدقاء لبدء التواصل')}</div></div>
+        <div class="card"><h2 class="title">${friend?'الشات مع '+esc(friend.name):'الشات الخاص'}</h2><div id="chatMessages" class="list" style="height:320px;overflow:auto">${selected?renderChatMessages():emptyHtml('اختر صديقًا من القائمة لفتح المحادثة')}</div>${selected?`<form id="chatForm" class="row" style="margin-top:10px"><input class="input" name="message" maxlength="2000" placeholder="اكتب رسالتك…" required><button class="btn primary">إرسال</button></form>`:''}<hr><h3>شات الفريق</h3><div class="muted small">الفريق النشط: ${esc(teamById(state.activeTeamId)?.name||'لا يوجد')}</div><div id="teamChatMessages" class="list" style="height:220px;overflow:auto">${renderTeamMessages()}</div>${teamById(state.activeTeamId)?.shared?`<form id="teamChatForm" class="row" style="margin-top:10px"><input class="input" name="message" maxlength="2000" placeholder="رسالة لكل أعضاء الفريق…" required><button class="btn primary">إرسال للفريق</button></form>`:`<p class="muted small">أنشئ أو انضم لفريق مشترك لاستخدام شات الفريق.</p>`}</div></div>`;
+      }
+
+      const Challenges={
+        async create(d){ const c=normalizeChallenge({...d,ownerId:state.auth.uid||'local'}); if(fb.ready && state.auth.provider==='firebase' && state.auth.uid){ c.source='cloud'; const payload={...c,createdAt:iso()}; delete payload.id; const ref=await fb.db.collection('challenges').add(payload); c.id=ref.id; state.challenges.cloud.unshift(c); } else { c.source='local'; state.challenges.local.unshift(c); } saveState(); toast(t('savedMsg'),'success'); return c; },
+        async fetchCloud(){ if(!fb.ready || state.auth.provider!=='firebase')return []; try{ const snap=await fb.db.collection('challenges').orderBy('endsAt','asc').limit(50).get(); state.challenges.cloud=snap.docs.map(d=>normalizeChallenge({...d.data(),id:d.id})).filter(c=>c.status==='active'&&new Date(c.endsAt)>=new Date()); saveState(false); return state.challenges.cloud; }catch{return[];} },
+        async join(id,source='cloud'){ const u=state.auth.uid||activeProfile?.id||'local'; if(source==='local'){ const c=state.challenges.local.find(x=>x.id===id); if(c&&!c.participants.includes(u))c.participants.push(u); saveState(); toast(t('challengeJoined'),'success'); return; } if(!fb.ready)return; try{ await fb.db.collection('challenges').doc(id).collection('participants').doc(u).set({joinedAt:iso(),uid:u}); const c=state.challenges.cloud.find(x=>x.id===id); if(c&&!c.participants.includes(u))c.participants.push(u); saveState(false); toast(t('challengeJoined'),'success'); }catch{ toast(t('requiresFirebase'),'error'); } },
+        async submit(id,source='cloud'){ const u=state.auth.uid||activeProfile?.id||'local'; const at=iso(); if(source==='local'){ const c=state.challenges.local.find(x=>x.id===id); if(!c)return; c.submissions.push({uid:u,at}); c.submissions.sort((a,b)=>new Date(a.at)-new Date(b.at)); if(c.submissions[0]?.uid===u){ state.game.raceWins++; Gamification.addXp(c.rewardXp||50); toast(t('challengeWon'),'success'); } state.game.challengeWins++; saveState(); Gamification.checkBadges(); toast(t('challengeSubmitted'),'success'); return; } if(!fb.ready)return; try{ await fb.db.collection('challenges').doc(id).collection('submissions').doc(u).set({uid:u,at}); const first=await fb.db.collection('challenges').doc(id).collection('submissions').orderBy('at','asc').limit(1).get(); if(first.docs[0]?.id===u){ state.game.raceWins++; Gamification.addXp(80); toast(t('challengeWon'),'success'); } state.game.challengeWins++; Gamification.addXp(30); saveState(); toast(t('challengeSubmitted'),'success'); }catch{ toast(t('requiresFirebase'),'error'); } }
+      };
+      const Leaderboard={
+        localRow(){ return {id:state.auth.uid||activeProfile?.id||'local',displayName:state.profile.name||(state.settings.lang==='ar'?'أنت':'You'),avatarColor:state.profile.avatarColor,photo:state.auth.photoURL||'',title:titleName(state.game.titles.equipped),frame:state.game.frames.equipped,xp:state.game.xp,level:state.game.level,streak:state.game.streak,tasksCompleted:state.tasks.filter(t=>t.status==='done').length,focusMinutes:Math.round(completedSessions().reduce((s,x)=>s+x.actualSec/60,0)),firstCompletionAt:state.game.firstCompletionAt,local:true}; },
+        local(){ state.leaderboard.cache=[this.localRow()]; state.leaderboard.updatedAt=iso(); saveState(false); },
+        async fetch(tab='global'){
+          state.ui.leaderboardTab=tab; state.leaderboard.tab=tab;
+          if(!fb.ready || state.auth.provider!=='firebase'){ this.local(); render(); return; }
+          try{
+            if(tab==='team'){
+              const team=teamById(state.activeTeamId);
+              if(!team){ this.local(); render(); return; }
+              const ids=team.shared?team.memberIds.slice(0,50):[activeProfile?.id||'local'];
+              const rows=[];
+              for(const id of ids){ if(team.shared){ const s=await fb.db.collection('publicProfiles').doc(id).get(); if(s.exists) rows.push({id,...s.data()}); } else rows.push(this.localRow()); }
+              rows.sort((a,b)=>(b.xp||0)-(a.xp||0)); state.leaderboard.cache=rows;
+            } else {
+              const snap=await fb.db.collection('publicProfiles').orderBy('xp','desc').limit(100).get();
+              let rows=snap.docs.map(d=>({id:d.id,...d.data()}));
+              if(tab==='daily'){ const today=dateKey(new Date()); rows=rows.filter(r=>r.firstCompletionDate===today).sort((a,b)=>new Date(a.firstCompletionAt||0)-new Date(b.firstCompletionAt||0)); }
+              state.leaderboard.cache=rows;
+            }
+            state.leaderboard.updatedAt=iso(); saveState(false); render();
+          }catch{ this.local(); render(); }
+        }
+      };
+
+      /* =========================
+         9) Focus
+         ========================= */
+      let timerInterval=null;
+      function ensureTimer(){ if(!timerInterval) timerInterval=setInterval(tickTimer,1000); }
+      function activeElapsedMs(){ const a=state.activeFocus; return a?a.accumulatedMs+(a.pausedAt?0:Date.now()-a.startedAt):0; }
+      function activeRemainingSec(){ const a=state.activeFocus; return a?Math.max(0,Math.ceil((a.plannedSec*1000-activeElapsedMs())/1000)):0; }
+      function startFocus({taskId=null,subjectId=null,minutes=25,mode='focus'}={}){
+        if(state.activeFocus){ toast(t('currentSession'),'warn'); return; }
+        const task=taskId?taskById(taskId):null;
+        state.activeFocus=normalizeActive({sessionId:uid(),taskId,subjectId:subjectId||task?.subjectId||null,mode,plannedSec:Math.max(1,Math.round(minutes*60)),startedAt:Date.now(),pausedAt:null,accumulatedMs:0,cycle:completedSessions().filter(s=>sameDay(new Date(s.startedAt),new Date())).length+1});
+        if(task && task.status==='new') Tasks.update(task.id,{status:'inProgress'});
+        saveState(); ensureTimer(); render(); toast(mode==='focus'?t('start'):t('shortBreak'),'success');
+      }
+      function pauseFocus(){ const a=state.activeFocus; if(!a||a.pausedAt)return; a.accumulatedMs+=Date.now()-a.startedAt; a.pausedAt=Date.now(); saveState(); updateFocusUI(); }
+      function resumeFocus(){ const a=state.activeFocus; if(!a||!a.pausedAt)return; a.startedAt=Date.now(); a.pausedAt=null; saveState(); updateFocusUI(); }
+      function stopFocus(){ const a=state.activeFocus; if(!a)return; const sec=Math.floor(activeElapsedMs()/1000); if(sec>10) logSession(a,'cancelled',sec); state.activeFocus=null; saveState(); render(); toast(t('cancelled'),'warn'); }
+      function finishFocusEarly(){ const a=state.activeFocus; if(!a)return; logSession(a,'completed',Math.floor(activeElapsedMs()/1000)); state.activeFocus=null; saveState(); render(); toast(t('sessionLogged'),'success'); }
+      function logSession(a,status,override=null){
+        const actualSec=override!=null?Math.max(0,Math.round(override)):(status==='completed'?Math.min(a.plannedSec,Math.max(1,Math.floor(activeElapsedMs()/1000))):Math.floor(activeElapsedMs()/1000));
+        state.sessions.unshift(normalizeSession({id:a.sessionId,taskId:a.taskId,subjectId:a.subjectId,mode:a.mode,startedAt:new Date(a.startedAt-a.accumulatedMs).toISOString(),endedAt:iso(),plannedSec:a.plannedSec,actualSec,status}));
+        if(status==='completed' && a.mode==='focus'){ if(a.taskId){ const t=taskById(a.taskId); if(t){ t.actualMin+=Math.round(actualSec/60); t.updatedAt=iso(); } } Gamification.focusReward(actualSec); playSound(); vibrate(); }
+        saveState(); Gamification.checkBadges();
+      }
+      function tickTimer(){ const a=state.activeFocus; if(!a){ clearInterval(timerInterval); timerInterval=null; return; } updateFocusUI(); if(!a.pausedAt && activeRemainingSec()<=0){ logSession(a,'completed',a.plannedSec); state.activeFocus=null; saveState(); render(); toast(t('sessionLogged'),'success'); } }
+      function updateFocusUI(){ const a=state.activeFocus; if(!a)return; const rem=activeRemainingSec(); const txt=`${pad(Math.floor(rem/60))}:${pad(rem%60)}`; $$('[data-remaining]').forEach(n=>n.textContent=txt); $$('[data-focus-progress]').forEach(n=>n.style.width=clamp(100-(rem/a.plannedSec*100),0,100)+'%'); const p=$('[data-action="focus-pause"]'), r=$('[data-action="focus-resume"]'); if(p)p.classList.toggle('hidden',!!a.pausedAt); if(r)r.classList.toggle('hidden',!a.pausedAt); }
+      function playSound(){ if(!state.settings.sound)return; try{ const Ctx=window.AudioContext||window.webkitAudioContext; const ctx=new Ctx(); const o=ctx.createOscillator(); const g=ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.value=880; g.gain.value=.08; o.start(); setTimeout(()=>{o.stop();ctx.close();},180); }catch{} }
+      function vibrate(){ if(state.settings.vibration && navigator.vibrate) navigator.vibrate([80,40,80]); }
+      function celebrate(){ if(matchMedia('(prefers-reduced-motion: reduce)').matches)return; for(let i=0;i<24;i++){ const el=document.createElement('div'); el.className='confetti-piece'; el.style.left=Math.random()*100+'vw'; el.style.background=['#2563eb','#7c3aed','#059669','#d97706','#dc2626'][i%5]; el.style.animationDelay=(Math.random()*.25)+'s'; document.body.appendChild(el); setTimeout(()=>el.remove(),1500); } }
+
+      /* =========================
+         10) Notifications
+         ========================= */
+      function getAlerts(){ const now=Date.now(), lead=state.settings.notifyLead*60000, out=[]; state.tasks.filter(t=>t.status!=='done'&&t.dueAt).forEach(t=>{ const due=Date.parse(t.dueAt); if(due-now<=lead && due-now>-lead*2) out.push({type:'task',id:t.id,title:t.title,due:t.dueAt,overdue:due<now}); }); return out.sort((a,b)=>Date.parse(a.due)-Date.parse(b.due)); }
+      function alertKey(a){ return `${a.type}-${a.id}-${a.due}`; }
+      function unreadAlerts(){ return getAlerts().filter(a=>!state.notifications.seen[alertKey(a)]); }
+      function checkNotifications(){ const alerts=unreadAlerts(); if(window.Notification?.permission==='granted'){ alerts.slice(0,3).forEach(a=>{ try{ new Notification(a.overdue?t('overdue'):t('notifications'),{body:a.title}); }catch{} state.notifications.seen[alertKey(a)]=true; }); saveState(false); } updateBell(); }
+      function requestNotificationPermission(){ if(!('Notification' in window)){ toast(t('notificationExplanation'),'warn'); return; } Notification.requestPermission().then(p=>toast(p==='granted'?t('savedMsg'):t('notificationExplanation'),p==='granted'?'success':'warn')); }
+      function updateBell(){ const b=$('#bellCount'); if(!b)return; const c=unreadAlerts().length; b.textContent=c>99?'99+':c; b.classList.toggle('hidden',c===0); }
+
+      /* =========================
+         11) UI Core
+         ========================= */
+      let modalStack=[];
+      function toast(msg,type='info',action=null){ const root=$('#toastRoot'); const el=document.createElement('div'); el.className=`toast ${type}`; el.innerHTML=`<div style="flex:1">${esc(msg)}</div>`; if(action){ const btn=document.createElement('button'); btn.className='btn sm'; btn.textContent=action.label; btn.dataset.action=action.action; el.appendChild(btn); } root.appendChild(el); setTimeout(()=>{el.classList.add('hide'); setTimeout(()=>el.remove(),220);}, action?6000:3200); }
+      function openModal(opts){ const backdrop=document.createElement('div'); backdrop.className='modal-backdrop'; const modal=document.createElement('div'); modal.className=`modal ${opts.size||''}`; modal.setAttribute('role','dialog'); modal.setAttribute('aria-modal','true'); modal.innerHTML=`<div class="modal-head"><h3>${esc(opts.title||'')}</h3><button class="icon-btn" data-close aria-label="${esc(t('close'))}">${icon('close',18)}</button></div><div class="modal-body">${opts.body||''}</div>${opts.footer?`<div class="modal-foot">${opts.footer}</div>`:''}`; backdrop.appendChild(modal); $('#modalRoot').appendChild(backdrop); requestAnimationFrame(()=>backdrop.classList.add('show')); const api={el:modal,close(){backdrop.classList.remove('show');setTimeout(()=>backdrop.remove(),180);modalStack=modalStack.filter(m=>m!==api);}}; backdrop.addEventListener('mousedown',e=>{if(e.target===backdrop && opts.dismissible!==false)api.close();}); modal.querySelector('[data-close]').addEventListener('click',api.close); modalStack.push(api); setTimeout(()=>modal.querySelector('input,select,textarea,button')?.focus(),60); return api; }
+      function confirmModal({title='',message='',confirmText='',danger=false}={}){ return new Promise(res=>{ const m=openModal({title,size:'sm',dismissible:false,body:`<p>${esc(message)}</p>`,footer:`<button class="btn ${danger?'danger':'primary'}" id="ok">${esc(confirmText||t('confirm'))}</button><button class="btn" id="cx">${esc(t('cancel'))}</button>`}); m.el.querySelector('#ok').onclick=()=>{m.close();res(true);}; m.el.querySelector('#cx').onclick=()=>{m.close();res(false);}; }); }
+      function promptSafe(label,def=''){ return new Promise(res=>{ const m=openModal({title:label,size:'sm',dismissible:false,body:`<label class="field"><span>${esc(label)}</span><input class="input" id="pi" value="${esc(def)}"></label>`,footer:`<button class="btn primary" id="ok">${esc(t('save'))}</button><button class="btn" id="cx">${esc(t('cancel'))}</button>`}); m.el.querySelector('#ok').onclick=()=>{const v=m.el.querySelector('#pi').value.trim(); m.close(); res(v||null);}; m.el.querySelector('#cx').onclick=()=>{m.close();res(null);}; }); }
+      function applySettings(){ const lang=state.settings.lang; document.documentElement.lang=lang; document.documentElement.dir=lang==='ar'?'rtl':'ltr'; const dark=state.settings.themeMode==='dark'||(state.settings.themeMode==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches); document.documentElement.dataset.theme=dark?'dark':'light'; const preset=getPreset(state.settings.themePreset); document.documentElement.style.setProperty('--accent',state.settings.accent||preset.accent); const meta=document.querySelector('meta[name=theme-color]'); if(meta) meta.content=state.settings.accent||preset.accent; }
+      function navItems(){ const items=[['home','home'],['tasks','tasks'],['groups','users'],['teams','trophy'],['friends','users'],['leaderboard','medal']]; if(state.developer.unlocked) items.push(['challenges','fire']); items.push(['focus','focus'],['settings','settings']); if(state.developer.unlocked) items.push(['developer','crown']); return items; }
+      function bottomItems(){ return ['home','tasks','focus','leaderboard','settings']; }
+      function render(){ applySettings(); $('#app').innerHTML=activeProfile?renderShell():renderLogin(); updateBell(); if(state.activeFocus){ensureTimer();updateFocusUI();} }
+      function avatarHtml(size=38){ const frame=state.game.frames.equipped||'none'; const photo=state.profile.photo||state.auth.photoURL; const name=state.profile.name||state.auth.displayName||'U'; return `<span class="avatar-wrap">${photo?`<img class="avatar frame-${esc(frame)}" style="width:${size}px;height:${size}px" src="${esc(photo)}" alt="">`:`<span class="avatar frame-${esc(frame)}" style="width:${size}px;height:${size}px;background:${esc(state.profile.avatarColor)}">${esc((name||'م').slice(0,1).toUpperCase())}</span>`}</span>`; }
+      function syncPill(){ const online=navigator.onLine, cloud=state.auth.provider==='firebase'; let cls='sync-pill', text=t('localOnly'); if(!online){cls+=' offline';text=t('offline');} else if(cloud){cls+=' online';text=t('synced');} return `<span class="${cls}">${icon('zap',14)} ${esc(text)}</span>`; }
+      function emptyHtml(text){ return `<div class="empty"><span class="emoji">📭</span><div>${esc(text)}</div></div>`; }
+      function statCard(title,value,sub,ic){ return `<div class="card"><div class="row between"><div><div class="muted small">${esc(title)}</div><div style="font-size:1.45rem;font-weight:900">${esc(value)}</div><div class="muted small">${esc(sub||'')}</div></div><div style="color:var(--accent)">${icon(ic,24)}</div></div></div>`; }
+
+      function renderLogin(){
+        const has=hasFirebaseConfig(); const profiles=getProfiles();
+        return `<div class="auth-wrap"><div class="auth-card">
+          <div class="auth-hero"><div class="logo" data-secret>${logo(44)}</div><div><h1 style="margin:0">${esc(t('appName'))} <span class="ys-badge">${esc(t('ultra'))}</span></h1><p class="muted" style="margin:4px 0 0">${esc(t('tagline'))}</p></div></div>
+          <div class="row center" style="justify-content:center"><button class="chip ${state.settings.lang==='ar'?'active':''}" data-action="lang" data-lang="ar">${esc(t('arabic'))}</button><button class="chip ${state.settings.lang==='en'?'active':''}" data-action="lang" data-lang="en">${esc(t('english'))}</button></div>
+          ${!has?`<div class="card small muted">${esc(t('firebaseMissing'))}</div>`:''}
+          <div class="auth-tabs"><button class="tab-btn active" data-tab="google">${esc(t('google'))}</button><button class="tab-btn" data-tab="email">${esc(t('email'))}</button><button class="tab-btn" data-tab="guest">${esc(t('guest'))}</button></div>
+          <div id="p-google" class="panel active"><button class="btn google-btn" data-action="google-login" ${has?'':'disabled'}>${GOOGLE_ICON}<span>${esc(t('google'))}</span></button><label class="checkbox-line"><input type="checkbox" id="remember" checked><span>${esc(t('remember'))}</span></label></div>
+          <div id="p-email" class="panel"><form id="emailLoginForm" class="auth-form"><label class="field"><span>Email</span><input class="input" type="email" name="email" required dir="ltr"></label><label class="field"><span>Password</span><input class="input" type="password" name="password" required minlength="6"></label><button class="btn primary" type="submit" ${has?'':'disabled'}>${esc(t('login'))}</button></form><details><summary class="link-btn">${esc(t('addProfile'))}</summary><form id="registerForm" class="auth-form" style="margin-top:10px"><label class="field"><span>${esc(t('displayName'))}</span><input class="input" name="name" required></label><label class="field"><span>Email</span><input class="input" type="email" name="email" required dir="ltr"></label><label class="field"><span>Password</span><input class="input" type="password" name="password" required minlength="6"></label><button class="btn primary" type="submit" ${has?'':'disabled'}>${esc(t('save'))}</button></form></details><details><summary class="link-btn">${esc(t('invalidCredentials'))}</summary><form id="resetForm" class="auth-form" style="margin-top:10px"><label class="field"><span>Email</span><input class="input" type="email" name="email" required dir="ltr"></label><button class="btn" type="submit" ${has?'':'disabled'}>${esc(t('send'))}</button></form></details></div>
+          <div id="p-guest" class="panel"><button class="btn" data-action="guest-login" style="width:100%">${esc(t('guest'))}</button></div>
+          ${profiles.length?`<div><div class="row between"><strong>${esc(t('savedProfiles'))}</strong><button class="link-btn" data-action="new-local-profile">${icon('plus',14)} ${esc(t('addProfile'))}</button></div><div class="profile-list">${profiles.map(p=>`<div class="profile-row"><div class="avatar" style="background:${esc(p.color)}">${p.photo||p.photoURL?`<img src="${esc(p.photo||p.photoURL)}" alt="" style="width:100%;height:100%;object-fit:cover">`:esc((p.name||'م').slice(0,1).toUpperCase())}</div><div class="meta"><strong>${esc(p.name)}</strong><div class="muted small">${esc(p.email||(p.provider==='local'?t('localOnly'):t('synced')))}</div></div><button class="btn sm" data-action="open-profile" data-id="${p.id}">${esc(t('openProfile'))}</button><button class="icon-btn" data-action="delete-profile" data-id="${p.id}" aria-label="${esc(t('deleteProfile'))}">${icon('trash',16)}</button></div>`).join('')}</div></div>`:''}
+          <div class="muted small center"><span class="ys-signature">YS</span> • ${esc(APP.copyright)}</div>
+        </div></div>`;
+      }
+
+      function renderShell(){
+        const v=state.ui.view;
+        return `<div class="shell"><aside class="sidebar ${state.ui.sidebarOpen?'open':''}"><div class="brand"><div class="brand-logo" data-secret>${logo(24)}</div><div><strong>${esc(t('appName'))}</strong><div class="muted small">v${esc(APP.version)}</div></div></div><nav class="nav">${navItems().map(([x,k])=>`<button class="nav-item ${v===x?'active':''}" data-action="nav" data-view="${x}">${icon(k,20)}<span>${esc(t(x))}</span></button>`).join('')}</nav><div class="sidebar-footer"><span class="ys-signature">YS</span> ${esc(APP.copyright)}</div></aside><div class="overlay ${state.ui.sidebarOpen?'show':''}" data-action="close-sidebar"></div><main class="main"><header class="topbar"><button class="icon-btn" data-action="toggle-sidebar">${icon('menu',20)}</button><div class="top-title"><h1>${esc(t(v))}</h1><p class="muted">${esc(state.profile.name||t('appName'))}</p></div>${syncPill()}<button class="icon-btn" data-action="alerts" style="position:relative">${icon('bell',20)}<span id="bellCount" class="badge hidden" style="position:absolute;top:2px;inset-inline-end:2px;min-width:18px;height:18px;padding:0 4px;background:var(--danger);color:#fff;border:0"></span></button><button class="icon-btn" data-action="nav" data-view="settings">${avatarHtml(30)}</button></header><section class="view">${renderView(v)}</section></main><nav class="bottom-nav">${bottomItems().map(x=>{const item=navItems().find(n=>n[0]===x); return `<button class="nav-item ${v===x?'active':''}" data-action="nav" data-view="${x}">${icon(item?item[1]:'star',18)}<span>${esc(t(x))}</span></button>`;}).join('')}</nav></div>`;
+      }
+
+      function renderView(v){
+        if(v==='home') return renderHome();
+        if(v==='tasks') return renderTasks();
+        if(v==='groups') return renderGroups();
+        if(v==='teams') return renderTeams();
+        if(v==='friends') return renderFriends();
+        if(v==='leaderboard') return renderLeaderboard();
+        if(v==='challenges') return state.developer.unlocked ? renderChallenges() : renderHome();
+        if(v==='focus') return renderFocus();
+        if(v==='settings') return renderSettings();
+        if(v==='developer') return renderDeveloper();
+        return renderHome();
+      }
+
+      function taskRow(x){
+        const s=subjectById(x.subjectId), g=groupById(x.groupId), tm=teamById(x.teamId), done=x.status==='done', od=isOverdue(x);
+        return `<div class="list-item ${done?'done':''}"><input type="checkbox" ${done?'checked':''} data-action="toggle-task" data-id="${x.id}" style="width:22px;height:22px;min-height:auto"><div class="list-main"><div class="list-title">${esc(x.title)}</div><div class="meta"><span class="badge ${x.priority}">${esc(t(x.priority))}</span><span><span class="dot" style="background:${esc(s?.color||'var(--muted)')}"></span> ${esc(s?.name||t('noSubject'))}</span>${g?`<span>${esc(g.name)}</span>`:''}${tm?`<span>${esc(tm.name)}</span>`:''}<span style="${od?'color:var(--danger);font-weight:900':''}">${esc(x.dueAt?new Date(x.dueAt).toLocaleString():'—')}</span><span>${esc(fmtDuration(x.estimate))}</span>${x.subtasks.length?`<span>${x.subtasks.filter(y=>y.done).length}/${x.subtasks.length}</span>`:''}</div>${x.subtasks.length?`<div class="progress"><span style="width:${x.progress}%"></span></div>`:''}</div><div class="row"><button class="icon-btn" data-action="focus-task" data-id="${x.id}">${icon('play',16)}</button><button class="icon-btn" data-action="edit-task" data-id="${x.id}">${icon('edit',16)}</button><button class="icon-btn" data-action="delete-task" data-id="${x.id}">${icon('trash',16)}</button></div></div>`;
+      }
+
+      function renderHome(){
+        const todays=state.tasks.filter(x=>x.status!=='done'&&x.dueAt&&sameDay(parseDate(x.dueAt),new Date()));
+        const overdue=state.tasks.filter(isOverdue).length;
+        const nearest=[...state.challenges.cloud,...state.challenges.local].filter(c=>new Date(c.endsAt)>=new Date()).sort((a,b)=>new Date(a.endsAt)-new Date(b.endsAt))[0];
+        const pinned=(state.announcements||[]).filter(a=>a.active!==false&&a.pinned).sort((a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||'')));
+        return `${pinned.length?`<div class="card" style="margin-bottom:12px;border:1px solid var(--accent);background:linear-gradient(135deg,var(--surface),var(--surface2))"><div class="row between"><h2 class="title">📌 ${esc(pinned[0].title||t('pinned'))}</h2><span class="badge done">${esc(t('pinned'))}</span></div><p style="white-space:pre-wrap;margin:8px 0 0">${esc(pinned[0].body||'')}</p></div>`:''}<div class="grid stats">${statCard(t('today'),todays.length,`${overdue} ${t('overdue')}`,'tasks')}${statCard(t('xp'),state.game.xp,`${t('level')} ${state.game.level}`,'star')}${statCard(t('streak'),state.game.streak,`${t('bestStreak')}: ${state.game.bestStreak}`,'fire')}${statCard(t('focus'),fmtDuration(focusMinutesOn(new Date())),t('todaySessions'),'focus')}</div>
+        <div class="card" style="margin-top:12px"><h2 class="title">${esc(t('quickAdd'))}</h2><form id="quickAddForm" class="row" style="margin-top:10px"><input class="input" name="text" placeholder="${esc(t('quickAdd'))}" required><button class="btn primary" type="submit">${icon('plus',18)} ${esc(t('add'))}</button></form></div>
+        <div class="grid cols-2" style="margin-top:12px"><div class="card"><div class="row between"><h2 class="title">${esc(t('today'))}</h2><button class="btn sm" data-action="nav" data-view="tasks">${esc(t('all'))}</button></div><div class="list">${todays.length?todays.slice(0,5).map(taskRow).join(''):emptyHtml(t('noTasks'))}</div></div><div class="card"><h2 class="title">${esc(t('activeTeam'))}</h2><div class="kv"><span>${esc(t('activeTeam'))}</span><strong>${esc(state.activeTeamId?teamById(state.activeTeamId)?.name||'—':t('noActiveTeam'))}</strong></div><div class="kv"><span>${esc(t('tasksCompleted'))}</span><strong>${state.tasks.filter(x=>x.status==='done').length}</strong></div><div class="kv"><span>${esc(t('xp'))}</span><strong>${Math.max(0,Math.round(state.game.xp||0))} XP</strong></div><div class="row" style="margin-top:10px"><button class="btn primary sm" data-action="nav" data-view="focus">${esc(t('startFocus'))}</button><button class="btn sm" data-action="nav" data-view="leaderboard">${esc(t('leaderboard'))}</button></div></div></div>`;
+      }
+
+      function filteredTasks(){
+        const q=state.ui.taskSearch.trim().toLowerCase(), now=new Date(), f=state.ui.taskFilter;
+        let list=state.tasks.filter(x=>{
+          if(q && !`${x.title} ${x.description} ${x.notes} ${x.tags.join(' ')}`.toLowerCase().includes(q)) return false;
+          if(state.ui.groupFilter!=='all' && x.groupId!==state.ui.groupFilter) return false;
+          if(state.ui.teamFilter!=='all' && x.teamId!==state.ui.teamFilter) return false;
+          if(f==='today') return x.status!=='done'&&x.dueAt&&sameDay(parseDate(x.dueAt),now);
+          if(f==='upcoming') return x.status!=='done'&&x.dueAt&&parseDate(x.dueAt)>=now;
+          if(f==='overdue') return isOverdue(x);
+          if(f==='done') return x.status==='done';
+          return true;
+        });
+        const pw={high:3,medium:2,low:1};
+        list.sort((a,b)=>{
+          if(state.ui.taskSort==='due') return (parseDate(a.dueAt)?.getTime()||Infinity)-(parseDate(b.dueAt)?.getTime()||Infinity);
+          if(state.ui.taskSort==='priority') return pw[b.priority]-pw[a.priority];
+          if(state.ui.taskSort==='created') return new Date(b.createdAt)-new Date(a.createdAt);
+          return a.title.localeCompare(b.title);
+        });
+        return list;
+      }
+      function renderTasksContent(){
+        const list=filteredTasks();
+        if(state.ui.taskView==='kanban') return `<div class="kanban">${STATUS.map(st=>`<div class="kanban-col" data-status="${st}"><div class="row between"><strong>${esc(t(st))}</strong><span class="badge">${list.filter(x=>x.status===st).length}</span></div>${list.filter(x=>x.status===st).map(x=>`<div class="kanban-card" draggable="true" data-id="${x.id}"><div class="list-title">${esc(x.title)}</div><div class="meta"><span class="badge ${x.priority}">${esc(t(x.priority))}</span></div></div>`).join('')||emptyHtml(t('noTasks'))}</div>`).join('')}</div>`;
+        return `<div class="list">${list.length?list.map(taskRow).join(''):emptyHtml(t('noTasks'))}</div>`;
+      }
+      function renderDailyQuests(){
+        const d=DailyQuests.data(), qs=DailyQuests.definitions();
+        return `<div class="card"><div class="row between"><div><h2 class="title">🎯 مهام اليوم</h2><p class="subtitle">تتجدد تلقائيًا كل يوم • كل مكافأة تُستلم مرة واحدة</p></div><span class="badge">${esc(d.date)}</span></div><div class="grid-cards">${qs.map(q=>{const pct=Math.min(100,Math.round(q.progress/q.goal*100)),claimed=!!d.claimed[q.id],done=q.progress>=q.goal;return `<div class="card entity-card"><div class="row between"><strong>${esc(q.title)}</strong><span class="badge">${q.xp} XP</span></div><p class="muted small">${esc(q.description)}</p><div style="height:7px;background:var(--border);border-radius:9px;overflow:hidden"><div style="height:100%;width:${pct}%;background:var(--accent)"></div></div><div class="row between" style="margin-top:8px"><span class="muted small">${Math.min(q.progress,q.goal)} / ${q.goal}</span><button class="btn sm ${done&&!claimed?'primary':''}" data-action="claim-daily-quest" data-id="${q.id}" ${!done||claimed?'disabled':''}>${claimed?'تم الاستلام':done?'استلام XP':'قيد التقدم'}</button></div></div>`}).join('')}</div></div>`;
+      }
+      function renderTasks(){
+        return `${renderDailyQuests()}<div class="card"><div class="toolbar"><input id="taskSearch" class="input" placeholder="${esc(t('search'))}" value="${esc(state.ui.taskSearch)}"><select id="taskSort" class="input" style="max-width:160px"><option value="due" ${state.ui.taskSort==='due'?'selected':''}>${esc(t('sortDue'))}</option><option value="priority" ${state.ui.taskSort==='priority'?'selected':''}>${esc(t('sortPriority'))}</option><option value="created" ${state.ui.taskSort==='created'?'selected':''}>${esc(t('sortCreated'))}</option><option value="title" ${state.ui.taskSort==='title'?'selected':''}>${esc(t('sortTitle'))}</option></select><select class="input" style="max-width:160px" data-action="group-filter"><option value="all">${esc(t('all'))} ${esc(t('groups'))}</option>${state.groups.map(g=>`<option value="${g.id}" ${state.ui.groupFilter===g.id?'selected':''}>${esc(g.name)}</option>`).join('')}</select><select class="input" style="max-width:160px" data-action="team-filter"><option value="all">${esc(t('all'))} ${esc(t('teams'))}</option>${state.teams.map(g=>`<option value="${g.id}" ${state.ui.teamFilter===g.id?'selected':''}>${esc(g.name)}</option>`).join('')}</select><button class="btn" data-action="toggle-view">${esc(state.ui.taskView==='list'?t('kanban'):t('list'))}</button><button class="btn primary" data-action="new-task">${icon('plus',18)} ${esc(t('addTask'))}</button></div><div class="row" style="margin-bottom:10px">${['today','upcoming','overdue','done','all'].map(f=>`<button class="chip ${state.ui.taskFilter===f?'active':''}" data-action="task-filter" data-filter="${f}">${esc(t(f))}</button>`).join('')}</div><div id="tasksContent">${renderTasksContent()}</div></div>`;
+      }
+
+      function renderGroups(){
+        return `<div class="card"><div class="row between"><h2 class="title">${esc(t('groups'))}</h2><button class="btn primary" data-action="new-group">${icon('plus',18)} ${esc(t('addGroup'))}</button></div>${state.groups.length?`<div class="grid-cards" style="margin-top:12px">${state.groups.map(g=>{const tasks=state.tasks.filter(x=>x.groupId===g.id); return `<div class="card entity-card"><div class="strip" style="background:${esc(g.color)}"></div><div style="margin-top:6px"><h3 style="margin:0">${esc(g.name)}</h3><div class="muted small">${esc(g.description||'—')}</div></div><div class="mini-stats"><div class="mini-stat"><strong>${tasks.length}</strong><div class="muted small">${esc(t('tasks'))}</div></div><div class="mini-stat"><strong>${tasks.filter(x=>x.status==='done').length}</strong><div class="muted small">${esc(t('done'))}</div></div></div><div class="row"><button class="btn sm" data-action="edit-group" data-id="${g.id}">${esc(t('edit'))}</button><button class="btn sm danger" data-action="delete-group" data-id="${g.id}">${esc(t('delete'))}</button></div></div>`;}).join('')}</div>`:emptyHtml(t('noGroups'))}</div>`;
+      }
+
+      function renderTeams(){
+        const active=teamById(state.activeTeamId);
+        return `<div class="card"><div class="row between"><div><h2 class="title">${esc(t('teams'))}</h2><p class="subtitle">${esc(t('createFirstTeam'))}</p></div><div class="row"><button class="btn" data-action="join-team">${icon('users',16)} ${esc(t('joinTeam'))}</button><button class="btn primary" data-action="new-team">${icon('plus',18)} ${esc(t('createTeam'))}</button></div></div>
+        ${state.teams.length?`<div class="grid-cards" style="margin-top:12px">${state.teams.map(tm=>{const tasks=state.tasks.filter(x=>x.teamId===tm.id); return `<div class="card entity-card ${state.activeTeamId===tm.id?'active':''}"><div class="strip" style="background:${esc(tm.color)}"></div><div style="margin-top:6px"><h3 style="margin:0">${esc(tm.name)}</h3><div class="muted small">${esc(tm.description||'—')}</div><div class="badge" style="margin-top:6px">${esc(t('teamCode'))}: ${esc(tm.joinCode)}</div></div><div class="mini-stats"><div class="mini-stat"><strong>${tasks.length}</strong><div class="muted small">${esc(t('tasks'))}</div></div><div class="mini-stat"><strong>${tm.memberIds.length}</strong><div class="muted small">${esc(t('members'))}</div></div></div><div class="row"><button class="btn sm ${state.activeTeamId===tm.id?'primary':''}" data-action="select-team" data-id="${tm.id}">${esc(state.activeTeamId===tm.id?t('activeTeam'):t('selectTeam'))}</button><button class="btn sm" data-action="copy-team-code" data-id="${tm.id}">${esc(t('copyCode'))}</button><button class="btn sm danger" data-action="leave-team" data-id="${tm.id}">${esc(t('leaveTeam'))}</button></div></div>`;}).join('')}</div>`:emptyHtml(t('noTeams'))}
+        </div>
+        ${active?`<div class="card" style="margin-top:12px"><div class="row between"><h2 class="title">${esc(t('teamLb'))}: ${esc(active.name)}</h2><button class="btn sm primary" data-action="lb-tab" data-tab="team">${esc(t('refresh'))}</button></div><div class="list">${state.leaderboard.cache.filter(Boolean).slice(0,10).map(lbRow).join('')||emptyHtml(t('noData'))}</div></div>`:''}`;
+      }
+
+      function lbRow(r,i=0){ return `<div class="list-item"><div class="lb-rank ${i===0?'top1':i===1?'top2':i===2?'top3':''}" style="min-width:28px">${i+1}</div>${r.photo?`<img class="avatar frame-${esc(r.frame||'none')}" src="${esc(r.photo)}" style="width:34px;height:34px" alt="">`:`<span class="avatar frame-${esc(r.frame||'none')}" style="width:34px;height:34px;background:${esc(r.avatarColor||'var(--accent)')}">${esc((r.displayName||'م').slice(0,1).toUpperCase())}</span>`}<div class="list-main"><div class="list-title">${esc(r.displayName||'—')}</div><div class="meta"><span>${esc(r.title||t('student'))}</span><span>${esc(t('level'))} ${esc(r.level||1)}</span><span>${esc(r.xp||0)} XP</span><span>${esc(r.streak||0)} ${esc(t('streak'))}</span></div></div></div>`; }
+
+      function renderLeaderboard(){
+        const tab=state.ui.leaderboardTab||'global'; const rows=state.leaderboard.cache||[];
+        return `<div class="card"><div class="row between"><div><h2 class="title">${esc(t('leaderboard'))}</h2><p class="subtitle">${esc(fb.ready?t('synced'):t('localOnly'))}</p></div><div class="segmented">${['global','daily','team'].map(x=>`<button class="${tab===x?'active':''}" data-action="lb-tab" data-tab="${x}">${esc(t(x==='global'?'global':x==='daily'?'daily':'teamLb'))}</button>`).join('')}</div></div><div class="row" style="margin:10px 0"><button class="btn primary" data-action="lb-refresh">${icon('zap',16)} ${esc(t('refresh'))}</button><span class="muted small">${state.leaderboard.updatedAt?esc(fmtDateTime(state.leaderboard.updatedAt)):''}</span></div><div class="list">${rows.length?rows.map((r,i)=>lbRow(r,i)).join(''):emptyHtml(t('noData'))}</div></div>
+        <div class="grid cols-2" style="margin-top:12px"><div class="card"><h2 class="title">${esc(t('heatMap'))}</h2>${renderHeatMap()}</div><div class="card"><h2 class="title">${esc(t('frames'))}</h2><div class="frame-grid">${FRAME_DEFS.map(f=>{const un=state.game.frames.unlocked.includes(f.id), eq=state.game.frames.equipped===f.id; return `<div class="frame-item ${un?'':'locked'} ${eq?'equipped':''}"><span class="avatar frame-${esc(f.id)}" style="width:52px;height:52px;background:var(--accent)">${icon('user',22)}</span><strong>${esc(frameName(f.id))}</strong><div class="muted small">${esc(un?(eq?t('equipped'):t('unlocked')):t('locked'))}</div>${un?`<button class="btn sm ${eq?'primary':''}" data-action="equip-frame" data-id="${f.id}">${esc(eq?t('equipped'):t('equip'))}</button>`:''}</div>`;}).join('')}</div></div></div>
+        <div class="card" style="margin-top:12px"><h2 class="title">${esc(t('titles'))}</h2><div class="row">${TITLE_DEFS.map(x=>{const un=state.game.titles.unlocked.includes(x.id), eq=state.game.titles.equipped===x.id; return `<button class="chip ${eq?'active':''}" data-action="equip-title" data-id="${x.id}" ${un?'':'disabled'}>${esc(titleName(x.id))}</button>`;}).join('')}</div></div>
+        <div class="card" style="margin-top:12px"><h2 class="title">${esc(t('badges'))}</h2><div class="badge-grid">${BADGE_DEFS.map(b=>{const un=!!state.game.badges[b.id]; return `<div class="badge-item ${un?'unlocked':''}"><div class="badge-icon">${icon(b.icon||'star',22)}</div><strong>${esc(badgeName(b.id))}</strong><div class="muted small">+${b.xp} XP</div></div>`;}).join('')}</div></div>`;
+      }
+      function renderHeatMap(){ const days=Array.from({length:35},(_,i)=>dateKey(addDays(new Date(),i-34))); const set=new Set(state.game.studyDates); return `<div class="heat-grid">${days.map(k=>`<div class="heat-cell ${set.has(k)?'on':''}" title="${esc(k)}"></div>`).join('')}</div><div class="row" style="margin-top:8px"><span class="muted small">${esc(t('streak'))}: <strong>${state.game.streak}</strong></span><span class="muted small">${esc(t('bestStreak'))}: <strong>${state.game.bestStreak}</strong></span></div>`; }
+
+      function renderChallenges(){
+        const all=[...state.challenges.cloud.map(c=>({...c,source:'cloud'})),...state.challenges.local.map(c=>({...c,source:'local'}))].filter(c=>new Date(c.endsAt)>=new Date());
+        return `<div class="card"><div class="row between"><h2 class="title">${esc(t('challenges'))}</h2><div class="row"><button class="btn" data-action="refresh-challenges">${icon('zap',16)} ${esc(t('refresh'))}</button><button class="btn primary" data-action="new-challenge">${icon('plus',18)} ${esc(t('addChallenge'))}</button></div></div>${all.length?`<div class="grid cols-2" style="margin-top:12px">${all.map(c=>`<div class="card challenge-card ${c.type}"><div class="row between"><strong>${esc(c.title)}</strong><span class="badge ${c.source==='cloud'?'done':'new'}">${esc(c.source==='cloud'?t('synced'):t('localOnly'))}</span></div><div class="muted small">${esc(c.description||'—')}</div><div class="meta"><span>${esc(t(c.type==='race'?'race':c.type==='focus'?'focusChallenge':c.type==='streak'?'streakChallenge':'teamChallenge'))}</span><span>${esc(t('endsAt'))}: ${esc(fmtDateTime(c.endsAt))}</span><span>+${c.rewardXp} XP</span><span>${(c.participants||[]).length} ${esc(t('users'))}</span></div><div class="row"><button class="btn sm primary" data-action="join-challenge" data-id="${c.id}" data-source="${c.source}">${esc(t('joinChallenge'))}</button><button class="btn sm" data-action="submit-challenge" data-id="${c.id}" data-source="${c.source}">${esc(t('submitChallenge'))}</button></div></div>`).join('')}</div>`:emptyHtml(t('noChallenges'))}</div>`;
+      }
+
+      function renderFocus(){
+        const a=state.activeFocus; const today=state.sessions.filter(s=>sameDay(new Date(s.startedAt),new Date()));
+        if(a){ const rem=activeRemainingSec(); return `<div class="card" style="display:grid;place-items:center;gap:14px;text-align:center;padding:24px"><span class="badge inProgress">${esc(a.mode==='focus'?t('focusTimer'):t('shortBreak'))}</span><div style="font-size:clamp(3rem,14vw,6rem);font-weight:900" data-remaining>${pad(Math.floor(rem/60))}:${pad(rem%60)}</div><div style="width:min(420px,90%)"><div class="progress"><span data-focus-progress style="width:${clamp(100-rem/a.plannedSec*100,0,100)}%"></span></div></div><div class="muted small">${esc(a.taskId?taskById(a.taskId)?.title||'':t('noActiveSession'))}</div><div class="row"><button class="btn primary hidden" data-action="focus-resume">${icon('play',16)} ${esc(t('resume'))}</button><button class="btn" data-action="focus-pause">${icon('pause',16)} ${esc(t('pause'))}</button><button class="btn ok" data-action="focus-finish">${icon('check',16)} ${esc(t('complete'))}</button><button class="btn danger" data-action="focus-stop">${icon('stop',16)} ${esc(t('stop'))}</button><button class="btn" data-action="deep-focus">${esc(t('deepFocus'))}</button></div></div>`; }
+        return `<div class="grid cols-2"><div class="card"><h2 class="title">${esc(t('startFocus'))}</h2><form id="focusForm" class="form-grid" style="margin-top:10px"><label class="field full"><span>${esc(t('tasks'))}</span><select class="input" name="taskId"><option value="">${esc(t('noActiveSession'))}</option>${state.tasks.filter(x=>x.status!=='done').map(x=>`<option value="${x.id}">${esc(x.title)}</option>`).join('')}</select></label><label class="field"><span>${esc(t('workMin'))}</span><input class="input" type="number" name="minutes" min="1" max="240" value="${state.settings.pomodoro.work}"></label><label class="field"><span>${esc(t('subject'))}</span><select class="input" name="subjectId"><option value="">—</option>${state.subjects.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('')}</select></label><div class="full row">${[15,25,45,60].map(m=>`<button type="button" class="chip" data-action="focus-preset" data-min="${m}">${m} ${state.settings.lang==='ar'?'د':'min'}</button>`).join('')}</div><div class="full"><button class="btn primary" type="submit">${icon('play',18)} ${esc(t('start'))}</button></div></form></div><div class="card"><h2 class="title">${esc(t('todaySessions'))}</h2><div class="kv"><span>${esc(t('completedSessions'))}</span><strong>${today.filter(s=>s.status==='completed'&&s.mode==='focus').length}</strong></div><div class="kv"><span>${esc(t('focusMinutes'))}</span><strong>${fmtDuration(today.filter(s=>s.status==='completed').reduce((s,x)=>s+x.actualSec/60,0))}</strong></div><div class="list" style="margin-top:10px">${today.length?today.map(s=>`<div class="list-item"><div class="list-main"><div class="list-title">${esc(s.taskId?taskById(s.taskId)?.title||'—':subjectById(s.subjectId)?.name||'—')}</div><div class="meta"><span>${esc(fmtDateTime(s.startedAt))}</span><span>${esc(fmtDuration(s.actualSec/60))}</span><span class="badge ${s.status==='completed'?'done':'new'}">${esc(s.status==='completed'?t('completed'):t('cancelled'))}</span></div></div></div>`).join(''):emptyHtml(t('noData'))}</div></div></div>`;
+      }
+
+      function renderSettings(){
+        const s=state.settings;
+        return `<div class="grid cols-2">
+          <div class="card"><h2 class="title">${esc(t('profile'))}</h2><div class="kv"><span>${state.settings.lang==='ar'?'معرّف الحساب (Profile ID)':'Account ID (Profile ID)'}</span><strong dir="ltr" style="overflow-wrap:anywhere">${esc(state.auth.provider==='firebase'&&state.auth.uid&&state.auth.uid!=='guest'?state.auth.uid:(activeProfile?.id||'LOCAL-'+String(activeProfile?.id||'guest').slice(0,12)))}</strong></div><p class="muted small">${state.settings.lang==='ar'?'احتفظ بهذا المعرّف لاستخدامه في إدارة الحساب من لوحة المطور.':'Keep this ID for account management in the developer console.'}</p><form id="profileForm" class="form-grid"><div class="full row"><div>${avatarHtml(72)}</div><div class="grid" style="flex:1"><label class="field"><span>${esc(t('displayName'))}</span><input class="input" name="name" value="${esc(state.profile.name)}" required></label><label class="field"><span>${esc(t('school'))}</span><input class="input" name="school" value="${esc(state.profile.school)}"></label></div></div><label class="field full"><span>${esc(t('photo'))}</span><input class="input" type="file" id="photoFile" accept="image/*"></label><label class="field"><span>${esc(t('accent'))}</span><input class="input" type="color" name="accent" value="${esc(s.accent)}"></label><div class="full row"><button class="btn primary" type="submit">${esc(t('save'))}</button><button type="button" class="btn" data-action="remove-photo">${esc(t('removePhoto'))}</button>${state.auth.provider==='firebase'?`<button type="button" class="btn danger" data-action="logout">${icon('logout',16)} ${esc(t('logout'))}</button>`:`<button type="button" class="btn" data-action="google-login">${GOOGLE_ICON} ${esc(t('google'))}</button>`}</div></form></div>
+          <div class="card"><h2 class="title">${esc(t('settings'))}</h2><form id="settingsForm" class="form-grid"><label class="field"><span>${esc(t('language'))}</span><select class="input" name="lang"><option value="ar" ${s.lang==='ar'?'selected':''}>${esc(t('arabic'))}</option><option value="en" ${s.lang==='en'?'selected':''}>${esc(t('english'))}</option></select></label><label class="field"><span>${esc(t('theme'))}</span><select class="input" name="themeMode"><option value="auto" ${s.themeMode==='auto'?'selected':''}>${esc(t('auto'))}</option><option value="light" ${s.themeMode==='light'?'selected':''}>${esc(t('light'))}</option><option value="dark" ${s.themeMode==='dark'?'selected':''}>${esc(t('dark'))}</option></select></label><label class="field"><span>${esc(t('preset'))}</span><select class="input" name="themePreset">${THEME_PRESETS.map(p=>`<option value="${p.id}" ${s.themePreset===p.id?'selected':''}>${esc(state.settings.lang==='ar'?p.ar:p.en)}</option>`).join('')}</select></label><label class="field"><span>${esc(t('workMin'))}</span><input class="input" type="number" name="work" min="1" max="240" value="${s.pomodoro.work}"></label><label class="field"><span>${esc(t('shortBreak'))}</span><input class="input" type="number" name="short" min="1" max="120" value="${s.pomodoro.short}"></label><label class="field"><span>${esc(t('notifications'))}</span><select class="input" name="notifyLead"><option value="10" ${s.notifyLead===10?'selected':''}>10</option><option value="60" ${s.notifyLead===60?'selected':''}>60</option><option value="1440" ${s.notifyLead===1440?'selected':''}>1440</option></select></label><label class="checkbox-line"><input type="checkbox" name="sound" ${s.sound?'checked':''}><span>${state.settings.lang==='ar'?'الصوت':'Sound'}</span></label><label class="checkbox-line"><input type="checkbox" name="vibration" ${s.vibration?'checked':''}><span>${state.settings.lang==='ar'?'اهتزاز':'Vibration'}</span></label><div class="full row"><button class="btn primary" type="submit">${esc(t('save'))}</button><button type="button" class="btn" data-action="request-notifications">${esc(t('enableNotifications'))}</button></div></form></div>
+          <div class="card"><h2 class="title">${esc(t('subjects'))}</h2><div class="list">${state.subjects.map(x=>`<div class="list-item"><span class="dot" style="background:${esc(x.color)}"></span><div class="list-main"><div class="list-title">${esc(x.name)}</div></div><div class="row"><button class="icon-btn" data-action="edit-subject" data-id="${x.id}">${icon('edit',16)}</button><button class="icon-btn" data-action="delete-subject" data-id="${x.id}">${icon('trash',16)}</button></div></div>`).join('')||emptyHtml(t('noSubjects'))}</div><button class="btn primary" data-action="new-subject" style="margin-top:10px">${icon('plus',16)} ${esc(t('addSubject'))}</button></div>
+          <div class="card"><h2 class="title">${esc(t('contactDeveloper'))} / الدعم والمراجعة</h2><p class="muted small">يمكنك إرسال طلب مراجعة أو الإبلاغ عن مشكلة. احتفظ برقم الطلب الذي يظهر بعد الإرسال. إذا كان الحساب محظورًا ولا يمكنك تسجيل الدخول، فقد تحتاج إلى قناة دعم مستقلة خارج التطبيق.</p><form id="inquiryForm" class="auth-form"><label class="field"><span>نوع الطلب</span><select class="input" name="category"><option value="general">استفسار عام</option><option value="bug">بلاغ عن خطأ أو فقدان تقدم</option><option value="appeal">طلب مراجعة حظر الحساب</option><option value="xp">مراجعة نقاط XP أو إنجاز</option><option value="privacy">الخصوصية والبيانات</option></select></label><label class="field"><span>${esc(t('title'))}</span><input class="input" name="subject" required maxlength="120"></label><label class="field"><span>${esc(t('message'))}</span><textarea class="input" name="message" required maxlength="1500"></textarea></label><button class="btn primary" type="submit">${esc(t('send'))}</button></form><div class="muted small">لا ترسل كلمة المرور أو رموز التحقق في طلب الدعم.</div></div>
+          <div class="card"><h2 class="title">${esc(t('about'))}</h2><p>${state.settings.lang==='ar'?'منجز Ultra تطبيق الطالب الحديث. تطوير YS.':'Munjiz Ultra modern student app. Developed by YS.'}</p><div class="kv"><span>${esc(t('version'))}</span><strong>${esc(APP.version)}</strong></div><div class="kv"><span>${esc(t('copyright'))}</span><strong class="ys-signature">YS</strong></div><div class="row" style="margin-top:10px"><button class="btn" data-action="export-json">${icon('download',16)} ${esc(t('exportJson'))}</button><button class="btn" data-action="import-json">${icon('upload',16)} ${esc(t('importJson'))}</button><button class="btn" data-action="export-csv">${icon('download',16)} ${esc(t('exportCsv'))}</button></div><button class="btn danger" data-action="delete-all" style="margin-top:10px">${icon('trash',16)} ${esc(t('deleteAll'))}</button></div>
+        </div>`;
+      }
+
+      function renderDeveloper(){
+        if(!state.developer.unlocked) return emptyHtml(t('noDeveloperAccess'));
+        const announcements=(state.announcements||[]).slice().sort((a,b)=>Number(!!b.pinned)-Number(!!a.pinned)||String(b.createdAt||'').localeCompare(String(a.createdAt||'')));
+        return `<div class="card dev-panel"><div class="row between"><div><h2 class="title">${icon('crown',22)} ${esc(t('developerConsole'))}</h2><p class="subtitle"><span class="ys-signature">YS</span> • ${esc(APP.copyright)}</p></div><span class="badge done">${esc(t('developerMode'))}</span></div>
+        <div class="grid cols-2" style="margin-top:12px">
+          <div class="card"><h3 class="title">${esc(t('sendAnnouncement'))}</h3><form id="announceForm" class="auth-form"><label class="field"><span>${esc(t('title'))}</span><input class="input" name="title" required maxlength="160"></label><label class="field"><span>${esc(t('message'))}</span><textarea class="input" name="body" required maxlength="3000"></textarea></label><label class="checkbox-line"><input type="checkbox" name="pinned"><span>${esc(t('pinAnnouncement'))}</span></label><button class="btn primary" type="submit">${esc(t('send'))}</button></form></div>
+          <div class="card"><h3 class="title">${esc(t('featureFlags'))}</h3><form id="flagForm" class="auth-form"><label class="field"><span>Key</span><input class="input" name="key" required placeholder="maintenance" maxlength="80"></label><label class="field"><span>Value</span><input class="input" name="value" required placeholder="true" maxlength="500"></label><button class="btn primary" type="submit">${esc(t('save'))}</button></form></div>
+          <div class="card"><h3 class="title">${esc(t('grantXp'))}</h3><form id="grantXpForm" class="auth-form"><label class="field"><span>${esc(t('targetUid'))}</span><input class="input" name="uid" required dir="ltr" maxlength="128"></label><label class="field"><span>${esc(t('amountXp'))}</span><input class="input" name="amount" type="number" min="1" max="1000000" value="100" required></label><button class="btn primary" type="submit">🎁 ${esc(t('grantXp'))}</button></form></div>
+          <div class="card"><h3 class="title">${esc(t('grantLevel'))}</h3><form id="grantLevelForm" class="auth-form"><label class="field"><span>${esc(t('targetUid'))}</span><input class="input" name="uid" required dir="ltr" maxlength="128"></label><label class="field"><span>${esc(t('targetLevel'))} (1–1000)</span><input class="input" name="level" type="number" min="1" max="1000" value="5" required></label><button class="btn primary" type="submit">${esc(t('grantLevel'))}</button></form></div>
+          <div class="card"><h3 class="title">${esc(t('grantBadge'))}</h3><form id="grantBadgeForm" class="auth-form"><label class="field"><span>${esc(t('targetUid'))}</span><input class="input" name="uid" required dir="ltr" maxlength="128"></label><label class="field"><span>${esc(t('badges'))}</span><select class="input" name="badgeId">${BADGE_DEFS.map(b=>`<option value="${esc(b.id)}">${esc(badgeName(b.id))}</option>`).join('')}</select></label><button class="btn primary" type="submit">${esc(t('grantBadge'))}</button></form></div>
+          <div class="card"><h3 class="title">${esc(t('grantFrame'))}</h3><form id="grantFrameForm" class="auth-form"><label class="field"><span>${esc(t('targetUid'))}</span><input class="input" name="uid" required dir="ltr" maxlength="128"></label><label class="field"><span>${esc(t('frames'))}</span><select class="input" name="frameId">${FRAME_DEFS.map(f=>`<option value="${esc(f.id)}">${esc(frameName(f.id))}</option>`).join('')}</select></label><button class="btn primary" type="submit">${esc(t('grantFrame'))}</button></form></div>
+          <div class="card"><h3 class="title">${esc(t('createGlobalChallenge'))}</h3><form id="globalChallengeForm" class="auth-form"><label class="field"><span>${esc(t('challengeTitle'))}</span><input class="input" name="title" required maxlength="160"></label><label class="field"><span>${esc(t('challengeDesc'))}</span><textarea class="input" name="description" maxlength="1000"></textarea></label><label class="field"><span>${esc(t('challengeType'))}</span><select class="input" name="type"><option value="race">${esc(t('race'))}</option><option value="focus">${esc(t('focusChallenge'))}</option><option value="streak">${esc(t('streakChallenge'))}</option><option value="team">${esc(t('teamChallenge'))}</option></select></label><label class="field"><span>${esc(t('goal'))}</span><input class="input" type="number" name="goal" min="1" value="1" required></label><label class="field"><span>${esc(t('rewardXp'))}</span><input class="input" type="number" name="rewardXp" min="0" max="100000" value="100" required></label><label class="field"><span>${esc(t('endsAt'))}</span><input class="input" type="datetime-local" name="endsAt" value="${esc(toLocalInput(addDays(new Date(),3)))}" required></label><button class="btn primary" type="submit">${esc(t('createGlobalChallenge'))}</button></form></div>
+          <div class="card"><h3 class="title">${esc(t('manageAnnouncements'))}</h3><div class="list">${announcements.map(a=>`<div class="list-item"><div class="list-main"><div class="list-title">${a.pinned?'📌 ':''}${esc(a.title||'—')}</div><p class="muted small" style="white-space:pre-wrap">${esc(a.body||'')}</p><div class="meta"><span>${esc(fmtDateTime(a.createdAt))}</span><span class="badge ${a.active===false?'':'done'}">${a.active===false?esc(t('deactivate')):esc(a.pinned?t('pinned'):t('active'))}</span></div></div><div class="row"><button class="btn sm" data-action="toggle-pin-announcement" data-id="${esc(a.id)}">${esc(a.pinned?t('unpin'):t('pinAnnouncement'))}</button><button class="btn sm danger" data-action="hide-announcement" data-id="${esc(a.id)}">${esc(t('deactivate'))}</button></div></div>`).join('')||emptyHtml(t('noData'))}</div></div>
+          <div class="card full"><h3 class="title">🛡️ إدارة الحسابات والصلاحيات</h3><form id="accountAdminForm" class="form-grid"><label class="field full"><span>UID / Account ID</span><input class="input" name="uid" required dir="ltr" maxlength="128" placeholder="Firebase Authentication UID"></label><label class="field full"><span>سبب الإجراء (للحظر)</span><input class="input" name="reason" maxlength="500"></label><div class="row full"><button class="btn danger" type="button" data-action="admin-ban">حظر الحساب</button><button class="btn" type="button" data-action="admin-unban">رفع الحظر</button><button class="btn primary" type="button" data-action="admin-mod-on">منح مشرف</button><button class="btn" type="button" data-action="admin-mod-off">سحب مشرف</button></div></form><p class="muted small">الإجراءات تحتاج صلاحيات Firestore متوافقة. لا تضع UID أو كلمات مرور في سجلات عامة.</p><div id="bannedList" class="list"><button class="btn sm" data-action="load-banned">عرض قائمة المحظورين</button></div></div>
+          <div class="card full"><h3 class="title">🏆 كتالوج الإنجازات والأوسمة والألقاب والجوائز</h3><form id="catalogForm" class="form-grid"><label class="field"><span>النوع</span><select class="input" name="type"><option value="achievements">إنجاز</option><option value="customBadges">وسام</option><option value="customFrames">إطار</option><option value="customTitles">لقب</option><option value="awards">جائزة / كأس</option></select></label><label class="field"><span>الاسم</span><input class="input" name="title" required maxlength="100"></label><label class="field"><span>XP</span><input class="input" name="xp" type="number" min="0" max="100000" value="0"></label><label class="field"><span>شرط/قاعدة الاستحقاق</span><input class="input" name="condition" maxlength="200" placeholder="مثال: tasksCompleted>=10 أو manual"></label><label class="field full"><span>الوصف</span><textarea class="input" name="description" maxlength="500"></textarea></label><button class="btn primary full" type="submit">إضافة إلى الكتالوج</button></form><p class="muted small">هذه العناصر تُحفظ في Firestore ككتالوج ديناميكي؛ تطبيق شروط الإنجاز آليًا على جميع الحسابات يحتاج Cloud Function موثوقة، ولا يُعتبر نص الشرط وحده محركًا للتنفيذ.</p></div>
+          <div class="card full"><h3 class="title">⚡ مضاعفة النقاط وهوية التطبيق</h3><form id="doubleXpForm" class="form-grid"><label class="field"><span>بداية المضاعفة (اختياري)</span><input class="input" name="startsAt" type="datetime-local"></label><label class="field"><span>نهاية المضاعفة</span><input class="input" name="endsAt" type="datetime-local" required></label><div class="row full"><button class="btn primary" type="submit">تفعيل Double XP</button><button class="btn" type="button" data-action="double-xp-off">إيقاف المضاعفة</button></div></form><form id="brandingForm" class="form-grid" style="margin-top:12px"><label class="field"><span>اسم التطبيق</span><input class="input" name="name" maxlength="60" value="منجز Ultra" required></label><label class="field"><span>رابط شعار HTTPS (اختياري)</span><input class="input" name="logo" type="url" dir="ltr" placeholder="https://..."></label><button class="btn primary full" type="submit">حفظ الهوية للجميع</button></form></div>
+          <div class="card"><h3 class="title">${esc(t('developerLogs'))}</h3><div class="dev-log">${state.developer.logs.length?state.developer.logs.map(l=>`<div class="kv"><span>${esc(l.action)}</span><strong>${esc(fmtDateTime(l.at))}</strong></div>`).join(''):emptyHtml(t('noData'))}</div></div>
+          <div class="card"><div class="row between"><h3 class="title">${esc(t('inquiry'))}</h3><button class="btn sm" data-action="refresh-inquiries">${esc(t('refresh'))}</button></div><div class="list">${(state.developer.inquiries||[]).map(q=>`<div class="list-item"><div class="list-main"><div class="list-title">${esc(q.subject||'—')}</div><div class="meta"><span class="badge ${q.status==='answered'?'done':q.status==='closed'?'new':'inProgress'}">${esc(q.status||'open')}</span><span>${esc(q.category||'general')}</span><span dir="ltr">Ticket: ${esc(q.id)}</span></div><div class="muted small">${esc(q.name||'')} • <span dir="ltr">${esc(q.uid||'')}</span></div><p>${esc(q.message||'')}</p>${q.developerReply?`<div class="card" style="padding:10px"><strong>رد المختص</strong><p>${esc(q.developerReply)}</p></div>`:''}<div class="row">${q.status==='closed'?'':`<button class="btn sm primary" data-action="reply-inquiry" data-id="${esc(q.id)}">${esc(q.developerReply?'متابعة الطلب':t('send'))}</button>`}<button class="btn sm" data-action="toggle-inquiry-status" data-id="${esc(q.id)}" data-status="${q.status==='closed'?'open':'closed'}">${q.status==='closed'?'إعادة فتح':'إغلاق الطلب'}</button></div></div></div>`).join('')||emptyHtml(t('noData'))}</div></div>
+        </div></div>`;
+      }
+
+      /* =========================
+         12) Modals
+         ========================= */
+      function openTaskModal(id=null){
+        const x=id?taskById(id):null;
+        openModal({title:x?t('edit'):t('addTask'),size:'lg',body:`<form id="taskForm" data-id="${x?.id||''}" class="form-grid"><label class="field full"><span>${esc(t('title'))} *</span><input class="input" name="title" required value="${esc(x?.title||'')}"></label><label class="field"><span>${esc(t('subject'))}</span><select class="input" name="subjectId"><option value="">—</option>${state.subjects.map(s=>`<option value="${s.id}" ${x?.subjectId===s.id?'selected':''}>${esc(s.name)}</option>`).join('')}</select></label><label class="field"><span>${esc(t('group'))}</span><select class="input" name="groupId"><option value="">${esc(t('noGroup'))}</option>${state.groups.map(g=>`<option value="${g.id}" ${x?.groupId===g.id?'selected':''}>${esc(g.name)}</option>`).join('')}</select></label><label class="field"><span>${esc(t('team'))}</span><select class="input" name="teamId"><option value="">${esc(t('noTeam'))}</option>${state.teams.map(g=>`<option value="${g.id}" ${(x?.teamId||state.activeTeamId)===g.id?'selected':''}>${esc(g.name)}</option>`).join('')}</select></label><label class="field"><span>${esc(t('priority'))}</span><select class="input" name="priority">${PRIORITIES.map(p=>`<option value="${p}" ${(x?.priority||'medium')===p?'selected':''}>${esc(t(p))}</option>`).join('')}</select></label><label class="field"><span>${esc(t('status'))}</span><select class="input" name="status">${STATUS.map(s=>`<option value="${s}" ${(x?.status||'new')===s?'selected':''}>${esc(t(s))}</option>`).join('')}</select></label><label class="field"><span>${esc(t('due'))}</span><input class="input" type="datetime-local" name="dueAt" value="${esc(x?.dueAt?toLocalInput(parseDate(x.dueAt)):'')}"></label><label class="field"><span>${esc(t('estimate'))}</span><input class="input" type="number" name="estimate" min="0" value="${x?.estimate??25}"></label><label class="field full"><span>${esc(t('description'))}</span><textarea class="input" name="description">${esc(x?.description||'')}</textarea></label><div class="full"><div class="row between"><strong>${esc(t('subtasks'))}</strong><button type="button" class="btn sm" data-action="add-subtask">${icon('plus',14)} ${esc(t('addSubtask'))}</button></div><div id="subtasks">${(x?.subtasks||[]).map(s=>`<div class="subtask-row" data-id="${s.id}"><input type="checkbox" ${s.done?'checked':''}><input class="input" name="subtaskTitle" value="${esc(s.title)}"><button type="button" class="icon-btn" data-action="remove-subtask">${icon('trash',15)}</button></div>`).join('')}</div></div></form>`,footer:`${x?`<button class="btn danger" data-action="delete-task-from-modal" data-id="${x.id}">${esc(t('delete'))}</button>`:''}<button class="btn primary" data-action="save-task">${esc(t('save'))}</button><button class="btn" data-close>${esc(t('cancel'))}</button>`});
+      }
+      function openSubjectModal(id=null){ const x=id?subjectById(id):null; openModal({title:x?t('edit'):t('addSubject'),size:'sm',body:`<form id="subjectForm" data-id="${x?.id||''}" class="form-grid"><label class="field full"><span>${esc(t('title'))} *</span><input class="input" name="name" required value="${esc(x?.name||'')}"></label><label class="field"><span>${esc(t('accent'))}</span><input class="input" type="color" name="color" value="${esc(x?.color||'#2563eb')}"></label><label class="field full"><span>${esc(t('description'))}</span><textarea class="input" name="description">${esc(x?.description||'')}</textarea></label></form>`,footer:`<button class="btn primary" data-action="save-subject">${esc(t('save'))}</button><button class="btn" data-close>${esc(t('cancel'))}</button>`}); }
+      function openGroupModal(id=null){ const x=id?groupById(id):null; openModal({title:x?t('edit'):t('addGroup'),size:'sm',body:`<form id="groupForm" data-id="${x?.id||''}" class="form-grid"><label class="field full"><span>${esc(t('title'))} *</span><input class="input" name="name" required value="${esc(x?.name||'')}"></label><label class="field"><span>${esc(t('accent'))}</span><input class="input" type="color" name="color" value="${esc(x?.color||randomColor())}"></label><label class="field full"><span>${esc(t('description'))}</span><textarea class="input" name="description">${esc(x?.description||'')}</textarea></label></form>`,footer:`<button class="btn primary" data-action="save-group">${esc(t('save'))}</button><button class="btn" data-close>${esc(t('cancel'))}</button>`}); }
+      function openTeamModal(){ openModal({title:t('createTeam'),size:'sm',body:`<form id="teamForm" class="form-grid"><label class="field full"><span>${esc(t('title'))} *</span><input class="input" name="name" required></label><label class="field"><span>${esc(t('accent'))}</span><input class="input" type="color" name="color" value="${esc(randomColor())}"></label><label class="field full"><span>${esc(t('description'))}</span><textarea class="input" name="description"></textarea></label></form>`,footer:`<button class="btn primary" data-action="save-team">${esc(t('save'))}</button><button class="btn" data-close>${esc(t('cancel'))}</button>`}); }
+      function openJoinTeamModal(){ openModal({title:t('joinTeam'),size:'sm',body:`<form id="joinTeamForm"><label class="field"><span>${esc(t('teamCode'))}</span><input class="input" name="code" required dir="ltr" maxlength="8" style="text-transform:uppercase"></label></form>`,footer:`<button class="btn primary" data-action="save-join-team">${esc(t('joinChallenge'))}</button><button class="btn" data-close>${esc(t('cancel'))}</button>`}); }
+      function openChallengeModal(){ openModal({title:t('newChallenge'),size:'lg',body:`<form id="challengeForm" class="form-grid"><label class="field full"><span>${esc(t('challengeTitle'))} *</span><input class="input" name="title" required></label><label class="field full"><span>${esc(t('challengeDesc'))}</span><textarea class="input" name="description"></textarea></label><label class="field"><span>${esc(t('challengeType'))}</span><select class="input" name="type"><option value="race">${esc(t('race'))}</option><option value="focus">${esc(t('focusChallenge'))}</option><option value="streak">${esc(t('streakChallenge'))}</option><option value="team">${esc(t('teamChallenge'))}</option></select></label><label class="field"><span>${esc(t('goal'))}</span><input class="input" type="number" name="goal" min="1" value="1"></label><label class="field"><span>${esc(t('rewardXp'))}</span><input class="input" type="number" name="rewardXp" min="0" value="100"></label><label class="field"><span>${esc(t('endsAt'))}</span><input class="input" type="datetime-local" name="endsAt" value="${esc(toLocalInput(addDays(new Date(),3)))}"></label></form>`,footer:`<button class="btn primary" data-action="save-challenge">${esc(t('save'))}</button><button class="btn" data-close>${esc(t('cancel'))}</button>`}); }
+      function openAlertsModal(){ const alerts=getAlerts(); openModal({title:t('alerts'),body:alerts.length?`<div class="list">${alerts.map(a=>`<div class="list-item"><div class="list-main"><div class="list-title">${esc(a.title)}</div><div class="meta"><span>${esc(a.overdue?t('overdue'):t('upcoming'))}</span><span>${esc(fmtDateTime(a.due))}</span></div></div><button class="btn sm" data-action="open-task" data-id="${a.id}">${esc(t('openProfile'))}</button></div>`).join('')}</div>`:emptyHtml(t('noAlerts')),footer:`<button class="btn" data-action="mark-alerts">${esc(t('markRead'))}</button><button class="btn primary" data-close>${esc(t('close'))}</button>`}); }
+      function openReplyModal(id){ openModal({title:t('reply')||'Reply',size:'sm',body:`<form id="replyForm"><label class="field"><span>${esc(t('message'))}</span><textarea class="input" name="reply" required></textarea></label></form>`,footer:`<button class="btn primary" data-action="save-reply" data-id="${id}">${esc(t('send'))}</button><button class="btn" data-close>${esc(t('cancel'))}</button>`}); }
+
+      /* =========================
+         13) Quick Add
+         ========================= */
+      function parseQuickAdd(text){
+        let title=text.trim(); const res={title,tags:[],priority:'medium',dueAt:null,estimate:25,subjectId:null,groupId:null,teamId:state.activeTeamId||null};
+        title=title.replace(/#(\S+)/g,(m,w)=>{res.tags.push(w);return '';});
+        if(/!(high|عالية|عاجل)/i.test(title)){res.priority='high'; title=title.replace(/!(high|عالية|عاجل)/gi,'');}
+        state.subjects.forEach(s=>{ if(title.includes(s.name)){res.subjectId=s.id; title=title.replace(s.name,' ');}});
+        const now=new Date(); let d=new Date(); let hasDate=false;
+        if(/بكرة|غدًا|غدا|tomorrow/i.test(title)){d=addDays(now,1);hasDate=true;title=title.replace(/بكرة|غدًا|غدا|tomorrow/gi,'');}
+        const tm=title.match(/([01]?\d|2[0-3])[:\s\.]?([0-5]\d)?\s*(ص|م|am|pm)?/i);
+        if(tm){let h=Number(tm[1]); const m=Number(tm[2]||0); const mer=(tm[3]||'').toLowerCase(); if(['م','pm'].includes(mer)&&h<12)h+=12; if(['ص','am'].includes(mer)&&h===12)h=0; d.setHours(h,m,0,0); if(!hasDate&&d<now)d=addDays(d,1); res.dueAt=d.toISOString(); title=title.replace(tm[0],'');}
+        else if(hasDate){d.setHours(20,0,0,0);res.dueAt=d.toISOString();}
+        const est=title.match(/(\d+)\s*(د|دقيقة|min)/i); if(est){res.estimate=Number(est[1]); title=title.replace(est[0],'');}
+        res.title=title.replace(/\s+/g,' ').trim()||text.trim(); return res;
+      }
+
+      /* =========================
+         14) Data actions
+         ========================= */
+      function saveTaskForm(form){
+        const fd=new FormData(form); const title=String(fd.get('title')||'').trim(); if(!title){toast(t('requiredTitle'),'error');return false;}
+        const due=fd.get('dueAt'); const dueDate=due?parseDate(due):null; if(due&&!dueDate){toast(t('invalidDate'),'error');return false;}
+        const subtasks=$$('.subtask-row',form).map(r=>({id:r.dataset.id||uid(),title:r.querySelector('[name=subtaskTitle]').value.trim(),done:r.querySelector('input[type=checkbox]').checked})).filter(x=>x.title);
+        const data={id:form.dataset.id||uid(),title,description:fd.get('description'),subjectId:fd.get('subjectId')||null,groupId:fd.get('groupId')||null,teamId:fd.get('teamId')||null,priority:fd.get('priority'),status:fd.get('status'),dueAt:dueDate?dueDate.toISOString():null,estimate:Math.max(0,num(fd.get('estimate'),25)),subtasks};
+        if(form.dataset.id) Tasks.update(form.dataset.id,data); else Tasks.create(data);
+        toast(t('savedMsg'),'success'); return true;
+      }
+      function exportJSON(){ download(`munjiz-${dateKey(new Date())}.json`,JSON.stringify(state,null,2),'application/json'); toast(t('exported'),'success'); }
+      function exportCSV(){ const rows=[['id','title','subject','group','team','priority','status','dueAt','estimate']]; state.tasks.forEach(x=>rows.push([x.id,x.title,subjectById(x.subjectId)?.name||'',groupById(x.groupId)?.name||'',teamById(x.teamId)?.name||'',x.priority,x.status,x.dueAt||'',x.estimate])); download(`munjiz-tasks.csv`,toCSV(rows),'text/csv'); toast(t('exported'),'success'); }
+      function importJSON(){ const i=document.createElement('input'); i.type='file'; i.accept='application/json,.json'; i.onchange=async()=>{ const f=i.files?.[0]; if(!f)return; const r=new FileReader(); r.onload=async()=>{ try{ const obj=JSON.parse(r.result); if(!obj||!Array.isArray(obj.tasks)) throw 0; if(!await confirmModal({title:t('importJson'),message:t('deleteAllWarning'),danger:true})) return; state=normalizeState(obj); if(activeProfile) saveProfile(activeProfile.id,state); applySettings(); render(); toast(t('imported'),'success'); }catch{ toast(t('importFailed'),'error'); } }; r.readAsText(f); }; i.click(); }
+      async function deleteAll(){ if(!await confirmModal({title:t('deleteAll'),message:t('deleteAllWarning'),danger:true})) return; const word=state.settings.lang==='ar'?'حذف':'delete'; const m=openModal({title:t('doubleConfirm'),size:'sm',dismissible:false,body:`<p>${esc(t('deleteAllWarning'))}</p><label class="field"><span>${esc(word)}</span><input class="input" id="kw"></label>`,footer:`<button class="btn danger" id="ok">${esc(t('confirm'))}</button><button class="btn" id="cx">${esc(t('cancel'))}</button>`}); m.el.querySelector('#ok').onclick=()=>{ if(m.el.querySelector('#kw').value.trim().toLowerCase()!==word){toast(t('invalidDate'),'error');return;} if(activeProfile) localStorage.removeItem(profileKey(activeProfile.id)); const list=getProfiles().filter(p=>p.id!==activeProfile?.id); saveProfiles(list); localStorage.removeItem(LS.active); activeProfile=null; state=normalizeState({settings:state.settings}); window.__state=state; m.close(); render(); toast(t('deleted'),'success'); }; m.el.querySelector('#cx').onclick=()=>m.close(); }
+      function handlePhotoFile(file){ if(!file||!file.type.startsWith('image/')) return; const img=new Image(); const url=URL.createObjectURL(file); img.onload=()=>{ const size=256; const c=document.createElement('canvas'); c.width=size; c.height=size; const ctx=c.getContext('2d'); const min=Math.min(img.width,img.height); ctx.drawImage(img,(img.width-min)/2,(img.height-min)/2,min,min,0,0,size,size); state.profile.photo=c.toDataURL('image/jpeg',0.82); URL.revokeObjectURL(url); if(activeProfile){ activeProfile.photo=state.profile.photo; const list=getProfiles(); const i=list.findIndex(p=>p.id===activeProfile.id); if(i>=0){list[i]=activeProfile; saveProfiles(list);} } saveState(); render(); toast(t('savedMsg'),'success'); }; img.src=url; }
+      async function sendInquiry(subject,message,category='general'){ if(!fb.ready || state.auth.provider!=='firebase' || !state.auth.uid || state.auth.uid==='guest'){ toast(t('requiresFirebase'),'warn'); return false; } const cleanSubject=String(subject||'').trim().slice(0,120), cleanMessage=String(message||'').trim().slice(0,1500); const allowed=['general','bug','appeal','xp','privacy']; if(!cleanSubject||!cleanMessage){toast(t('requiredTitle'),'warn');return false;} if(!allowed.includes(category))category='general'; try{ const ref=await fb.db.collection('inquiries').add({uid:state.auth.uid,name:String(state.profile.name||state.auth.displayName||'User').slice(0,100),subject:cleanSubject,message:cleanMessage,category,createdAt:iso(),status:'open',developerReply:'',updatedAt:iso()}); toast(`تم إرسال الطلب. رقم المتابعة: ${ref.id}`,'success'); return true; }catch(e){ console.warn('Support request failed',e); toast('تعذر إرسال الطلب. تحقق من الاتصال وصلاحيات Firestore.','error'); return false; } }
+
+      /* =========================
+         15) Events
+         ========================= */
+      let logoTaps=0, logoTimer=null;
+      document.addEventListener('click', async e => {
+        const tab=e.target.closest('[data-tab]');
+        if(tab){ $$('.tab-btn').forEach(b=>b.classList.toggle('active',b===tab)); $$('.panel').forEach(p=>p.classList.remove('active')); $(`#p-${tab.dataset.tab}`)?.classList.add('active'); return; }
+        const secret=e.target.closest('[data-secret]');
+        if(secret){ logoTaps++; clearTimeout(logoTimer); logoTimer=setTimeout(()=>logoTaps=0,700); if(logoTaps>=3){logoTaps=0; openDeveloperAccessModal();} return; }
+        const el=e.target.closest('[data-action]'); if(!el) return;
+        const a=el.dataset.action, id=el.dataset.id;
+        switch(a){
+          case 'lang': state.settings.lang=el.dataset.lang; saveState(); render(); break;
+          case 'google-login': await signInWithGoogle($('#remember')?.checked ?? true); break;
+          case 'guest-login': { const name=await promptSafe(t('displayName'), state.settings.lang==='ar'?'ضيف':'Guest'); if(!name) break; const p=createProfile({name,provider:'local'}); switchProfile(p.id); break; }
+          case 'new-local-profile': { const name=await promptSafe(t('displayName'), state.settings.lang==='ar'?'ملف جديد':'New profile'); if(!name) break; const p=createProfile({name,provider:'local'}); switchProfile(p.id); break; }
+          case 'open-profile': switchProfile(id); break;
+          case 'delete-profile': if(await confirmModal({title:t('deleteProfile'),message:t('deleteAllWarning'),danger:true})) deleteProfile(id); break;
+          case 'toggle-sidebar': state.ui.sidebarOpen=!state.ui.sidebarOpen; render(); break;
+          case 'close-sidebar': state.ui.sidebarOpen=false; render(); break;
+          case 'nav': state.ui.view=el.dataset.view; state.ui.sidebarOpen=false; saveState(false); render(); if(state.ui.view==='leaderboard') Leaderboard.fetch(state.ui.leaderboardTab||'global'); if(state.ui.view==='friends'&&Social.uid()){Social.refresh(); if(state.social.selectedFriend)Social.loadMessages(); if(state.activeTeamId)Social.loadTeamMessages();} break;
+          case 'alerts': openAlertsModal(); break;
+          case 'mark-alerts': getAlerts().forEach(x=>state.notifications.seen[alertKey(x)]=true); saveState(); updateBell(); modalStack.at(-1)?.close(); break;
+          case 'open-task': openTaskModal(id); modalStack.at(-1)?.close(); break;
+          case 'new-task': openTaskModal(); break;
+          case 'edit-task': openTaskModal(id); break;
+          case 'delete-task': if(await confirmModal({title:t('delete'),message:t('delete'),danger:true})) Tasks.remove(id); break;
+          case 'delete-task-from-modal': if(await confirmModal({title:t('delete'),message:t('delete'),danger:true})){ Tasks.remove(id); modalStack.at(-1)?.close(); } break;
+          case 'save-task': if(saveTaskForm($('#taskForm'))) modalStack.at(-1)?.close(); break;
+          case 'add-subtask': $('#subtasks').insertAdjacentHTML('beforeend',`<div class="subtask-row" data-id="${uid()}"><input type="checkbox"><input class="input" name="subtaskTitle"><button type="button" class="icon-btn" data-action="remove-subtask">${icon('trash',15)}</button></div>`); break;
+          case 'remove-subtask': el.closest('.subtask-row').remove(); break;
+          case 'toggle-task': Tasks.toggle(id); break;
+          case 'focus-task': state.ui.view='focus'; saveState(false); render(); startFocus({taskId:id}); break;
+          case 'task-filter': state.ui.taskFilter=el.dataset.filter; saveState(false); $('#tasksContent').innerHTML=renderTasksContent(); render(); break;
+          case 'toggle-view': state.ui.taskView=state.ui.taskView==='list'?'kanban':'list'; saveState(false); render(); break;
+          case 'undo': undoFn?.(); undoFn=null; break;
+          case 'new-subject': openSubjectModal(); break;
+          case 'edit-subject': openSubjectModal(id); break;
+          case 'delete-subject': if(await confirmModal({title:t('delete'),message:t('delete'),danger:true})) Subjects.remove(id); break;
+          case 'save-subject': { const f=$('#subjectForm'); const fd=new FormData(f); if(!String(fd.get('name')||'').trim()){toast(t('requiredTitle'),'error');break;} Subjects.upsert({id:f.dataset.id||uid(),name:fd.get('name'),color:fd.get('color'),description:fd.get('description')}); modalStack.at(-1)?.close(); render(); toast(t('savedMsg'),'success'); break; }
+          case 'new-group': openGroupModal(); break;
+          case 'edit-group': openGroupModal(id); break;
+          case 'save-group': { const f=$('#groupForm'); const fd=new FormData(f); if(!String(fd.get('name')||'').trim()){toast(t('requiredTitle'),'error');break;} Groups.upsert({id:f.dataset.id||uid(),name:fd.get('name'),color:fd.get('color'),description:fd.get('description')}); modalStack.at(-1)?.close(); render(); toast(t('savedMsg'),'success'); break; }
+          case 'delete-group': if(await confirmModal({title:t('delete'),message:t('delete'),danger:true})) Groups.remove(id); break;
+          case 'social-refresh': await Social.refresh(); if(state.social.selectedFriend) await Social.loadMessages(); if(state.activeTeamId) await Social.loadTeamMessages(); break;
+          case 'friend-add': try{await Social.sendRequest(id);}catch(err){toast(err.message||'تعذر إرسال الطلب','error');} break;
+          case 'friend-accept': try{await Social.accept(id);}catch(err){toast(err.message||'تعذر قبول الطلب','error');} break;
+          case 'friend-decline': try{await Social.decline(id);}catch(err){toast(err.message||'تعذر رفض الطلب','error');} break;
+          case 'open-chat': try{await Social.openChat(id);}catch(err){toast(err.message||'تعذر فتح الشات','error');} break;
+          case 'toggle-close-friend': try{await Social.toggleClose(id);}catch(err){toast(err.message||'تعذر تحديث الصديق المقرب','error');} break;
+          case 'new-team': openTeamModal(); break;
+          case 'save-team': { const fd=new FormData($('#teamForm')); if(!String(fd.get('name')||'').trim()){toast(t('requiredTitle'),'error');break;} await Teams.create({name:fd.get('name'),color:fd.get('color'),description:fd.get('description')}); modalStack.at(-1)?.close(); render(); break; }
+          case 'join-team': openJoinTeamModal(); break;
+          case 'save-join-team': { const fd=new FormData($('#joinTeamForm')); const ok=await Teams.joinByCode(fd.get('code')); if(ok) modalStack.at(-1)?.close(); render(); break; }
+          case 'select-team': Teams.setActive(id); break;
+          case 'copy-team-code': { const tm=teamById(id); if(tm){ await navigator.clipboard?.writeText(tm.joinCode); toast(t('copied'),'success'); } break; }
+          case 'leave-team': if(await confirmModal({title:t('leaveTeam'),message:t('leaveTeam'),danger:true})) await Teams.leave(id); render(); break;
+          case 'lb-tab': Leaderboard.fetch(el.dataset.tab); break;
+          case 'lb-refresh': Leaderboard.fetch(state.ui.leaderboardTab||'global'); break;
+          case 'claim-daily-quest': DailyQuests.claim(id); break;
+          case 'equip-frame': Gamification.equipFrame(el.dataset.id); break;
+          case 'equip-title': Gamification.equipTitle(el.dataset.id); break;
+          case 'new-challenge': if(!state.developer.unlocked){toast(t('noDeveloperAccess'),'error');break;} openChallengeModal(); break;
+          case 'save-challenge': { if(!state.developer.unlocked){toast(t('noDeveloperAccess'),'error');break;} const fd=new FormData($('#challengeForm')); if(!String(fd.get('title')||'').trim()){toast(t('requiredTitle'),'error');break;} await Challenges.create({title:fd.get('title'),description:fd.get('description'),type:fd.get('type'),goal:num(fd.get('goal'),1),rewardXp:num(fd.get('rewardXp'),100),endsAt:parseDate(fd.get('endsAt'))?.toISOString()||new Date(Date.now()+3*DAY).toISOString(),teamId:state.activeTeamId||null}); modalStack.at(-1)?.close(); render(); break; }
+          case 'refresh-challenges': if(!state.developer.unlocked){toast(t('noDeveloperAccess'),'error');break;} await Challenges.fetchCloud(); render(); break;
+          case 'join-challenge': if(!state.developer.unlocked){toast(t('noDeveloperAccess'),'error');break;} await Challenges.join(id, el.dataset.source); render(); break;
+          case 'submit-challenge': if(!state.developer.unlocked){toast(t('noDeveloperAccess'),'error');break;} await Challenges.submit(id, el.dataset.source); render(); break;
+          case 'focus-preset': { const i=$('#focusForm [name=minutes]'); if(i)i.value=el.dataset.min; break; }
+          case 'focus-pause': pauseFocus(); break;
+          case 'focus-resume': resumeFocus(); break;
+          case 'focus-stop': if(await confirmModal({title:t('stop'),message:t('cancelled'),danger:true})) stopFocus(); break;
+          case 'focus-finish': if(await confirmModal({title:t('complete'),message:t('sessionLogged')})) finishFocusEarly(); break;
+          case 'deep-focus': document.body.classList.toggle('deep-focus'); break;
+          case 'remove-photo': state.profile.photo=''; if(activeProfile){activeProfile.photo=''; const list=getProfiles(); const i=list.findIndex(p=>p.id===activeProfile.id); if(i>=0){list[i]=activeProfile;saveProfiles(list);}} saveState(); render(); break;
+          case 'logout': await logout(); break;
+          case 'request-notifications': requestNotificationPermission(); break;
+          case 'export-json': exportJSON(); break;
+          case 'import-json': importJSON(); break;
+          case 'export-csv': exportCSV(); break;
+          case 'delete-all': await deleteAll(); break;
+          case 'admin-ban': case 'admin-unban': case 'admin-mod-on': case 'admin-mod-off': { if(!state.developer.unlocked)break; const f=$('#accountAdminForm'); const fd=new FormData(f); const target=String(fd.get('uid')||'').trim(); try{ if(el.dataset.action==='admin-ban')await Developer.setBan(target,true,fd.get('reason')); else if(el.dataset.action==='admin-unban')await Developer.setBan(target,false); else if(el.dataset.action==='admin-mod-on')await Developer.setModerator(target,true); else await Developer.setModerator(target,false); }catch(err){toast(err.message||'تعذر تنفيذ الإجراء','error');} break; }
+          case 'load-banned': { if(!state.developer.unlocked)break; try{const rows=await Developer.loadBanned(); const box=$('#bannedList'); if(box)box.innerHTML=rows.length?rows.map(b=>`<div class="list-item"><div class="list-main"><strong dir="ltr">${esc(b.id)}</strong><div class="muted small">${esc(b.reason||'بدون سبب')} • ${esc(b.at||'')}</div></div><button class="btn sm" data-action="unban-listed" data-id="${esc(b.id)}">رفع الحظر</button></div>`).join(''):emptyHtml('لا توجد حسابات محظورة');}catch(err){toast(err.message||'تعذر تحميل القائمة','error');} break; }
+          case 'unban-listed': { if(!state.developer.unlocked)break; try{await Developer.setBan(id,false); const box=$('#bannedList'); if(box)box.querySelector(`[data-id="${CSS.escape(id)}"]`)?.closest('.list-item')?.remove();}catch(err){toast(err.message||'تعذر رفع الحظر','error');} break; }
+          case 'double-xp-off': { if(!state.developer.unlocked)break; try{await Developer.setFlag('doubleXp',false);}catch(err){toast(err.message||'تعذر الإيقاف','error');} break; }
+          case 'dev-login': { const fd=new FormData($('#devLoginForm')); const ok=await loginWithEmail(fd.get('email'),fd.get('password'),true); if(ok){ const isDev=await Developer.check(); if(isDev){ modalStack.at(-1)?.close(); } else { await logout(); toast(t('noDeveloperAccess'),'error'); } } break; }
+          case 'reply-inquiry': openReplyModal(id); break;
+          case 'toggle-inquiry-status': { if(!state.developer.unlocked)break; try{await Developer.setInquiryStatus(id,el.dataset.status==='closed'?'closed':'open'); render();}catch(err){toast(err.message||t('requiresFirebase'),'error');} break; }
+          case 'refresh-inquiries': await Developer.loadInquiries(); render(); break;
+          case 'toggle-pin-announcement': { if(!state.developer.unlocked)break; const a=(state.announcements||[]).find(x=>x.id===id); if(!a)break; const next=!a.pinned; try{await Developer.setAnnouncement(id,{pinned:next,updatedAt:iso()}); a.pinned=next; a.updatedAt=iso(); saveState(false); render(); toast(next?'تم تثبيت الإعلان':'تم إلغاء تثبيت الإعلان','success');}catch(err){toast(err.message||t('requiresFirebase'),'error');} break; }
+          case 'hide-announcement': { if(!state.developer.unlocked)break; if(!await confirmModal({title:t('deactivate'),message:t('deactivate'),danger:true}))break; try{await Developer.setAnnouncement(id,{active:false,pinned:false}); state.announcements=state.announcements.filter(x=>x.id!==id); render(); toast(t('savedMsg'),'success');}catch(err){toast(err.message||t('requiresFirebase'),'error');} break; }
+          case 'save-reply': { const fd=new FormData($('#replyForm')); await Developer.replyInquiry(id, fd.get('reply')); modalStack.at(-1)?.close(); break; }
+        }
+      });
+
+      document.addEventListener('submit', async e => {
+        e.preventDefault(); const f=e.target;
+        if(f.id==='friendSearchForm'){const fd=new FormData(f);state.social.query=String(fd.get('query')||'');try{await Social.search(state.social.query);}catch(err){toast(err.message||'تعذر البحث','error');}}
+        if(f.id==='chatForm'){const fd=new FormData(f);try{await Social.sendMessage(fd.get('message'));f.reset();}catch(err){toast(err.message||'تعذر إرسال الرسالة','error');}}
+        if(f.id==='teamChatForm'){const fd=new FormData(f);try{await Social.sendTeamMessage(fd.get('message'));f.reset();}catch(err){toast(err.message||'تعذر إرسال الرسالة','error');}}
+        if(f.id==='quickAddForm'){ const fd=new FormData(f); Tasks.create(parseQuickAdd(fd.get('text'))); f.reset(); render(); toast(t('savedMsg'),'success'); }
+        if(f.id==='focusForm'){ const fd=new FormData(f); startFocus({taskId:fd.get('taskId')||null,subjectId:fd.get('subjectId')||null,minutes:clamp(Math.round(num(fd.get('minutes'),25)),1,240)}); }
+        if(f.id==='emailLoginForm'){ const fd=new FormData(f); await loginWithEmail(fd.get('email'),fd.get('password'),true); }
+        if(f.id==='registerForm'){ const fd=new FormData(f); await registerWithEmail(fd.get('name'),fd.get('email'),fd.get('password'),true); }
+        if(f.id==='resetForm'){ const fd=new FormData(f); await resetPassword(fd.get('email')); }
+        if(f.id==='profileForm'){ const fd=new FormData(f); state.profile.name=String(fd.get('name')||'').trim(); state.profile.school=String(fd.get('school')||'').trim(); state.settings.accent=fd.get('accent'); if(activeProfile){ activeProfile.name=state.profile.name; activeProfile.color=state.settings.accent; const list=getProfiles(); const i=list.findIndex(p=>p.id===activeProfile.id); if(i>=0){list[i]=activeProfile;saveProfiles(list);} } saveState(); applySettings(); render(); toast(t('savedMsg'),'success'); }
+        if(f.id==='settingsForm'){ const fd=new FormData(f); state.settings.lang=fd.get('lang'); state.settings.themeMode=fd.get('themeMode'); state.settings.themePreset=fd.get('themePreset'); state.settings.pomodoro.work=clamp(Math.round(num(fd.get('work'),25)),1,240); state.settings.pomodoro.short=clamp(Math.round(num(fd.get('short'),5)),1,120); state.settings.notifyLead=clamp(Math.round(num(fd.get('notifyLead'),60)),1,1440); state.settings.sound=!!fd.get('sound'); state.settings.vibration=!!fd.get('vibration'); saveState(); applySettings(); render(); toast(t('savedMsg'),'success'); }
+        if(f.id==='inquiryForm'){ const fd=new FormData(f); const ok=await sendInquiry(fd.get('subject'),fd.get('message'),fd.get('category')); if(ok)f.reset(); }
+        if(f.id==='catalogForm'){ if(!state.developer.unlocked)return; const fd=new FormData(f); try{await Developer.createCatalogItem(fd.get('type'),{title:fd.get('title'),xp:fd.get('xp'),condition:fd.get('condition'),description:fd.get('description')}); f.reset();}catch(err){toast(err.message||'تعذر إنشاء العنصر','error');} }
+        if(f.id==='doubleXpForm'){ if(!state.developer.unlocked)return; const fd=new FormData(f); const end=parseDate(fd.get('endsAt')); const start=fd.get('startsAt')?parseDate(fd.get('startsAt')):new Date(); if(!end||end<=start){toast('حدد فترة صحيحة','error');return;} try{await Developer.setFlag('doubleXp',{startsAt:start.toISOString(),endsAt:end.toISOString()}); f.reset();}catch(err){toast(err.message||'تعذر تفعيل المضاعفة','error');} }
+        if(f.id==='brandingForm'){ if(!state.developer.unlocked)return; const fd=new FormData(f); const logo=String(fd.get('logo')||'').trim(); if(logo && !/^https:\/\//i.test(logo)){toast('يجب أن يبدأ رابط الشعار بـ HTTPS','error');return;} try{await Developer.setBranding(fd.get('name'),logo); }catch(err){toast(err.message||'تعذر حفظ الهوية','error');} }
+        if(f.id==='announceForm'){ if(!state.developer.unlocked)return; const fd=new FormData(f); try{await Developer.sendAnnouncement(fd.get('title'),fd.get('body'),fd.has('pinned')); f.reset(); render();}catch(err){toast(err.message||t('requiresFirebase'),'error');} }
+        if(f.id==='flagForm'){ if(!state.developer.unlocked)return; const fd=new FormData(f); const v=fd.get('value'); await Developer.setFlag(fd.get('key'), v==='true'?true:v==='false'?false:v); f.reset(); }
+        if(f.id==='grantBadgeForm'){ if(!state.developer.unlocked)return; const fd=new FormData(f); await Developer.grantBadge(fd.get('uid'),fd.get('badgeId')); f.reset(); }
+        if(f.id==='grantFrameForm'){ if(!state.developer.unlocked)return; const fd=new FormData(f); try{await Developer.grantFrame(fd.get('uid'),fd.get('frameId')); f.reset();}catch(err){toast(err.message||t('requiresFirebase'),'error');} }
+        if(f.id==='grantXpForm'){ if(!state.developer.unlocked)return; const fd=new FormData(f); try{await Developer.grantXp(String(fd.get('uid')||'').trim(),fd.get('amount')); f.reset();}catch(err){toast(err.message||t('requiresFirebase'),'error');} }
+        if(f.id==='grantLevelForm'){ if(!state.developer.unlocked)return; const fd=new FormData(f); try{await Developer.setLevel(String(fd.get('uid')||'').trim(),fd.get('level')); f.reset();}catch(err){toast(err.message||t('requiresFirebase'),'error');} }
+        if(f.id==='globalChallengeForm'){ if(!state.developer.unlocked)return; const fd=new FormData(f); try{await Developer.createGlobalChallenge({title:fd.get('title'),description:fd.get('description'),type:fd.get('type'),goal:num(fd.get('goal'),1),rewardXp:num(fd.get('rewardXp'),100),endsAt:parseDate(fd.get('endsAt'))?.toISOString()||new Date(Date.now()+3*DAY).toISOString()}); f.reset(); await Challenges.fetchCloud(); render();}catch(err){toast(err.message||t('requiresFirebase'),'error');} }
+      });
+
+      document.addEventListener('input', debounce(e=>{
+        if(e.target.id==='taskSearch'){ state.ui.taskSearch=e.target.value; const c=$('#tasksContent'); if(c)c.innerHTML=renderTasksContent(); }
+      },180));
+      document.addEventListener('change', e=>{
+        if(e.target.id==='taskSort'){ state.ui.taskSort=e.target.value; saveState(false); $('#tasksContent').innerHTML=renderTasksContent(); }
+        if(e.target.matches('[data-action="group-filter"]')){ state.ui.groupFilter=e.target.value; saveState(false); render(); }
+        if(e.target.matches('[data-action="team-filter"]')){ state.ui.teamFilter=e.target.value; saveState(false); render(); }
+        if(e.target.id==='photoFile'){ handlePhotoFile(e.target.files?.[0]); }
+      });
+      document.addEventListener('keydown', e=>{
+        if(e.key==='Escape' && modalStack.length){ modalStack.at(-1).close(); return; }
+        if(e.ctrlKey && e.altKey && e.shiftKey && e.key.toLowerCase()==='d'){ e.preventDefault(); openDeveloperAccessModal(); }
+        if(e.target.matches('input,textarea,select')) return;
+        if(e.key.toLowerCase()==='n'){ openTaskModal(); }
+      });
+      document.addEventListener('dragstart', e=>{ const c=e.target.closest('.kanban-card'); if(c)e.dataTransfer.setData('text/plain',c.dataset.id); });
+      document.addEventListener('dragover', e=>{ const c=e.target.closest('.kanban-col'); if(c){e.preventDefault();c.classList.add('dragover');} });
+      document.addEventListener('dragleave', e=>{ const c=e.target.closest('.kanban-col'); if(c)c.classList.remove('dragover'); });
+      document.addEventListener('drop', e=>{ const c=e.target.closest('.kanban-col'); if(!c)return; e.preventDefault(); c.classList.remove('dragover'); const id=e.dataTransfer.getData('text/plain'); const st=c.dataset.status; if(st==='done') Tasks.complete(id); else Tasks.update(id,{status:st}); });
+      window.addEventListener('beforeunload', ()=>{ if(activeProfile) saveProfile(activeProfile.id,state); });
+      const colorSchemeQuery=window.matchMedia?.('(prefers-color-scheme: dark)');
+      if(colorSchemeQuery?.addEventListener) colorSchemeQuery.addEventListener('change',()=>{ if(state.settings.themeMode==='auto') applySettings(); });
+      else if(colorSchemeQuery?.addListener) colorSchemeQuery.addListener(()=>{ if(state.settings.themeMode==='auto') applySettings(); });
+
+      /* =========================
+         16) Init
+         ========================= */
+      async function registerSW(){
+        if(!('serviceWorker' in navigator) || !(location.protocol==='https:'||location.hostname==='localhost')) return;
+        try{
+          const registration=await navigator.serviceWorker.register('sw.js');
+          registration.update().catch(()=>{});
+        }catch(e){ console.warn('Service worker unavailable; app can still run online.',e); }
+      }
+      async function init(){
+        loadLocalPrefs(); bootProfile(); applySettings(); render();
+        await initFirebase();
+        if(fb.ready){ watchAuth(); if(activeProfile && state.auth.provider==='firebase'){ await Developer.check(); await loadGrants(); await Teams.fetch(); await Challenges.fetchCloud(); await Leaderboard.fetch(state.ui.leaderboardTab||'global'); subscribeLive(); } }
+        setInterval(checkNotifications,60000);
+        setInterval(()=>{ if(['home','tasks','leaderboard','challenges'].includes(state.ui.view)) render(); },60000);
+        registerSW();
+      }
+      init();
+    })();
+  </script>
+</body>
+</html>
