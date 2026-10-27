@@ -1,0 +1,194 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===== دوال مساعدة =====
+    function signedIn() { return request.auth != null; }
+    function isSelf(uid) { return signedIn() && request.auth.uid == uid; }
+    // المطور = له مستند في مجموعة developers (يُنشأ يدويًا من لوحة Firebase فقط)
+    function isDeveloper() {
+      return signedIn() && exists(/databases/$(database)/documents/developers/$(request.auth.uid));
+    }
+    function optStr(d, k, max) { return !(k in d) || (d[k] is string && d[k].size() <= max); }
+    function optNum(d, k, lo, hi) { return !(k in d) || (d[k] is number && d[k] >= lo && d[k] <= hi); }
+
+    // البروفايل العام (المتصدرين): حقول محددة وقيم منطقية فقط
+    function validProfile(d) {
+      return d.keys().hasOnly(['displayName','avatarColor','photo','title','frame','xp','level','streak','bestStreak',
+                               'tasksCompleted','focusMinutes','raceWins','challengeWins','firstCompletionDate',
+                               'firstCompletionAt','badgesCount','updatedAt','public'])
+        && optStr(d,'displayName',80) && optStr(d,'avatarColor',20) && optStr(d,'photo',600)
+        && optStr(d,'title',80) && optStr(d,'frame',40)
+        && optNum(d,'xp',0,100000000) && optNum(d,'level',1,1000)
+        && optNum(d,'streak',0,100000) && optNum(d,'bestStreak',0,100000)
+        && optNum(d,'tasksCompleted',0,10000000) && optNum(d,'focusMinutes',0,100000000)
+        && optNum(d,'raceWins',0,1000000) && optNum(d,'challengeWins',0,1000000)
+        && optNum(d,'badgesCount',0,1000);
+    }
+
+    // الانضمام لفريق: يضيف نفسه فقط ويحتفظ بباقي الأعضاء
+    function teamJoinOk() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['memberIds','updatedAt'])
+        && request.auth.uid in request.resource.data.memberIds
+        && request.resource.data.memberIds.hasAll(resource.data.memberIds)
+        && request.resource.data.memberIds.size() <= resource.data.memberIds.size() + 1
+        && request.resource.data.memberIds.size() <= 50;
+    }
+    // مغادرة فريق: يزيل نفسه فقط
+    function teamLeaveOk() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['memberIds','updatedAt'])
+        && request.auth.uid in resource.data.memberIds
+        && !(request.auth.uid in request.resource.data.memberIds)
+        && request.resource.data.memberIds.size() == resource.data.memberIds.size() - 1;
+    }
+
+    // ===== بيانات المستخدم (مهامه وحالته): له فقط + المطور (لمنح XP والمستويات) =====
+    match /users/{uid}/data/{docId} {
+      allow read, write: if isSelf(uid) || isDeveloper();
+    }
+
+    // ===== البروفايل العام والمتصدرين =====
+    match /publicProfiles/{uid} {
+      allow read: if signedIn();
+      allow create, update: if (isSelf(uid) || isDeveloper()) && validProfile(request.resource.data);
+      allow delete: if isSelf(uid) || isDeveloper();
+    }
+
+    // ===== الفرق =====
+    match /teams/{teamId} {
+      allow get: if signedIn() && (request.auth.uid in resource.data.memberIds || isDeveloper());
+      // قائمة فرقي فقط (الانضمام يتم عبر teamCodes دون قراءة الفرق)
+      allow list: if signedIn() && (request.auth.uid in resource.data.memberIds || isDeveloper());
+      allow create: if signedIn()
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.memberIds.size() == 1
+        && request.resource.data.memberIds[0] == request.auth.uid
+        && optStr(request.resource.data, 'name', 120);
+      allow update: if signedIn() && (
+        (resource.data.ownerId == request.auth.uid && request.resource.data.ownerId == resource.data.ownerId)
+        || isDeveloper() || teamJoinOk() || teamLeaveOk());
+      allow delete: if signedIn() && (resource.data.ownerId == request.auth.uid || isDeveloper());
+    }
+
+    // ===== الأصدقاء والشات =====
+    function msgOk() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['uid','name','text','at']) && d.uid == request.auth.uid
+        && d.text is string && d.text.size() > 0 && d.text.size() <= 1000
+        && d.name is string && d.name.size() <= 80 && d.at == request.time;
+    }
+    function friendshipOf(fid) { return get(/databases/$(database)/documents/friendships/$(fid)).data; }
+
+    match /friendCodes/{code} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid
+        && request.resource.data.name is string && request.resource.data.name.size() <= 80;
+      allow update: if signedIn() && resource.data.uid == request.auth.uid && request.resource.data.uid == request.auth.uid
+        && request.resource.data.name is string && request.resource.data.name.size() <= 80;
+      allow delete: if signedIn() && resource.data.uid == request.auth.uid;
+    }
+    match /friendships/{fid} {
+      allow read: if signedIn() && request.auth.uid in resource.data.users;
+      allow create: if signedIn()
+        && request.resource.data.users.size() == 2
+        && request.auth.uid in request.resource.data.users
+        && fid == request.resource.data.users[0] + '_' + request.resource.data.users[1]
+        && request.resource.data.requester == request.auth.uid
+        && request.resource.data.status == 'pending';
+      allow update: if signedIn() && request.auth.uid in resource.data.users && (
+        (resource.data.status == 'pending' && resource.data.requester != request.auth.uid
+          && request.resource.data.status == 'accepted'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','updatedAt']))
+        || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['close','updatedAt'])
+          && request.resource.data.close.diff(resource.data.close).affectedKeys().hasOnly([request.auth.uid])));
+      allow delete: if signedIn() && request.auth.uid in resource.data.users;
+      match /messages/{mid} {
+        allow read: if signedIn() && request.auth.uid in friendshipOf(fid).users && friendshipOf(fid).status == 'accepted';
+        allow create: if signedIn() && request.auth.uid in friendshipOf(fid).users && friendshipOf(fid).status == 'accepted' && msgOk();
+        allow delete: if signedIn() && resource.data.uid == request.auth.uid;
+      }
+    }
+    // شات الفريق: الأعضاء فقط
+    match /teams/{tid}/messages/{mid} {
+      allow read: if signedIn() && request.auth.uid in get(/databases/$(database)/documents/teams/$(tid)).data.memberIds;
+      allow create: if signedIn() && request.auth.uid in get(/databases/$(database)/documents/teams/$(tid)).data.memberIds && msgOk();
+      allow delete: if signedIn() && resource.data.uid == request.auth.uid;
+    }
+
+    // ===== أكواد الانضمام: قراءة كود واحد فقط (لا قائمة)، ولا يسجّل الكود إلا مالك الفريق =====
+    match /teamCodes/{code} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if signedIn()
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.teamId is string
+        && get(/databases/$(database)/documents/teams/$(request.resource.data.teamId)).data.ownerId == request.auth.uid;
+      allow delete: if signedIn() && (resource.data.ownerId == request.auth.uid || isDeveloper());
+    }
+
+    // ===== التحديات =====
+    match /challenges/{cid} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.ownerId == request.auth.uid
+        && (!('global' in request.resource.data) || request.resource.data.global == false || isDeveloper())
+        && optStr(request.resource.data, 'title', 200);
+      allow update, delete: if signedIn() && (resource.data.ownerId == request.auth.uid || isDeveloper());
+
+      match /participants/{u} {
+        allow read: if signedIn();
+        allow create, update: if isSelf(u) && request.resource.data.uid == u;
+        allow delete: if isSelf(u) || isDeveloper();
+      }
+      // التسليم مرة واحدة فقط (الأول يفوز) ولا يمكن تعديله
+      match /submissions/{u} {
+        allow read: if signedIn();
+        allow create: if isSelf(u) && request.resource.data.uid == u
+          && request.resource.data.keys().hasOnly(['uid','at']);
+        allow update: if false;
+        allow delete: if isDeveloper();
+      }
+    }
+
+    // ===== إعلانات المطور وأعلام الميزات =====
+    match /announcements/{id} {
+      allow read: if signedIn();
+      allow write: if isDeveloper();
+    }
+    match /developer/{docId} {
+      allow read: if signedIn();
+      allow write: if isDeveloper();
+    }
+    // مستند المطور: يقرأ كل مستخدم مستنده فقط (للتحقق)، ولا أحد يكتب من التطبيق
+    match /developers/{uid} {
+      allow get: if isSelf(uid);
+      allow list, write: if false;
+    }
+
+    // ===== الاستفسارات =====
+    match /inquiries/{id} {
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.keys().hasOnly(['uid','name','subject','message','createdAt','status','developerReply'])
+        && request.resource.data.subject is string && request.resource.data.subject.size() <= 200
+        && request.resource.data.message is string && request.resource.data.message.size() <= 3000
+        && request.resource.data.status == 'open';
+      allow get: if signedIn() && (resource.data.uid == request.auth.uid || isDeveloper());
+      allow list: if isDeveloper();
+      allow update, delete: if isDeveloper();
+    }
+
+    // ===== الشارات والإطارات: المطور يمنح، والمستخدم يقرأ شاراته فقط =====
+    match /userBadges/{uid}/badges/{badgeId} {
+      allow read: if isSelf(uid) || isDeveloper();
+      allow write: if isDeveloper();
+    }
+    match /userFrames/{uid} {
+      allow read: if isSelf(uid) || isDeveloper();
+      allow write: if isDeveloper();
+    }
+
+    // أي شيء آخر: مرفوض
+  }
+}
